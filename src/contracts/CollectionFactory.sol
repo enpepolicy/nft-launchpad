@@ -21,13 +21,14 @@ contract NftCollection is ERC721 {
 
 contract CollectionFactory {
 
-  NftCollection[] public collections;
+  address[] public collections;
   struct Collections {
     uint presaleDate;
     uint mysteryBoxCap;
     uint nftCap;
   }
-  mapping(NftCollection => Collections) collection;
+  mapping(address => Collections) collection;
+  
   function create(
     string memory tokenName, 
     string memory tokenSymbol,
@@ -42,6 +43,10 @@ contract CollectionFactory {
       fullSupply,
       baseUri
     );
-    collections.push(_collection);
+    collections.push(address(_collection));
+  }
+
+  function getCollection(address _collection) external view returns(Collections memory) {
+    return collection[_collection];
   }
 }
