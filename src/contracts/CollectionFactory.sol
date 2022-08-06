@@ -7,13 +7,15 @@ import "hardhat/console.sol";
 
 contract NftCollection is ERC721 {  
   constructor(
-    string memory tokenName,
-    string memory tokenSymbol,
-    uint presaleSupply,
-    uint fullSupply,
-    string memory baseUri
+    string memory _tokenName,
+    string memory _tokenSymbol,
+    uint _presaleDate,
+    uint _mysteryBoxCap,
+    uint _nftCap,
+    string memory _baseUri
   )
-    ERC721(tokenName, tokenSymbol)
+
+    ERC721(_tokenName, _tokenSymbol)
   {    
     
   }
@@ -26,24 +28,35 @@ contract CollectionFactory {
     uint presaleDate;
     uint mysteryBoxCap;
     uint nftCap;
+    address owner;
   }
 
   mapping(address => Collections) collection;
   
   function create(
-    string memory tokenName, 
-    string memory tokenSymbol,
-    uint presaleSupply,
-    uint fullSupply,
-    string memory baseUri
+    string memory _tokenName, 
+    string memory _tokenSymbol,
+    uint _presaleDate,
+    uint _mysteryBoxCap,
+    uint _nftCap,
+    string memory _baseUri
   ) external {
     NftCollection _collection = new NftCollection(
-      tokenName,
-      tokenSymbol,
-      presaleSupply,
-      fullSupply,
-      baseUri
+      _tokenName,
+      _tokenSymbol,
+      _presaleDate,
+      _mysteryBoxCap,
+      _nftCap,
+      _baseUri
     );
+
+    collection[address(_collection)] = Collections(
+      _presaleDate,
+      _mysteryBoxCap,
+      _nftCap,
+      msg.sender
+    );
+
     collections.push(address(_collection));
   }
 
