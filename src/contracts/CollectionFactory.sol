@@ -27,7 +27,9 @@ contract CollectionFactory {
     uint mysteryBoxCap;
     uint nftCap;
   }
-  mapping(address => Collections)  public collection;
+
+  mapping(address => Collections) collection;
+  
   function create(
     string memory tokenName, 
     string memory tokenSymbol,
