@@ -12,6 +12,8 @@ contract NftCollection is ERC721 {
     uint _presaleDate,
     uint _mysteryBoxCap,
     uint _nftCap,
+    uint _mysteryBoxUsdPrice,
+    uint _nftUsdPrice,
     string memory _baseUri
   )
 
@@ -29,6 +31,8 @@ contract CollectionFactory {
     uint mysteryBoxCap;
     uint nftCap;
     address owner;
+    uint mysteryBoxUsdPrice;
+    uint nftUsdPrice;
   }
 
   mapping(address => Collections) collection;
@@ -39,6 +43,8 @@ contract CollectionFactory {
     uint _presaleDate,
     uint _mysteryBoxCap,
     uint _nftCap,
+    uint _mysteryBoxUsdPrice,
+    uint _nftUsdPrice,
     string memory _baseUri
   ) external {
     NftCollection _collection = new NftCollection(
@@ -47,6 +53,8 @@ contract CollectionFactory {
       _presaleDate,
       _mysteryBoxCap,
       _nftCap,
+      _mysteryBoxUsdPrice,
+      _nftUsdPrice,
       _baseUri
     );
 
@@ -54,7 +62,9 @@ contract CollectionFactory {
       _presaleDate,
       _mysteryBoxCap,
       _nftCap,
-      msg.sender
+      msg.sender,
+      _mysteryBoxUsdPrice,
+      _nftUsdPrice
     );
 
     collections.push(address(_collection));

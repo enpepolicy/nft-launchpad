@@ -9,10 +9,13 @@ import "./CollectionFactory.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
 
 contract NftStore is VRFConsumerBaseV2 {
 
+  // Chainlink price feed interface
+  AggregatorV3Interface priceFeed;
   // ChainLink parameters for getting random number
   VRFCoordinatorV2Interface COORDINATOR;
   LinkTokenInterface LINKTOKEN;
@@ -43,6 +46,7 @@ contract NftStore is VRFConsumerBaseV2 {
   mapping(uint => address) requestToCollection;
 
   constructor(
+    address _priceFeedAddress,
     address _factoryAddress,
     uint64 subscriptionId, 
     address _vrfCoordinator, 
@@ -53,6 +57,7 @@ contract NftStore is VRFConsumerBaseV2 {
   )
     VRFConsumerBaseV2(_vrfCoordinator)
   {
+    priceFeed = AggregatorV3Interface(_priceFeedAddress);
     collectionFactory = CollectionFactory(_factoryAddress);
     vrfCoordinator = _vrfCoordinator;
     COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
@@ -64,11 +69,9 @@ contract NftStore is VRFConsumerBaseV2 {
     s_subscriptionId = subscriptionId;
     // Fee to pay chainLink VRF usage in presale
     chainlinkFeeMatic = 60000000000000000;    
-  }
+  }  
 
-
-  function buyMysteryBox(address _collectionAddress) public {
-    // require dinero
+  function buyMysteryBox(address _collectionAddress) public payable {    
     require(
       mysteryBoxCounter[_collectionAddress] < collectionFactory.getCollection(_collectionAddress).mysteryBoxCap,
       "NftStore: all Mystery Boxes were already sold"
@@ -77,8 +80,15 @@ contract NftStore is VRFConsumerBaseV2 {
       block.timestamp < collectionFactory.getCollection(_collectionAddress).presaleDate, 
       "NftStore: presale is over"
     );
-    // obtener admin de Factory
-    // Pagar al admin
+    uint price = collectionFactory.getCollection(_collectionAddress).mysteryBoxUsdPrice / getLatestPrice(); // TODO: check units
+    require(
+      price <= msg.value,
+      "NftStore: the amount paid did not cover the price"
+    );
+
+    address payable owner = payable(collectionFactory.getCollection(_collectionAddress).owner);
+    owner.transfer(price);
+    payable(msg.sender).transfer(msg.value - price);
     mysteryBoxUserCounter[msg.sender][_collectionAddress] ++;
   }
 
@@ -122,4 +132,16 @@ contract NftStore is VRFConsumerBaseV2 {
     // Create collection instance
     // Call mint function from collection
   }
+
+  function getLatestPrice() public view returns (uint) {
+    (
+      /*uint80 roundID*/,
+      int price,
+      /*uint startedAt*/,
+      /*uint timeStamp*/,
+      /*uint80 answeredInRound*/
+  ) = priceFeed.latestRoundData();
+    return uint(price);
+  }
+
 }
