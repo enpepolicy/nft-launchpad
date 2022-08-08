@@ -38,6 +38,8 @@ contract CollectionFactory {
     uint16 nftCap;
     uint16[] availableNfts;
     address owner;
+    uint mysteryBoxUsdPrice;
+    uint nftUsdPrice;
   }
 
   mapping(address => Collections) collection;
@@ -45,10 +47,12 @@ contract CollectionFactory {
   function create(
     string memory _tokenName, 
     string memory _tokenSymbol,
+    string memory _baseUri,
     uint _presaleDate,
     uint16 _mysteryBoxCap,
     uint16 _nftCap,
-    string memory _baseUri
+    uint _mysteryBoxUsdPrice,
+    uint _nftUsdPrice
   ) external {
 
     // Initialize array to later on pick nft to mint
@@ -67,7 +71,9 @@ contract CollectionFactory {
       _mysteryBoxCap,
       _nftCap,
       _availableNfts,
-      msg.sender
+      msg.sender,
+      _mysteryBoxUsdPrice,
+      _nftUsdPrice
     );
     collections.push(address(_collection));
   }
