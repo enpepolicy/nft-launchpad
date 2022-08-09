@@ -1,21 +1,25 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-
+import "@openzeppelin/contracts/utils/Strings.sol";
 // Import this file to use console.log
 import "hardhat/console.sol";
 
 contract NftCollection is ERC721 {
   string baseURI;
+  address nftStoreAddress;
+  using Strings for uint;
   constructor(
     string memory _tokenName,
     string memory _tokenSymbol,
-    string memory _baseUri
+    string memory _baseUri,
+    address _nftStoreAddress
   )
 
     ERC721(_tokenName, _tokenSymbol)
   {    
     baseURI = _baseUri;
+    nftStoreAddress = _nftStoreAddress;
   }
 
   // Override
@@ -26,12 +30,27 @@ contract NftCollection is ERC721 {
   function supportsInterface(bytes4 interfaceId) public view override(ERC721) returns (bool) {
     return super.supportsInterface(interfaceId);
   }
+
+  function mint(uint _nftIndex, address _nftOwner) external {
+    require(msg.sender == nftStoreAddress, "Only NftStore can mint");
+    _safeMint(_nftOwner, _nftIndex);
+  }
+
+  function getTokenUri(uint _tokenId) external view returns(string memory) {
+    return  string(abi.encodePacked(baseURI, "/", _tokenId, ".json"));
+  }
+
+  function _baseURI() internal override view virtual returns (string memory) {
+    return baseURI;
+  }
 }
 
+
+// Collection Factory Contract
 contract CollectionFactory {
 
   address[] public collections;
-
+  address public nftStoreAddress;
   struct Collections {
     uint presaleDate;
     uint16 mysteryBoxCap;
@@ -44,7 +63,7 @@ contract CollectionFactory {
 
   mapping(address => Collections) collection;
   
-  function create(
+  function createNFTCollection(
     string memory _tokenName, 
     string memory _tokenSymbol,
     string memory _baseUri,
@@ -63,7 +82,8 @@ contract CollectionFactory {
     NftCollection _collection = new NftCollection(
       _tokenName,
       _tokenSymbol,
-      _baseUri
+      _baseUri,
+      nftStoreAddress
     );
 
     collection[address(_collection)] = Collections(
@@ -83,7 +103,7 @@ contract CollectionFactory {
   }
 
   function updateCollection(address _nftCollection, uint16 _indexToDelete) external {
-    // TODO: require to only minter
+    require(msg.sender == nftStoreAddress, "Only nftStore can update this");
     uint16[] storage _availableNfts = collection[_nftCollection].availableNfts;
     _availableNfts[_indexToDelete] = _availableNfts[_availableNfts.length - 1];
     _availableNfts.pop();
