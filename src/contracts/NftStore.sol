@@ -11,6 +11,7 @@ import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
+// TODO: Require in Mint to make sure all MB can mint
 
 contract NftStore is VRFConsumerBaseV2 {
 
@@ -156,7 +157,7 @@ contract NftStore is VRFConsumerBaseV2 {
       /*uint startedAt*/,
       /*uint timeStamp*/,
       /*uint80 answeredInRound*/
-  ) = priceFeed.latestRoundData();
+    ) = priceFeed.latestRoundData();
     return uint(price);
   }
 
