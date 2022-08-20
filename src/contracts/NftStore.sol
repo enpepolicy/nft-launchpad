@@ -72,44 +72,56 @@ contract NftStore is VRFConsumerBaseV2 {
   }  
 
   function buyMysteryBox(address _collectionAddress) public payable {    
+    CollectionFactory.Collections memory collections = collectionFactory.getCollection(_collectionAddress);
     require(
-      mysteryBoxCounter[_collectionAddress] < collectionFactory.getCollection(_collectionAddress).mysteryBoxCap,
+      mysteryBoxCounter[_collectionAddress] < collections.mysteryBoxCap,
       "NftStore: all Mystery Boxes were already sold"
     );
     require(
-      block.timestamp < collectionFactory.getCollection(_collectionAddress).presaleDate, 
+      block.timestamp < collections.presaleDate, 
       "NftStore: presale is over"
     );
-    uint price = collectionFactory.getCollection(_collectionAddress).mysteryBoxUsdPrice / getLatestPrice(); // TODO: check units
+    uint price = collections.mysteryBoxUsdPrice * (10 ** 18) * (10 ** 6) / getLatestPrice();
     require(
       price <= msg.value,
       "NftStore: the amount paid did not cover the price"
     );
 
-    address payable owner = payable(collectionFactory.getCollection(_collectionAddress).owner);
+    address payable owner = payable(collections.owner);
     owner.transfer(price);
     payable(msg.sender).transfer(msg.value - price);
     mysteryBoxUserCounter[msg.sender][_collectionAddress] ++;
   }
 
-  function mint(address _collectionAddress) public {
-    if(block.timestamp < collectionFactory.getCollection(_collectionAddress).presaleDate) {
-      require(
-        mysteryBoxUserCounter[msg.sender][_collectionAddress] > 0,
-        "NftStore: a Mystery Box must be purchased to mint during presale");
-      mysteryBoxUserCounter[msg.sender][_collectionAddress] --;
-    } else {
-      // require money
-    }
+  function mint(address _collectionAddress) public payable {
+    CollectionFactory.Collections memory collections = collectionFactory.getCollection(_collectionAddress);
+    require(
+      block.timestamp > collections.presaleDate,
+      "NftStore: NFT cannot be minted during presale"
+    );
 
     require(
-      nftCounter[_collectionAddress] < collectionFactory.getCollection(_collectionAddress).nftCap,
+      nftCounter[_collectionAddress] < collections.nftCap,
       "NftStore: all NFT were already sold"
     );
-    _requestRandomWords(1);
+
+    if(mysteryBoxUserCounter[msg.sender][_collectionAddress] == 0) {
+      uint price = collections.nftUsdPrice * (10 ** 18) * (10 ** 6) / getLatestPrice();
+      require(
+        price <= msg.value,
+       "NftStore: the amount paid did not cover the price"
+      );
+      address payable owner = payable(collections.owner);
+      owner.transfer(price);
+      payable(msg.sender).transfer(msg.value - price);
+    } else {
+      mysteryBoxUserCounter[msg.sender][_collectionAddress] --;
+    }
+    
+    _requestRandomWords(1, _collectionAddress);
   }
 
-  function _requestRandomWords(uint32 _numWords) internal {
+  function _requestRandomWords(uint32 _numWords, address _collectionAddress) internal {
     s_requestId  = COORDINATOR.requestRandomWords(
       keyHash,
       s_subscriptionId,
@@ -118,6 +130,7 @@ contract NftStore is VRFConsumerBaseV2 {
       _numWords
     );  
     requestToSender[s_requestId] = msg.sender;
+    requestToCollection[s_requestId] = _collectionAddress;
   }
 
   function fulfillRandomWords(
@@ -127,10 +140,13 @@ contract NftStore is VRFConsumerBaseV2 {
     internal override 
   {
     address user = requestToSender[requestId];
-    address collectionAddress = requestToCollection[requestId];    
-    // Use the random number to get the Nft Id
-    // Create collection instance
-    // Call mint function from collection
+    address collectionAddress = requestToCollection[requestId];
+
+    uint remaining = collectionFactory.getCollection(collectionAddress).availableNfts.length;
+    uint16 index = uint16(randomWords[0] % remaining);
+    collectionFactory.updateCollection(collectionAddress, index);
+    NftCollection nftCollection = NftCollection(collectionAddress);
+    nftCollection.mint(index, user);
   }
 
   function getLatestPrice() public view returns (uint) {
