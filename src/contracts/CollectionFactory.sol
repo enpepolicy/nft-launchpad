@@ -122,10 +122,11 @@ contract CollectionFactory {
     return collection[_collection];
   }
 
-  function getAllCollectionData(address[] memory _collection) external view returns(Collections[] memory) {
-    Collections[] memory _collectionData = new Collections[](_collection.length);
-    for(uint16 i = 0; i < _collection.length; i++ ) {
-      _collectionData[i] = collection[_collection[i]];
+  function getAllCollectionData() external view returns(Collections[] memory) {
+    address [] memory _collections = collections;
+    Collections[] memory _collectionData = new Collections[](_collections.length);
+    for(uint16 i = 0; i < _collections.length; i++ ) {
+      _collectionData[i] = collection[_collections[i]];
     }
     return _collectionData;
   }
