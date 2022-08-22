@@ -7,130 +7,161 @@
 // Check getters
 
 
-
 const {
-  time,
-  loadFixture,
+  time
 } = require("@nomicfoundation/hardhat-network-helpers");
 const { anyValue } = require("@nomicfoundation/hardhat-chai-matchers/withArgs");
 const { expect } = require("chai");
+const assert = require('assert');
+// const { expectRevert, expectEvent } = require('@openzeppelin/test-helpers')
 
-describe("Lock", function () {
-  // We define a fixture to reuse the same setup in every test.
-  // We use loadFixture to run this setup once, snapshot that state,
-  // and reset Hardhat Network to that snapshopt in every test.
-  async function deployOneYearLockFixture() {
-    const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-    const ONE_GWEI = 1_000_000_000;
+let owner, factory
+colName = "First Collection Test",
+colSymbol = "FCT",
+colBaseURI = "testBaseURI",
+colPresaleDate = "1666359708",
+colPresaleCap = "10",
+colFullCap = "20",
+colPresalePrice = "2000",
+colRegularPrice = "4000",
+colOwnerRevert = "Not Collection Owner"
 
-    const lockedAmount = ONE_GWEI;
-    const unlockTime = (await time.latest()) + ONE_YEAR_IN_SECS;
+describe("Collection Factory", function () {
+	before (async () => {
+		[owner, secAccount] = await ethers.getSigners()
+		const Factory = await ethers.getContractFactory("CollectionFactory");
+		factory = await Factory.deploy()
+	})
 
-    // Contracts are deployed using the first signer/account by default
-    const [owner, otherAccount] = await ethers.getSigners();
+  describe("CollectionFactory Deployment", () => {
+    it('Deploys successfully', async () => {
+			const address = factory.address;
+			assert.notEqual(address, 0x0);
+			assert.notEqual(address, '');
+			assert.notEqual(address, null);
+			assert.notEqual(address, undefined);
+		});
+  })
 
-    const Lock = await ethers.getContractFactory("Lock");
-    const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+  describe("Create NFT Collection", ()=> {
+    it("NFt Collection Deployed correctly", async() => {
+      recipe = await factory.createNFTCollection(
+        colName,
+        colSymbol,
+        colBaseURI,
+        colPresaleDate,
+        colPresaleCap,
+        colFullCap,
+        colPresalePrice,
+        colRegularPrice
+              )
+      firstCollectionAddress = await factory.collections(0)
+      assert.notEqual(firstCollectionAddress, 0x0)
+			assert.notEqual(firstCollectionAddress, '')
+			assert.notEqual(firstCollectionAddress, null)
+			assert.notEqual(firstCollectionAddress, undefined)
 
-    return { lock, unlockTime, lockedAmount, owner, otherAccount };
-  }
+      firstCollection = await hre.ethers.getContractAt("NftCollection", firstCollectionAddress);
+      const name = await firstCollection.name()
+      assert.equal(colName, name.toString())
+			const symbol = await firstCollection.symbol()
+			assert.equal(colSymbol, symbol.toString())
+    })
 
-  describe("Deployment", function () {
-    it("Should set the right unlockTime", async function () {
-      const { lock, unlockTime } = await loadFixture(deployOneYearLockFixture);
+    it("CollectionCreated event is emitted", async()=> {
+      const eventCreated = await recipe.wait()
+      assert.equal(eventCreated.events[0].args[0].toString(),firstCollectionAddress.toString())
+    })
 
-      expect(await lock.unlockTime()).to.equal(unlockTime);
-    });
+    it("NFT Attributes are correct", async() => {
+      attributes = await factory.getCollection(firstCollectionAddress)
+      assert.equal(attributes.presaleDate.toString(), colPresaleDate)
+      assert.equal(attributes.mysteryBoxCap.toString(), colPresaleCap)
+      assert.equal(attributes.nftCap.toString(), colFullCap)
+      assert.equal(attributes.availableNfts.toString(), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19")
+      assert.equal(attributes.owner, owner.address)
+      assert.equal(attributes.mysteryBoxUsdPrice.toString(), colPresalePrice)
+      assert.equal(attributes.nftUsdPrice.toString(), colRegularPrice)
+      assert.equal(attributes.frozen.toString(), "false")
+    })
 
-    it("Should set the right owner", async function () {
-      const { lock, owner } = await loadFixture(deployOneYearLockFixture);
+  describe("Update Collection Parameters", () => {
+    // Set NFTStore address to be able to updateCollection
+    it("Set nftStoreAddress", async() => {
+      await factory.setNftStoreAddress(owner.address)
+      const nftStoreAddress = await factory.nftStoreAddress()
+      assert.equal(nftStoreAddress, owner.address)
+    })
 
-      expect(await lock.owner()).to.equal(owner.address);
-    });
+    it("Update presaleDate with insufficient rights", async() => {
+      await expect(
+        factory.connect(secAccount).updatePresaleDate(firstCollectionAddress, 4132431242)
+      ).to.be.revertedWith(colOwnerRevert)
+    })
 
-    it("Should receive and store the funds to lock", async function () {
-      const { lock, lockedAmount } = await loadFixture(
-        deployOneYearLockFixture
-      );
+    it("Update presaleDate", async() => {
+      await factory.updatePresaleDate(firstCollectionAddress, 4132431242)
+      attributes = await factory.getCollection(firstCollectionAddress)
+      assert.equal(attributes.presaleDate.toString(), "4132431242")
 
-      expect(await ethers.provider.getBalance(lock.address)).to.equal(
-        lockedAmount
-      );
-    });
+    })
 
-    it("Should fail if the unlockTime is not in the future", async function () {
-      // We don't use the fixture here because we want a different deployment
-      const latestTime = await time.latest();
-      const Lock = await ethers.getContractFactory("Lock");
-      await expect(Lock.deploy(latestTime, { value: 1 })).to.be.revertedWith(
-        "Unlock time should be in the future"
-      );
-    });
-  });
+    it("Update available NFTs with wrong arguments", async() => {
+      await expect(
+        factory.connect(secAccount).updateCollection(firstCollectionAddress, 1)
+      ).to.be.revertedWith("Only nftStore can update this")
+    })
 
-  describe("Withdrawals", function () {
-    describe("Validations", function () {
-      it("Should revert with the right error if called too soon", async function () {
-        const { lock } = await loadFixture(deployOneYearLockFixture);
+    it("Update available NFTs", async() => {
+      await factory.updateCollection(firstCollectionAddress, 1)
+      attributes = await factory.getCollection(firstCollectionAddress)
+      assert.equal(attributes.availableNfts.toString(), "0,19,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18")
+    })
 
-        await expect(lock.withdraw()).to.be.revertedWith(
-          "You can't withdraw yet"
-        );
-      });
+    it("updadateMysteryBoxPrice with insufficient rights", async() => {
+      await expect(
+        factory.connect(secAccount).updadateMysteryBoxPrice(firstCollectionAddress, 3414)
+      ).to.be.revertedWith(colOwnerRevert)
+    })
 
-      it("Should revert with the right error if called from another account", async function () {
-        const { lock, unlockTime, otherAccount } = await loadFixture(
-          deployOneYearLockFixture
-        );
+    it("updadateMysteryBoxPrice", async() => {
+      await factory.updadateMysteryBoxPrice(firstCollectionAddress, 3414)
+      attributes = await factory.getCollection(firstCollectionAddress)
+      assert.equal(attributes.mysteryBoxUsdPrice.toString(), "3414")      
+    })
 
-        // We can increase the time in Hardhat Network
-        await time.increaseTo(unlockTime);
+    it("updateNftPrice with insufficient rights", async() => {
+      await expect(
+        factory.connect(secAccount).updateNftPrice(firstCollectionAddress, 100)
+      ).to.be.revertedWith(colOwnerRevert)
+    })
 
-        // We use lock.connect() to send a transaction from another account
-        await expect(lock.connect(otherAccount).withdraw()).to.be.revertedWith(
-          "You aren't the owner"
-        );
-      });
+    it("updateNftPrice", async() => {
+      await factory.updateNftPrice(firstCollectionAddress, 100)
+      attributes = await factory.getCollection(firstCollectionAddress)
+      assert.equal(attributes.nftUsdPrice.toString(), "100")
+    })
 
-      it("Shouldn't fail if the unlockTime has arrived and the owner calls it", async function () {
-        const { lock, unlockTime } = await loadFixture(
-          deployOneYearLockFixture
-        );
+    it("updateFrozenFlag with insufficient rights", async() => {
+      await expect(
+        factory.connect(secAccount).updateFrozenFlag(firstCollectionAddress)
+      ).to.be.revertedWith(colOwnerRevert)
+    })
 
-        // Transactions are sent using the first signer by default
-        await time.increaseTo(unlockTime);
+    it("updateFrozenFlag", async() => {
+      await factory.updateFrozenFlag(firstCollectionAddress)
+      attributes = await factory.getCollection(firstCollectionAddress)
+      assert.equal(attributes.frozen.toString(), "true")
+    })    
 
-        await expect(lock.withdraw()).not.to.be.reverted;
-      });
-    });
+  })
+})
 
-    describe("Events", function () {
-      it("Should emit an event on withdrawals", async function () {
-        const { lock, unlockTime, lockedAmount } = await loadFixture(
-          deployOneYearLockFixture
-        );
-
-        await time.increaseTo(unlockTime);
-
-        await expect(lock.withdraw())
-          .to.emit(lock, "Withdrawal")
-          .withArgs(lockedAmount, anyValue); // We accept any value as `when` arg
-      });
-    });
-
-    describe("Transfers", function () {
-      it("Should transfer the funds to the owner", async function () {
-        const { lock, unlockTime, lockedAmount, owner } = await loadFixture(
-          deployOneYearLockFixture
-        );
-
-        await time.increaseTo(unlockTime);
-
-        await expect(lock.withdraw()).to.changeEtherBalances(
-          [owner, lock],
-          [lockedAmount, -lockedAmount]
-        );
-      });
-    });
-  });
-});
+// Deploy check
+// Create NFT Collection
+  // Check collection deployment
+// UpdateCollection with wrong address
+// UpdateCollection with right address
+// Check array properly updated
+// Check getters
+})

@@ -59,10 +59,13 @@ contract CollectionFactory {
     address owner;
     uint mysteryBoxUsdPrice;
     uint nftUsdPrice;
+    bool frozen;
   }
 
   mapping(address => Collections) collection;
   
+  // Events
+  event NFTCollectionCreated(address nftCollectionAddress);
   function createNFTCollection(
     string memory _tokenName, 
     string memory _tokenSymbol,
@@ -93,13 +96,24 @@ contract CollectionFactory {
       _availableNfts,
       msg.sender,
       _mysteryBoxUsdPrice,
-      _nftUsdPrice
+      _nftUsdPrice,
+      false
     );
     collections.push(address(_collection));
+    emit NFTCollectionCreated(address(_collection));
   }
 
   function getCollection(address _collection) external view returns(Collections memory) {
     return collection[_collection];
+  }
+
+  function setNftStoreAddress(address _nftStoreAddress) external {
+    nftStoreAddress = _nftStoreAddress;
+  }
+  
+  function updatePresaleDate(address _collectionAddress, uint _presaleDate) external {
+    require(msg.sender == collection[_collectionAddress].owner, "Not Collection Owner");
+    collection[_collectionAddress].presaleDate = _presaleDate;
   }
 
   function updateCollection(address _nftCollection, uint16 _indexToDelete) external {
@@ -107,6 +121,21 @@ contract CollectionFactory {
     uint16[] storage _availableNfts = collection[_nftCollection].availableNfts;
     _availableNfts[_indexToDelete] = _availableNfts[_availableNfts.length - 1];
     _availableNfts.pop();
+  }
+
+  function updadateMysteryBoxPrice(address _collectionAddress, uint _USDPrice) external {
+    require(msg.sender == collection[_collectionAddress].owner, "Not Collection Owner");
+    collection[_collectionAddress].mysteryBoxUsdPrice = _USDPrice;
+  }
+
+  function updateNftPrice(address _collectionAddress, uint _USDPrice) external {
+    require(msg.sender == collection[_collectionAddress].owner, "Not Collection Owner");
+    collection[_collectionAddress].nftUsdPrice = _USDPrice;
+  }
+
+  function updateFrozenFlag(address _collectionAddress) external {
+    require(msg.sender == collection[_collectionAddress].owner, "Not Collection Owner");
+    collection[_collectionAddress].frozen = !collection[_collectionAddress].frozen;
   }
 
 }
