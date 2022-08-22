@@ -11,7 +11,7 @@ import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
-// TODO: Require in Mint to make sure all MB can mint
+// TODO: EVENTS!!
 
 contract NftStore is VRFConsumerBaseV2 {
 
@@ -36,6 +36,8 @@ contract NftStore is VRFConsumerBaseV2 {
   uint256 public s_requestId;
   // LINK fee in Matic to be charged to user as result of using ChainLink
   uint chainlinkFeeMatic;
+  // Admin address
+  address payable admin;
 
   address public factoryAddress;
   CollectionFactory collectionFactory;
@@ -54,7 +56,8 @@ contract NftStore is VRFConsumerBaseV2 {
     address _link, 
     bytes32 _keyHash, 
     uint32 _callbackGasLimit, 
-    uint16 _requestConfirmations
+    uint16 _requestConfirmations,
+    address payable _admin
   )
     VRFConsumerBaseV2(_vrfCoordinator)
   {
@@ -69,7 +72,8 @@ contract NftStore is VRFConsumerBaseV2 {
     LINKTOKEN = LinkTokenInterface(link);    
     s_subscriptionId = subscriptionId;
     // Fee to pay chainLink VRF usage in presale
-    chainlinkFeeMatic = 60000000000000000;    
+    chainlinkFeeMatic = 60000000000000000;
+    admin = _admin;
   }  
 
   function buyMysteryBox(address _collectionAddress) public payable {    
@@ -84,14 +88,16 @@ contract NftStore is VRFConsumerBaseV2 {
     );
     uint price = collections.mysteryBoxUsdPrice * (10 ** 18) * (10 ** 6) / getLatestPrice();
     require(
-      price <= msg.value,
+      (price + chainlinkFeeMatic) <= msg.value,
       "NftStore: the amount paid did not cover the price"
     );
 
     address payable owner = payable(collections.owner);
     owner.transfer(price);
-    payable(msg.sender).transfer(msg.value - price);
+    admin.transfer(chainlinkFeeMatic);
+    payable(msg.sender).transfer(msg.value - price - chainlinkFeeMatic);
     mysteryBoxUserCounter[msg.sender][_collectionAddress] ++;
+    mysteryBoxCounter[_collectionAddress] ++;
   }
 
   function mint(address _collectionAddress) public payable {
@@ -102,23 +108,25 @@ contract NftStore is VRFConsumerBaseV2 {
     );
 
     require(
-      nftCounter[_collectionAddress] < collections.nftCap,
+      nftCounter[_collectionAddress] < (collections.nftCap + mysteryBoxCounter[_collectionAddress]),
       "NftStore: all NFT were already sold"
     );
 
     if(mysteryBoxUserCounter[msg.sender][_collectionAddress] == 0) {
       uint price = collections.nftUsdPrice * (10 ** 18) * (10 ** 6) / getLatestPrice();
       require(
-        price <= msg.value,
+        (price + chainlinkFeeMatic) <= msg.value,
        "NftStore: the amount paid did not cover the price"
       );
       address payable owner = payable(collections.owner);
       owner.transfer(price);
-      payable(msg.sender).transfer(msg.value - price);
+      admin.transfer(chainlinkFeeMatic);
+      payable(msg.sender).transfer(msg.value - price - chainlinkFeeMatic);
     } else {
       mysteryBoxUserCounter[msg.sender][_collectionAddress] --;
+      mysteryBoxCounter[_collectionAddress] --;
     }
-    
+    nftCounter[_collectionAddress] ++;
     _requestRandomWords(1, _collectionAddress);
   }
 
