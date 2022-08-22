@@ -60,16 +60,22 @@ contract CollectionFactory {
     uint mysteryBoxUsdPrice;
     uint nftUsdPrice;
     bool frozen;
+    string coverImageUri;
+    string tokenName;
   }
 
   mapping(address => Collections) collection;
   
   // Events
-  event NFTCollectionCreated(address nftCollectionAddress);
+  event NFTCollectionCreated(address nftCollectionAddress, uint presaleDate, uint mysteryBoxCap, uint nftCap,
+  uint16[] availableNFTs, address owner, uint mysteryBoxUsdPrice, uint nftUsdPrice, bool frozen);
+  event AvailableNFtsUpdated(address nftCollectionAddress, uint nftIndex);
+
   function createNFTCollection(
-    string memory _tokenName, 
+    string memory _tokenName,
     string memory _tokenSymbol,
     string memory _baseUri,
+    string memory _coverImageUri,
     uint _presaleDate,
     uint16 _mysteryBoxCap,
     uint16 _nftCap,
@@ -97,50 +103,89 @@ contract CollectionFactory {
       msg.sender,
       _mysteryBoxUsdPrice,
       _nftUsdPrice,
-      false
+      false,
+      _coverImageUri,
+      _tokenName
     );
     collections.push(address(_collection));
-    emit NFTCollectionCreated(address(_collection));
+    emit NFTCollectionCreated(address(_collection), _presaleDate, _mysteryBoxCap, _nftCap,
+    _availableNfts, msg.sender, _mysteryBoxUsdPrice, _nftUsdPrice, false);
   }
+
+	/********************************************************
+	*                                                       *
+	*                      Getters                          *
+	*                                                       *
+	********************************************************/
 
   function getCollection(address _collection) external view returns(Collections memory) {
     return collection[_collection];
   }
 
+  function getAllCollectionData(address[] memory _collection) external view returns(Collections[] memory) {
+    Collections[] memory _collectionData = new Collections[](_collection.length);
+    for(uint16 i = 0; i < _collection.length; i++ ) {
+      _collectionData[i] = collection[_collection[i]];
+    }
+    return _collectionData;
+  }
+
+  function getCollectionArray() external view returns(address[] memory) {
+    return collections;
+  }
+
+	/********************************************************
+	*                                                       *
+	*                      SETTERS                          *
+	*                                                       *
+	********************************************************/
+
+
   function setNftStoreAddress(address _nftStoreAddress) external {
     nftStoreAddress = _nftStoreAddress;
   }
   
-  function updatePresaleDate(address _collectionAddress, uint _presaleDate) external {
-    require(msg.sender == collection[_collectionAddress].owner, "Not Collection Owner");
+  function updatePresaleDate(address _collectionAddress, uint _presaleDate) external collectionOwner(_collectionAddress) {
     collection[_collectionAddress].presaleDate = _presaleDate;
   }
 
-  function updateCollection(address _nftCollection, uint16 _indexToDelete) external {
+  function updateAvailableNFts(address _nftCollection, uint16 _indexToDelete) external {
     require(msg.sender == nftStoreAddress, "Only nftStore can update this");
     uint16[] storage _availableNfts = collection[_nftCollection].availableNfts;
     _availableNfts[_indexToDelete] = _availableNfts[_availableNfts.length - 1];
     _availableNfts.pop();
+    emit AvailableNFtsUpdated(_nftCollection, _indexToDelete);
   }
 
-  function updadateMysteryBoxPrice(address _collectionAddress, uint _USDPrice) external {
-    require(msg.sender == collection[_collectionAddress].owner, "Not Collection Owner");
+  function updadateMysteryBoxPrice(address _collectionAddress, uint _USDPrice) external collectionOwner(_collectionAddress) {
     collection[_collectionAddress].mysteryBoxUsdPrice = _USDPrice;
   }
 
-  function updateNftPrice(address _collectionAddress, uint _USDPrice) external {
-    require(msg.sender == collection[_collectionAddress].owner, "Not Collection Owner");
+  function updateNftPrice(address _collectionAddress, uint _USDPrice) external collectionOwner(_collectionAddress) {
     collection[_collectionAddress].nftUsdPrice = _USDPrice;
   }
 
-  function updateFrozenFlag(address _collectionAddress) external {
-    require(msg.sender == collection[_collectionAddress].owner, "Not Collection Owner");
+  function updateFrozenFlag(address _collectionAddress) external collectionOwner(_collectionAddress) {
     collection[_collectionAddress].frozen = !collection[_collectionAddress].frozen;
   }
 
+	/********************************************************
+	*                                                       *
+	*                     MODIFIERS                         *
+	*                                                       *
+	********************************************************/
+
+	modifier collectionOwner(address _collectionAddress) {
+		require(msg.sender == collection[_collectionAddress].owner, "Not Collection Owner");
+		_;
+	}
 }
 
 /*
-1. Factory
+1. CreateCollecton
 2. NftStore
+3. My MysteryBoxes
+4. My NFTs
+
 */
+

@@ -6,7 +6,6 @@
 // Check array properly updated
 // Check getters
 
-
 const {
   time
 } = require("@nomicfoundation/hardhat-network-helpers");
@@ -19,12 +18,24 @@ let owner, factory
 colName = "First Collection Test",
 colSymbol = "FCT",
 colBaseURI = "testBaseURI",
+colCoverImageUri = "testCoverURI",
 colPresaleDate = "1666359708",
 colPresaleCap = "10",
 colFullCap = "20",
 colPresalePrice = "2000",
 colRegularPrice = "4000",
-colOwnerRevert = "Not Collection Owner"
+
+colName2 = "Second Collection Test",
+colSymbol2 = "SCT",
+colBaseURI2 = "Second testBaseURI",
+colCoverImageUri2 = "Second testCoverURI",
+colPresaleDate2 = "4134",
+colPresaleCap2 = "2",
+colFullCap2 = "5",
+colPresalePrice2 = "100",
+colRegularPrice2 = "200",
+colOwnerRevert = "Not Collection Owner";
+
 
 describe("Collection Factory", function () {
 	before (async () => {
@@ -49,6 +60,7 @@ describe("Collection Factory", function () {
         colName,
         colSymbol,
         colBaseURI,
+        colCoverImageUri,
         colPresaleDate,
         colPresaleCap,
         colFullCap,
@@ -73,16 +85,45 @@ describe("Collection Factory", function () {
       assert.equal(eventCreated.events[0].args[0].toString(),firstCollectionAddress.toString())
     })
 
+
+
     it("NFT Attributes are correct", async() => {
-      attributes = await factory.getCollection(firstCollectionAddress)
-      assert.equal(attributes.presaleDate.toString(), colPresaleDate)
-      assert.equal(attributes.mysteryBoxCap.toString(), colPresaleCap)
-      assert.equal(attributes.nftCap.toString(), colFullCap)
-      assert.equal(attributes.availableNfts.toString(), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19")
-      assert.equal(attributes.owner, owner.address)
-      assert.equal(attributes.mysteryBoxUsdPrice.toString(), colPresalePrice)
-      assert.equal(attributes.nftUsdPrice.toString(), colRegularPrice)
-      assert.equal(attributes.frozen.toString(), "false")
+      await factory.createNFTCollection(
+        colName2,
+        colSymbol2,
+        colBaseURI2,
+        colCoverImageUri2,
+        colPresaleDate2,
+        colPresaleCap2,
+        colFullCap2,
+        colPresalePrice2,
+        colRegularPrice2
+              )
+      
+      collectionArrays = await factory.getCollectionArray()
+      const fullCollection = await factory.getAllCollectionData(collectionArrays)
+      // attributes = await factory.getCollection(firstCollectionAddress)
+      assert.equal(fullCollection[0].presaleDate.toString(), colPresaleDate)
+      assert.equal(fullCollection[0].mysteryBoxCap.toString(), colPresaleCap)
+      assert.equal(fullCollection[0].nftCap.toString(), colFullCap)
+      assert.equal(fullCollection[0].availableNfts.toString(), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19")
+      assert.equal(fullCollection[0].owner, owner.address)
+      assert.equal(fullCollection[0].mysteryBoxUsdPrice.toString(), colPresalePrice)
+      assert.equal(fullCollection[0].nftUsdPrice.toString(), colRegularPrice)
+      assert.equal(fullCollection[0].frozen.toString(), "false")
+      assert.equal(fullCollection[0].coverImageUri.toString(), colCoverImageUri)
+      assert.equal(fullCollection[0].tokenName.toString(), colName)
+
+      assert.equal(fullCollection[1].presaleDate.toString(), colPresaleDate2)
+      assert.equal(fullCollection[1].mysteryBoxCap.toString(), colPresaleCap2)
+      assert.equal(fullCollection[1].nftCap.toString(), colFullCap2)
+      assert.equal(fullCollection[1].availableNfts.toString(), "0,1,2,3,4")
+      assert.equal(fullCollection[1].owner, owner.address)
+      assert.equal(fullCollection[1].mysteryBoxUsdPrice.toString(), colPresalePrice2)
+      assert.equal(fullCollection[1].nftUsdPrice.toString(), colRegularPrice2)
+      assert.equal(fullCollection[1].frozen.toString(), "false")
+      assert.equal(fullCollection[1].coverImageUri.toString(), colCoverImageUri2)
+      assert.equal(fullCollection[1].tokenName.toString(), colName2)
     })
 
   describe("Update Collection Parameters", () => {
@@ -108,12 +149,12 @@ describe("Collection Factory", function () {
 
     it("Update available NFTs with wrong arguments", async() => {
       await expect(
-        factory.connect(secAccount).updateCollection(firstCollectionAddress, 1)
+        factory.connect(secAccount).updateAvailableNFts(firstCollectionAddress, 1)
       ).to.be.revertedWith("Only nftStore can update this")
     })
 
     it("Update available NFTs", async() => {
-      await factory.updateCollection(firstCollectionAddress, 1)
+      await factory.updateAvailableNFts(firstCollectionAddress, 1)
       attributes = await factory.getCollection(firstCollectionAddress)
       assert.equal(attributes.availableNfts.toString(), "0,19,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18")
     })

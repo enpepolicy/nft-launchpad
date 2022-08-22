@@ -153,7 +153,7 @@ contract NftStore is VRFConsumerBaseV2 {
 
     uint remaining = collectionFactory.getCollection(collectionAddress).availableNfts.length;
     uint16 index = uint16(randomWords[0] % remaining);
-    collectionFactory.updateCollection(collectionAddress, index);
+    collectionFactory.updateAvailableNFts(collectionAddress, index); // REVIEW: updateColllection is named udateAvailableNFTs now
     NftCollection nftCollection = NftCollection(collectionAddress);
     nftCollection.mint(index, user);
   }
