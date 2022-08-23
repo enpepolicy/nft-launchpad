@@ -17,8 +17,8 @@
           <div class="relative flex flex-col items-center">
             <div aria-hidden="true" class="absolute h-0.5 bg-gradient-to-r from-white via-gray-300 to-white dark:from-gray-900 dark:via-gray-700 dark:to-gray-900 hidden md:block" style="width:calc(100% - 96px);left:calc(50% + 64px);top:40px;"></div>
             <div class="relative w-20 h-20 mb-3">
-              <div class="absolute inset-0 rounded-full opacity-30 bg-gradient-to-tr from-teal-500 -z-1" aria-hidden="true"></div>
-              <svg class="w-20 h-20 fill-current text-teal-500" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+              <div class="absolute inset-0 rounded-full opacity-30 bg-gradient-to-tr from-indigo-500 -z-1" aria-hidden="true"></div>
+              <svg class="w-20 h-20 fill-current text-indigo-500" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
                 <path d="M56.209 8.306l5.084-5.084c2.574-2.574 7.7-3.714 9.95-1.465 2.25 2.249 1.11 7.376-1.465 9.95l-5.084 5.084 6.43 22.5-5.298 5.298-11.25-17.68-5.798 5.798-.174.14-3.725 2.343 1.192 7.153L43 45.414l-5.55-5.55-4.198 2.642a2 2 0 01-2.758-2.757l2.641-4.2L27.585 30l3.072-3.071 7.151 1.192 2.346-3.725.139-.174 5.797-5.797-3.507-2.232 1.073-1.687 3.883 2.47 7.052-7.052-6.022-1.721.55-1.923 7.09 2.026zm6.498-3.67l-20.92 20.92-2.64 4.193-6.96 11.065 15.256-9.6 20.92-20.921c1.891-1.89 2.766-5.822 1.466-7.122-1.3-1.3-5.232-.425-7.122 1.465zm.37 13.773l-7.053 7.052 10.15 15.95 2.703-2.702-5.8-20.3zm-23.89 20.363L43 42.586l.929-.93-.885-5.311-3.858 2.427zm-4.96-4.959l2.427-3.857-5.31-.885-.93.929 3.813 3.813zM43.39 1.611a5.5 5.5 0 010 7.778L36 16.78l-7.39-7.39A5.5 5.5 0 0136 1.257a5.5 5.5 0 017.39.354zM36 13.95l5.975-5.975a3.5 3.5 0 10-4.95-4.95L36 4.05l-1.025-1.025a3.5 3.5 0 00-4.95 4.95L36 13.95z" />
               </svg>
             </div>

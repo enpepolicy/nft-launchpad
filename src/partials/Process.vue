@@ -33,11 +33,11 @@
           <!-- 1st item -->
           <div class="relative flex flex-col items-center">
             <!-- Line connecting (1) and (2) -->
-            <div aria-hidden="true" class="absolute h-px opacity-50 bg-gradient-to-r from-white via-teal-400 to-white dark:from-gray-900 dark:via-teal-400 dark:to-gray-900 hidden md:block" style="width:calc(100% - 48px);left:calc(50% + 48px);top:24px;">
+            <div aria-hidden="true" class="absolute h-px opacity-50 bg-gradient-to-r from-white via-indigo-400 to-white dark:from-gray-900 dark:via-indigo-400 dark:to-gray-900 hidden md:block" style="width:calc(100% - 48px);left:calc(50% + 48px);top:24px;">
               <div class="absolute inset-0 border-t border-dashed border-white dark:border-gray-900"></div>
             </div>
             <!-- Number -->
-            <div class="w-12 h-12 rounded-full bg-teal-400 dark:bg-teal-600 dark:bg-opacity-25 flex justify-center items-center text-white dark:text-teal-400 font-medium mb-8 lg:mb-12">1</div>
+            <div class="w-12 h-12 rounded-full bg-indigo-400 dark:bg-indigo-600 dark:bg-opacity-25 flex justify-center items-center text-white dark:text-indigo-400 font-medium mb-8 lg:mb-12">1</div>
             <!-- Mobile mockup -->
             <div class="inline-flex relative justify-center items-center">
               <!-- Image inside mockup size: 290x624px (or 580x1248px for Retina devices) -->
@@ -50,11 +50,11 @@
           <!-- 2nd item -->
           <div class="relative flex flex-col items-center">
             <!-- Line connecting (2) and (3) -->
-            <div aria-hidden="true" class="absolute h-px opacity-50 bg-gradient-to-r from-white via-teal-400 to-white dark:from-gray-900 dark:via-teal-400 dark:to-gray-900 hidden md:block" style="width:calc(100% - 48px);left:calc(50% + 48px);top:24px;">
+            <div aria-hidden="true" class="absolute h-px opacity-50 bg-gradient-to-r from-white via-indigo-400 to-white dark:from-gray-900 dark:via-indigo-400 dark:to-gray-900 hidden md:block" style="width:calc(100% - 48px);left:calc(50% + 48px);top:24px;">
               <div class="absolute inset-0 border-t border-dashed border-white dark:border-gray-900"></div>
             </div>
             <!-- Number -->
-            <div class="w-12 h-12 rounded-full bg-teal-400 dark:bg-teal-600 dark:bg-opacity-25 flex justify-center items-center text-white dark:text-teal-400 font-medium mb-8 lg:mb-12">2</div>
+            <div class="w-12 h-12 rounded-full bg-indigo-400 dark:bg-indigo-600 dark:bg-opacity-25 flex justify-center items-center text-white dark:text-indigo-400 font-medium mb-8 lg:mb-12">2</div>
             <!-- Mobile mockup -->
             <div class="inline-flex relative justify-center items-center">
               <!-- Image inside mockup size: 290x624px (or 580x1248px for Retina devices) -->
@@ -66,7 +66,7 @@
 
           <!-- 3rd item -->
           <div class="relative flex flex-col items-center">
-            <div class="w-12 h-12 rounded-full bg-teal-400 dark:bg-teal-600 dark:bg-opacity-25 flex justify-center items-center text-white dark:text-teal-400 font-medium mb-8 lg:mb-12">3</div>
+            <div class="w-12 h-12 rounded-full bg-indigo-400 dark:bg-indigo-600 dark:bg-opacity-25 flex justify-center items-center text-white dark:text-indigo-400 font-medium mb-8 lg:mb-12">3</div>
             <!-- Mobile mockup -->
             <div class="inline-flex relative justify-center items-center">
               <!-- Image inside mockup size: 290x624px (or 580x1248px for Retina devices) -->

@@ -3,7 +3,7 @@ import Home from './pages/Home.vue'
 import Testimonials from './pages/Testimonials.vue'
 import Blog from './pages/Blog.vue'
 import BlogPost from './pages/BlogPost.vue'
-import About from './pages/About.vue'
+import CreateCollection from './pages/CreateCollection.vue'
 import Contact from './pages/Contact.vue'
 import Help from './pages/Help.vue'
 import PageNotFound from './pages/PageNotFound.vue'
@@ -27,33 +27,36 @@ const router = createRouter({
       component: Home
     },
     {
-      path: '/testimonials',
+      path: '/create-collection',
+      component: CreateCollection
+    },
+    {
+      path: '/nft-store',
+      component: Blog
+    },
+    {
+      path: '/my-mystery-boxes',
       component: Testimonials
     },
     {
-      path: '/blog',
-      component: Blog
+      path: '/my-nft',
+      component: Contact
     },
+
+    // TO-DO Remove
     {
       path: '/blog-post',
       component: BlogPost
     },
     {
-      path: '/about',
-      component: About
-    },
-    {
-      path: '/contact',
-      component: Contact
-    },
-    {
       path: '/help',
       component: Help
     },
+
     {
       path: '/:pathMatch(.*)*',
       component: PageNotFound
-    }
+    },
   ]
 })
 

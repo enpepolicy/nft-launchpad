@@ -18,7 +18,7 @@ const props = defineProps({
   },
   buttonClass: {
     type: String,
-    default: 'btn-sm text-white bg-teal-500 hover:bg-teal-400'
+    default: 'btn-sm text-white bg-indigo-500 hover:bg-indigo-400'
   },
 })
 </script>

@@ -92,7 +92,7 @@ export default {
           size: '72',
           style: 'max-width: 10.62%;top: 43%;left: 13%;',
           comment:
-            'When, while the lovely valley teems with vapour around me, and the meridian sun strikes the upper surface of the impenetrable foliage of my trees, and but a few stray gleams steal into the inner sanctuary, I throw myself down among the tall grass by the trickling stream.',
+            'When, while the lovely valley teems with vapour around me, and the meridian sun strikes the upper surface of the impenetrable foliage of my trees, and but a few stray gleams sindigo into the inner sanctuary, I throw myself down among the tall grass by the trickling stream.',
           name: 'Leonel Roy',
         },
         {

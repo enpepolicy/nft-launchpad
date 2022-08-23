@@ -16,7 +16,7 @@
             </div>
             <blockquote class="text-xl text-gray-600 dark:text-gray-400">“ This is a great app and the value is amazing. Since I purchased it I have been using it everyday! Highly recommend it. “</blockquote>
             <div class="font-red-hat-display font-bold mt-2">
-              <cite class="not-italic">—Andy Croll</cite>, <a class="text-teal-500 transition duration-150 ease-in-out" href="#0">Appy.com</a>
+              <cite class="not-italic">—Andy Croll</cite>, <a class="text-indigo-500 transition duration-150 ease-in-out" href="#0">Appy.com</a>
             </div>
           </div>
 
@@ -30,7 +30,7 @@
             </div>
             <blockquote class="text-xl text-gray-600 dark:text-gray-400">“ This is a great app and the value is amazing. Since I purchased it I have been using it everyday! Highly recommend it. “</blockquote>
             <div class="font-red-hat-display font-bold mt-2">
-              <cite class="not-italic">—Patricia Lepisov</cite>, <a class="text-teal-500 transition duration-150 ease-in-out" href="#0">Nobi Bank</a>
+              <cite class="not-italic">—Patricia Lepisov</cite>, <a class="text-indigo-500 transition duration-150 ease-in-out" href="#0">Nobi Bank</a>
             </div>
           </div>
 
@@ -44,7 +44,7 @@
             </div>
             <blockquote class="text-xl text-gray-600 dark:text-gray-400">“ This is a great app and the value is amazing. Since I purchased it I have been using it everyday! Highly recommend it. “</blockquote>
             <div class="font-red-hat-display font-bold mt-2">
-              <cite class="not-italic">—Zhenya Ritz</cite>, <a class="text-teal-500 transition duration-150 ease-in-out" href="#0">Sync</a>
+              <cite class="not-italic">—Zhenya Ritz</cite>, <a class="text-indigo-500 transition duration-150 ease-in-out" href="#0">Sync</a>
             </div>
           </div>
 
@@ -58,7 +58,7 @@
             </div>
             <blockquote class="text-xl text-gray-600 dark:text-gray-400">“ This is a great app and the value is amazing. Since I purchased it I have been using it everyday! Highly recommend it. “</blockquote>
             <div class="font-red-hat-display font-bold mt-2">
-              <cite class="not-italic">—Lisa Champ</cite>, <a class="text-teal-500 transition duration-150 ease-in-out" href="#0">Appicu</a>
+              <cite class="not-italic">—Lisa Champ</cite>, <a class="text-indigo-500 transition duration-150 ease-in-out" href="#0">Appicu</a>
             </div>
           </div>
 

@@ -21,23 +21,23 @@
               </div>
               <button class="flex items-center justify-between font-medium text-gray-500 dark:text-gray-400 w-20 py-3 pr-2 text-left" @click="year = '2020'">
                 <span class="block w-12 truncate">2020</span>
-                <span class="block w-3.5 h-3.5 bg-gray-400 dark:bg-gray-700 border-2 border-white dark:border-gray-900 rounded-full" :class="{ 'bg-teal-500 dark:bg-teal-500' : year === '2020' }"></span>
+                <span class="block w-3.5 h-3.5 bg-gray-400 dark:bg-gray-700 border-2 border-white dark:border-gray-900 rounded-full" :class="{ 'bg-indigo-500 dark:bg-indigo-500' : year === '2020' }"></span>
               </button>
               <button class="flex items-center justify-between font-medium text-gray-500 dark:text-gray-400 w-20 py-3 pr-2 text-left" @click="year = '2019'">
                 <span class="block w-12 truncate">2019</span>
-                <span class="block w-3.5 h-3.5 bg-gray-400 dark:bg-gray-700 border-2 border-white dark:border-gray-900 rounded-full" :class="{ 'bg-teal-500 dark:bg-teal-500' : year === '2019' }"></span>
+                <span class="block w-3.5 h-3.5 bg-gray-400 dark:bg-gray-700 border-2 border-white dark:border-gray-900 rounded-full" :class="{ 'bg-indigo-500 dark:bg-indigo-500' : year === '2019' }"></span>
               </button>
               <button class="flex items-center justify-between font-medium text-gray-500 dark:text-gray-400 w-20 py-3 pr-2 text-left" @click="year = '2018'">
                 <span class="block w-12 truncate">2018</span>
-                <span class="block w-3.5 h-3.5 bg-gray-400 dark:bg-gray-700 border-2 border-white dark:border-gray-900 rounded-full" :class="{ 'bg-teal-500 dark:bg-teal-500' : year === '2018' }"></span>
+                <span class="block w-3.5 h-3.5 bg-gray-400 dark:bg-gray-700 border-2 border-white dark:border-gray-900 rounded-full" :class="{ 'bg-indigo-500 dark:bg-indigo-500' : year === '2018' }"></span>
               </button>
               <button class="flex items-center justify-between font-medium text-gray-500 dark:text-gray-400 w-20 py-3 pr-2 text-left" @click="year = '2017'">
                 <span class="block w-12 truncate">2017</span>
-                <span class="block w-3.5 h-3.5 bg-gray-400 dark:bg-gray-700 border-2 border-white dark:border-gray-900 rounded-full" :class="{ 'bg-teal-500 dark:bg-teal-500' : year === '2017' }"></span>
+                <span class="block w-3.5 h-3.5 bg-gray-400 dark:bg-gray-700 border-2 border-white dark:border-gray-900 rounded-full" :class="{ 'bg-indigo-500 dark:bg-indigo-500' : year === '2017' }"></span>
               </button>
               <button class="flex items-center justify-between font-medium text-gray-500 dark:text-gray-400 w-20 py-3 pr-2 text-left" @click="year = '2016'">
                 <span class="block w-12 truncate">2016</span>
-                <span class="block w-3.5 h-3.5 bg-gray-400 dark:bg-gray-700 border-2 border-white dark:border-gray-900 rounded-full" :class="{ 'bg-teal-500 dark:bg-teal-500' : year === '2016' }"></span>
+                <span class="block w-3.5 h-3.5 bg-gray-400 dark:bg-gray-700 border-2 border-white dark:border-gray-900 rounded-full" :class="{ 'bg-indigo-500 dark:bg-indigo-500' : year === '2016' }"></span>
               </button>
             </div>
 
@@ -53,7 +53,7 @@
                   <div class="text-gray-600 dark:text-gray-400 grow">
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
                   </div>
-                  <a class="inline-flex items-center font-medium text-teal-500 hover:underline mt-2" href="#0">
+                  <a class="inline-flex items-center font-medium text-indigo-500 hover:underline mt-2" href="#0">
                     <span>Learn more</span>
                     <svg class="w-3 h-3 shrink-0 mt-px ml-2" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                       <path class="fill-current" d="M6.602 11l-.875-.864L9.33 6.534H0v-1.25h9.33L5.727 1.693l.875-.875 5.091 5.091z" />
@@ -69,7 +69,7 @@
                   <div class="text-gray-600 dark:text-gray-400 grow">
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
                   </div>
-                  <a class="inline-flex items-center font-medium text-teal-500 hover:underline mt-2" href="#0">
+                  <a class="inline-flex items-center font-medium text-indigo-500 hover:underline mt-2" href="#0">
                     <span>Learn more</span>
                     <svg class="w-3 h-3 shrink-0 mt-px ml-2" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                       <path class="fill-current" d="M6.602 11l-.875-.864L9.33 6.534H0v-1.25h9.33L5.727 1.693l.875-.875 5.091 5.091z" />
@@ -85,7 +85,7 @@
                   <div class="text-gray-600 dark:text-gray-400 grow">
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
                   </div>
-                  <a class="inline-flex items-center font-medium text-teal-500 hover:underline mt-2" href="#0">
+                  <a class="inline-flex items-center font-medium text-indigo-500 hover:underline mt-2" href="#0">
                     <span>Learn more</span>
                     <svg class="w-3 h-3 shrink-0 mt-px ml-2" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                       <path class="fill-current" d="M6.602 11l-.875-.864L9.33 6.534H0v-1.25h9.33L5.727 1.693l.875-.875 5.091 5.091z" />
@@ -101,7 +101,7 @@
                   <div class="text-gray-600 dark:text-gray-400 grow">
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
                   </div>
-                  <a class="inline-flex items-center font-medium text-teal-500 hover:underline mt-2" href="#0">
+                  <a class="inline-flex items-center font-medium text-indigo-500 hover:underline mt-2" href="#0">
                     <span>Learn more</span>
                     <svg class="w-3 h-3 shrink-0 mt-px ml-2" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                       <path class="fill-current" d="M6.602 11l-.875-.864L9.33 6.534H0v-1.25h9.33L5.727 1.693l.875-.875 5.091 5.091z" />
@@ -123,7 +123,7 @@
                   <div class="text-gray-600 dark:text-gray-400 grow">
                     <p>Sed do eiusmod tempor incididunt, Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                   </div>
-                  <a class="inline-flex items-center font-medium text-teal-500 hover:underline mt-2" href="#0">
+                  <a class="inline-flex items-center font-medium text-indigo-500 hover:underline mt-2" href="#0">
                     <span>Learn more</span>
                     <svg class="w-3 h-3 shrink-0 mt-px ml-2" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                       <path class="fill-current" d="M6.602 11l-.875-.864L9.33 6.534H0v-1.25h9.33L5.727 1.693l.875-.875 5.091 5.091z" />
@@ -139,7 +139,7 @@
                   <div class="text-gray-600 dark:text-gray-400 grow">
                     <p>Sed do eiusmod tempor incididunt, Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                   </div>
-                  <a class="inline-flex items-center font-medium text-teal-500 hover:underline mt-2" href="#0">
+                  <a class="inline-flex items-center font-medium text-indigo-500 hover:underline mt-2" href="#0">
                     <span>Learn more</span>
                     <svg class="w-3 h-3 shrink-0 mt-px ml-2" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                       <path class="fill-current" d="M6.602 11l-.875-.864L9.33 6.534H0v-1.25h9.33L5.727 1.693l.875-.875 5.091 5.091z" />
@@ -161,7 +161,7 @@
                   <div class="text-gray-600 dark:text-gray-400 grow">
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
                   </div>
-                  <a class="inline-flex items-center font-medium text-teal-500 hover:underline mt-2" href="#0">
+                  <a class="inline-flex items-center font-medium text-indigo-500 hover:underline mt-2" href="#0">
                     <span>Learn more</span>
                     <svg class="w-3 h-3 shrink-0 mt-px ml-2" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                       <path class="fill-current" d="M6.602 11l-.875-.864L9.33 6.534H0v-1.25h9.33L5.727 1.693l.875-.875 5.091 5.091z" />
@@ -177,7 +177,7 @@
                   <div class="text-gray-600 dark:text-gray-400 grow">
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
                   </div>
-                  <a class="inline-flex items-center font-medium text-teal-500 hover:underline mt-2" href="#0">
+                  <a class="inline-flex items-center font-medium text-indigo-500 hover:underline mt-2" href="#0">
                     <span>Learn more</span>
                     <svg class="w-3 h-3 shrink-0 mt-px ml-2" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                       <path class="fill-current" d="M6.602 11l-.875-.864L9.33 6.534H0v-1.25h9.33L5.727 1.693l.875-.875 5.091 5.091z" />
@@ -199,7 +199,7 @@
                   <div class="text-gray-600 dark:text-gray-400 grow">
                     <p>Sed do eiusmod tempor incididunt, Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                   </div>
-                  <a class="inline-flex items-center font-medium text-teal-500 hover:underline mt-2" href="#0">
+                  <a class="inline-flex items-center font-medium text-indigo-500 hover:underline mt-2" href="#0">
                     <span>Learn more</span>
                     <svg class="w-3 h-3 shrink-0 mt-px ml-2" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                       <path class="fill-current" d="M6.602 11l-.875-.864L9.33 6.534H0v-1.25h9.33L5.727 1.693l.875-.875 5.091 5.091z" />
@@ -215,7 +215,7 @@
                   <div class="text-gray-600 dark:text-gray-400 grow">
                     <p>Sed do eiusmod tempor incididunt, Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
                   </div>
-                  <a class="inline-flex items-center font-medium text-teal-500 hover:underline mt-2" href="#0">
+                  <a class="inline-flex items-center font-medium text-indigo-500 hover:underline mt-2" href="#0">
                     <span>Learn more</span>
                     <svg class="w-3 h-3 shrink-0 mt-px ml-2" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                       <path class="fill-current" d="M6.602 11l-.875-.864L9.33 6.534H0v-1.25h9.33L5.727 1.693l.875-.875 5.091 5.091z" />
@@ -237,7 +237,7 @@
                   <div class="text-gray-600 dark:text-gray-400 grow">
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est.</p>
                   </div>
-                  <a class="inline-flex items-center font-medium text-teal-500 hover:underline mt-2" href="#0">
+                  <a class="inline-flex items-center font-medium text-indigo-500 hover:underline mt-2" href="#0">
                     <span>Learn more</span>
                     <svg class="w-3 h-3 shrink-0 mt-px ml-2" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                       <path class="fill-current" d="M6.602 11l-.875-.864L9.33 6.534H0v-1.25h9.33L5.727 1.693l.875-.875 5.091 5.091z" />
@@ -253,7 +253,7 @@
                   <div class="text-gray-600 dark:text-gray-400 grow">
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
                   </div>
-                  <a class="inline-flex items-center font-medium text-teal-500 hover:underline mt-2" href="#0">
+                  <a class="inline-flex items-center font-medium text-indigo-500 hover:underline mt-2" href="#0">
                     <span>Learn more</span>
                     <svg class="w-3 h-3 shrink-0 mt-px ml-2" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                       <path class="fill-current" d="M6.602 11l-.875-.864L9.33 6.534H0v-1.25h9.33L5.727 1.693l.875-.875 5.091 5.091z" />
@@ -269,7 +269,7 @@
                   <div class="text-gray-600 dark:text-gray-400 grow">
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</p>
                   </div>
-                  <a class="inline-flex items-center font-medium text-teal-500 hover:underline mt-2" href="#0">
+                  <a class="inline-flex items-center font-medium text-indigo-500 hover:underline mt-2" href="#0">
                     <span>Learn more</span>
                     <svg class="w-3 h-3 shrink-0 mt-px ml-2" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                       <path class="fill-current" d="M6.602 11l-.875-.864L9.33 6.534H0v-1.25h9.33L5.727 1.693l.875-.875 5.091 5.091z" />

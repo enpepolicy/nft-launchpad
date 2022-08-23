@@ -88,7 +88,7 @@
               </div>
               <div class="flex flex-wrap -mx-3 mt-6">
                 <div class="w-full px-3">
-                  <button class="btn text-white bg-teal-500 hover:bg-teal-400 w-full flex items-center">
+                  <button class="btn text-white bg-indigo-500 hover:bg-indigo-400 w-full flex items-center">
                     <span>Request code</span>
                     <svg class="w-3 h-3 shrink-0 mt-px ml-2" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
                       <path class="fill-current" d="M6.602 11l-.875-.864L9.33 6.534H0v-1.25h9.33L5.727 1.693l.875-.875 5.091 5.091z" />
