@@ -33,7 +33,7 @@
 
           <!-- CTA button -->
           <div class="flex justify-center mt-8">
-            <a class="btn text-white bg-teal-500 hover:bg-teal-400" href="#0">Send us a message</a>
+            <a class="btn text-white bg-indigo-500 hover:bg-indigo-400" href="#0">Send us a message</a>
           </div>
 
         </div>

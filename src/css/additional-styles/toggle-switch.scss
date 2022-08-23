@@ -22,7 +22,7 @@
         &:checked {
 
             + label {
-                @apply bg-teal-500;
+                @apply bg-indigo-500;
 
                 > span:first-child {
                     left: 22px;

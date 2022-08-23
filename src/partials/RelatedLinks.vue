@@ -15,7 +15,7 @@
         <div class="max-w-xs sm:max-w-none mx-auto md:max-w-none lg:max-w-none grid gap-4 md:gap-6 sm:grid-cols-2 md:grid-cols-3" data-aos-id-rellinks>
 
           <!-- 1st item -->
-          <a class="flex flex-col items-center text-center p-5 text-white group bg-gradient-to-tr from-teal-500 to-teal-400 dark:to-teal-500 shadow-2xl" href="#0" data-aos="fade-down" data-aos-anchor="[data-aos-id-rellinks]">
+          <a class="flex flex-col items-center text-center p-5 text-white group bg-gradient-to-tr from-indigo-500 to-indigo-400 dark:to-indigo-500 shadow-2xl" href="#0" data-aos="fade-down" data-aos-anchor="[data-aos-id-rellinks]">
             <svg class="w-8 h-8 mb-3" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
               <path class="fill-current" d="M11.586 23l-3-3L10 18.586 15.414 24 10 29.414 8.586 28l3-3H3v-8h2v6h6.586zm8.828-14l3 3L22 13.414 16.586 8 22 2.586 23.414 4l-3 3H29v8h-2V9h-6.586zM7 14A7 7 0 117 0a7 7 0 010 14zm0-2A5 5 0 107 2a5 5 0 000 10zm18 20a7 7 0 110-14 7 7 0 010 14zm0-2a5 5 0 100-10 5 5 0 000 10z" fill="#FFF" fill-rule="nonzero" />
             </svg>

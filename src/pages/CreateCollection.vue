@@ -8,8 +8,8 @@
     <main class="grow">
 
       <!-- Page sections -->
-      <HeroHome />
-      <Process />
+      <HeroCreateCollection />
+      <FormCreateCollection />
 
     </main>
 
@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 import Header from './../partials/Header.vue'
-import HeroHome from './../partials/HeroHome.vue'
-import Process from './../partials/Process.vue'
+import HeroCreateCollection from './../partials/HeroCreateCollection.vue'
+import FormCreateCollection from './../partials/FormCreateCollection.vue'
 import Footer from './../partials/Footer.vue'
 </script>

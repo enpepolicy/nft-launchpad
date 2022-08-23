@@ -36,7 +36,7 @@
           <form class="w-full lg:w-1/2">
             <div class="flex flex-col sm:flex-row justify-center max-w-xs mx-auto sm:max-w-md lg:max-w-none">
               <input type="tel" class="form-input w-full mb-2 sm:mb-0 sm:mr-2" placeholder="Phone number" aria-label="Phone number" />
-              <a class="btn text-white bg-teal-500 hover:bg-teal-400 shrink-0" href="#0">Request code</a>
+              <a class="btn text-white bg-indigo-500 hover:bg-indigo-400 shrink-0" href="#0">Request code</a>
             </div>
             <!-- Success message -->
             <!-- <p class="text-center lg:text-left lg:absolute mt-2 opacity-75 text-sm">Thanks for subscribing!</p> -->

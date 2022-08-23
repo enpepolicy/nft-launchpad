@@ -14,7 +14,7 @@
           <p class="text-xl text-gray-600 dark:text-gray-400" data-aos="fade-down" data-aos-delay="150">Our customers are building some of the world's most original, useful and
             loved products.</p>
           <div class="mt-8" data-aos="fade-down" data-aos-delay="300">
-            <router-link class="btn text-white bg-teal-500 hover:bg-teal-400 ml-3" to="/contact">Request code</router-link>
+            <router-link class="btn text-white bg-indigo-500 hover:bg-indigo-400 ml-3" to="/contact">Request code</router-link>
           </div>
         </div>
       </div>

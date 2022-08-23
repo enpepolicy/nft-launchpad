@@ -18,41 +18,18 @@
           <!-- Desktop menu links -->
           <ul class="flex grow flex-wrap items-center font-medium">
             <li>
-              <router-link to="/about" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 px-5 py-2 flex items-center transition duration-150 ease-in-out">About</router-link>
+              <router-link to="/create-collection" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 px-5 py-2 flex items-center transition duration-150 ease-in-out">Create Collection</router-link>
             </li>
             <li>
-              <router-link to="/blog" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 px-5 py-2 flex items-center transition duration-150 ease-in-out">Blog</router-link>
+              <router-link to="/nft-store" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 px-5 py-2 flex items-center transition duration-150 ease-in-out">NFT Store</router-link>
             </li>
             <li>
-              <router-link to="/testimonials" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 px-5 py-2 flex items-center transition duration-150 ease-in-out">Testimonials</router-link>
+              <router-link to="/my-mystery-boxes" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 px-5 py-2 flex items-center transition duration-150 ease-in-out">My Mystery Boxes</router-link>
             </li>
-            <!-- 1st level: hover -->
-            <Dropdown title="Resources">
-              <li>
-                <router-link to="/help" class="text-sm text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-500 flex py-2 px-4 leading-tight">Help center</router-link>
-              </li>
-              <li>
-                <router-link to="/404" class="text-sm text-gray-600 dark:text-gray-400 hover:text-teal-500 dark:hover:text-teal-500 flex py-2 px-4 leading-tight">404</router-link>
-              </li>
-            </Dropdown>
+            <li>
+              <router-link to="/my-nft" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 px-5 py-2 flex items-center transition duration-150 ease-in-out">My NFT's</router-link>
+            </li>
           </ul>
-
-          <!-- Desktop lights switch -->
-          <div class="form-switch flex flex-col justify-center mx-3">
-            <input type="checkbox" name="light-switch" id="light-switch-desktop" v-model="darkMode" class="light-switch sr-only" />
-            <label class="relative" for="light-switch-desktop">
-              <span class="relative bg-gradient-to-t from-gray-100 to-white dark:from-gray-800 dark:to-gray-700 shadow-sm z-10" aria-hidden="true"></span>
-              <svg class="absolute inset-0" width="44" height="24" viewBox="0 0 44 24" xmlns="http://www.w3.org/2000/svg">
-                <g class="fill-current text-white" fill-rule="nonzero" opacity=".88">
-                  <path d="M32 8a.5.5 0 00.5-.5v-1a.5.5 0 10-1 0v1a.5.5 0 00.5.5zM35.182 9.318a.5.5 0 00.354-.147l.707-.707a.5.5 0 00-.707-.707l-.707.707a.5.5 0 00.353.854zM37.5 11.5h-1a.5.5 0 100 1h1a.5.5 0 100-1zM35.536 14.829a.5.5 0 00-.707.707l.707.707a.5.5 0 00.707-.707l-.707-.707zM32 16a.5.5 0 00-.5.5v1a.5.5 0 101 0v-1a.5.5 0 00-.5-.5zM28.464 14.829l-.707.707a.5.5 0 00.707.707l.707-.707a.5.5 0 00-.707-.707zM28 12a.5.5 0 00-.5-.5h-1a.5.5 0 100 1h1a.5.5 0 00.5-.5zM28.464 9.171a.5.5 0 00.707-.707l-.707-.707a.5.5 0 00-.707.707l.707.707z" />
-                  <circle cx="32" cy="12" r="3" />
-                  <circle fill-opacity=".4" cx="12" cy="12" r="6" />
-                  <circle fill-opacity=".88" cx="12" cy="12" r="3" />
-                </g>
-              </svg>
-              <span class="sr-only">Switch to light / dark version</span>
-            </label>
-          </div>
 
           <!-- Desktop CTA on the right -->
           <ul class="flex justify-end flex-wrap items-center">
@@ -63,23 +40,6 @@
 
         <!-- Mobile menu -->
         <div class="inline-flex md:hidden">
-
-          <!-- Mobile lights switch -->
-          <div class="form-switch flex flex-col justify-center mr-6 -mt-0.5">
-            <input type="checkbox" name="light-switch" id="light-switch-mobile" v-model="darkMode" class="light-switch sr-only" />
-            <label class="relative" for="light-switch-mobile">
-              <span class="relative bg-gradient-to-t from-gray-100 to-white dark:from-gray-800 dark:to-gray-700 shadow-sm z-10" aria-hidden="true"></span>
-              <svg class="absolute inset-0" width="44" height="24" viewBox="0 0 44 24" xmlns="http://www.w3.org/2000/svg">
-                <g class="fill-current text-white" fill-rule="nonzero" opacity=".88">
-                  <path d="M32 8a.5.5 0 00.5-.5v-1a.5.5 0 10-1 0v1a.5.5 0 00.5.5zM35.182 9.318a.5.5 0 00.354-.147l.707-.707a.5.5 0 00-.707-.707l-.707.707a.5.5 0 00.353.854zM37.5 11.5h-1a.5.5 0 100 1h1a.5.5 0 100-1zM35.536 14.829a.5.5 0 00-.707.707l.707.707a.5.5 0 00.707-.707l-.707-.707zM32 16a.5.5 0 00-.5.5v1a.5.5 0 101 0v-1a.5.5 0 00-.5-.5zM28.464 14.829l-.707.707a.5.5 0 00.707.707l.707-.707a.5.5 0 00-.707-.707zM28 12a.5.5 0 00-.5-.5h-1a.5.5 0 100 1h1a.5.5 0 00.5-.5zM28.464 9.171a.5.5 0 00.707-.707l-.707-.707a.5.5 0 00-.707.707l.707.707z" />
-                  <circle cx="32" cy="12" r="3" />
-                  <circle fill-opacity=".4" cx="12" cy="12" r="6" />
-                  <circle fill-opacity=".88" cx="12" cy="12" r="3" />
-                </g>
-              </svg>
-              <span class="sr-only">Switch to light / dark version</span>
-            </label>
-          </div>
 
           <!-- Hamburger button -->
           <button class="hamburger" ref="hamburger" :class="{ active: mobileNavOpen }" aria-controls="mobile-nav" :aria-expanded="mobileNavOpen" @click="mobileNavOpen = !mobileNavOpen">
@@ -107,24 +67,16 @@
                 <!-- Links -->
                 <ul>
                   <li>
-                    <router-link to="/about" class="flex text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 py-2">About</router-link>
+                    <router-link to="/create-collection" class="flex text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 py-2">Create Collection</router-link>
                   </li>
                   <li>
-                    <router-link to="/blog" class="flex text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 py-2">Blog</router-link>
+                    <router-link to="/nft-store" class="flex text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 py-2">NFT Store</router-link>
                   </li>
                   <li>
-                    <router-link to="/testimonials" class="flex text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 py-2">Testimonials</router-link>
+                    <router-link to="/my-mystery-boxes" class="flex text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 py-2">My Mystery Boxes</router-link>
                   </li>
-                  <li class="py-2 my-2 border-t border-b border-gray-200 dark:border-gray-800">
-                    <span class="flex text-gray-600 dark:text-gray-400 py-2">Resources</span>
-                    <ul class="pl-4">
-                      <li>
-                        <router-link to="/help" class="text-sm flex font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 py-2">Help center</router-link>
-                      </li>
-                      <li>
-                        <router-link to="/404" class="text-sm flex font-medium text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 py-2">404</router-link>
-                      </li>
-                    </ul>
+                  <li>
+                    <router-link to="/my-nft" class="flex text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 py-2">My NFT's</router-link>
                   </li>
                   <ConnectButton class="mt-6"/>
                 </ul>
