@@ -56,12 +56,13 @@
                 class="absolute transition-all duration-500" src="../images/shuttle.png" width="290" height="624" style="max-width: 75%;" alt="Features illustration"
                 :class="launchButtonIsHovered ? '-mt-24' :  '-mt-16 opacity-80'"
               />
-              
-              <a
-                @mouseover="launchButtonIsHovered  = true"
+              <router-link to="/launch-collection" @mouseover="launchButtonIsHovered  = true"
                 @mouseleave="launchButtonIsHovered  = false"
-                class="absolute btn text-white bg-indigo-500 hover:bg-indigo-400 shrink-0 bottom-16 cursor-pointer"
-              >Launch Collection</a>
+                class="absolute btn text-white bg-indigo-500 hover:bg-indigo-400 shrink-0 bottom-16 cursor-pointer" aria-label="Cruip"
+              >
+                Launch Collection
+              </router-link>
+
               <!-- iPhone mockup -->
               <img class="relative max-w-full mx-auto md:mr-0 md:max-w-none h-auto pointer-events-none" src="../images/iphone-mockup.png" width="344" height="674" alt="iPhone mockup" aria-hidden="true" />
             </div>

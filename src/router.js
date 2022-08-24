@@ -27,7 +27,7 @@ const router = createRouter({
       component: Home
     },
     {
-      path: '/create-collection',
+      path: '/launch-collection',
       component: CreateCollection
     },
     {
