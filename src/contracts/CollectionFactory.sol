@@ -232,6 +232,9 @@ contract CollectionFactory is Ownable {
     collection[_collectionAddress].nftUsdPrice = _USDPrice;
   }
 
+  /// @notice switch the frozenFlag boolean value
+  /// @dev Only owner of collection can call this function. if users switches this no NFTs from the collection can be bought. 
+  /// @param _collectionAddress Address of NFT Contract
   function updateFrozenFlag(address _collectionAddress) external collectionOwner(_collectionAddress) {
     collection[_collectionAddress].frozen = !collection[_collectionAddress].frozen;
   }
@@ -247,12 +250,3 @@ contract CollectionFactory is Ownable {
 		_;
 	}
 }
-
-/*
-1. CreateCollecton
-2. NftStore
-3. My MysteryBoxes
-4. My NFTs
-
-*/
-
