@@ -99,6 +99,7 @@ contract CollectionFactory is Ownable {
   }
 
   mapping(address => Collections) collection;
+  mapping(address => address[]) userToCollections;
   
   // Events
   event NFTCollectionCreated(address nftCollectionAddress, uint presaleDate, uint mysteryBoxCap, uint nftCap,
@@ -155,6 +156,7 @@ contract CollectionFactory is Ownable {
       _tokenName
     );
     collections.push(address(_collection));
+    userToCollections[msg.sender].push(address(_collection));
     emit NFTCollectionCreated(address(_collection), _presaleDate, _mysteryBoxCap, _nftCap,
     _availableNfts, msg.sender, _mysteryBoxUsdPrice, _nftUsdPrice, false);
   }
@@ -173,11 +175,21 @@ contract CollectionFactory is Ownable {
     return collection[_collectionAddress];
   }
 
-  /// @notice Create your own Collection of unique NFTs
-  /// @dev creates and deploys an ERC721 contract
+  /// @dev used to display all collections in front-end
   /// @return AllCollectionData returns onchain data of all NFT Collections deployed using this contract
   function getAllCollectionData() external view returns(Collections[] memory) {
     address [] memory _collections = collections;
+    Collections[] memory _collectionData = new Collections[](_collections.length);
+    for(uint16 i = 0; i < _collections.length; i++ ) {
+      _collectionData[i] = collection[_collections[i]];
+    }
+    return _collectionData;
+  }
+
+  /// @dev used to display all collections of a user in front-end
+  /// @return myCollectionData returns onchain data of all my NFT Collections deployed using this contract
+  function getMyCollectionData() external view returns(Collections[] memory) {
+    address [] memory _collections = userToCollections[msg.sender];
     Collections[] memory _collectionData = new Collections[](_collections.length);
     for(uint16 i = 0; i < _collections.length; i++ ) {
       _collectionData[i] = collection[_collections[i]];
