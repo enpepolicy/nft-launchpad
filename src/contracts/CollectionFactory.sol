@@ -188,8 +188,8 @@ contract CollectionFactory is Ownable {
 
   /// @dev used to display all collections of a user in front-end
   /// @return myCollectionData returns onchain data of all my NFT Collections deployed using this contract
-  function getMyCollectionData() external view returns(Collections[] memory) {
-    address [] memory _collections = userToCollections[msg.sender];
+  function getDetailedCollectionsByAddress(address _userAddress) external view returns(Collections[] memory) {
+    address [] memory _collections = userToCollections[_userAddress];
     Collections[] memory _collectionData = new Collections[](_collections.length);
     for(uint16 i = 0; i < _collections.length; i++ ) {
       _collectionData[i] = collection[_collections[i]];
