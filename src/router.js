@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from './pages/Home.vue'
 import Testimonials from './pages/Testimonials.vue'
-import Blog from './pages/Blog.vue'
+import NFTStore from './pages/NFTStore.vue'
 import BlogPost from './pages/BlogPost.vue'
 import CreateCollection from './pages/CreateCollection.vue'
 import Contact from './pages/Contact.vue'
@@ -32,7 +32,7 @@ const router = createRouter({
     },
     {
       path: '/nft-store',
-      component: Blog
+      component: NFTStore
     },
     {
       path: '/my-mystery-boxes',

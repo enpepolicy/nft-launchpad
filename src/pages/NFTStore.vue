@@ -8,11 +8,9 @@
     <main class="grow">
 
       <!-- Page sections -->
-      <HeroCreateCollection />
-      <FormCreateCollection />
+      <HeroNFTStore />
       <HeroCollections
-        section-title="Your Collections"
-        section-description="Check your deployed collections using NFT Launchpad protocol:"
+        section-title="Available Collections"
       />
 
     </main>
@@ -25,8 +23,7 @@
 
 <script setup lang="ts">
 import Header from './../partials/Header.vue'
-import HeroCreateCollection from './../partials/HeroCreateCollection.vue'
-import FormCreateCollection from './../partials/FormCreateCollection.vue'
+import HeroNFTStore from '../partials/HeroNFTStore.vue'
 import HeroCollections from '../partials/HeroCollections.vue'
-import Footer from './../partials/Footer.vue'
+import Footer from '../partials/Footer.vue'
 </script>
