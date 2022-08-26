@@ -96,6 +96,7 @@ contract CollectionFactory is Ownable {
     bool frozen;
     string coverImageUri;
     string tokenName;
+    string tokenDescription;
   }
 
   mapping(address => Collections) collection;
@@ -126,7 +127,8 @@ contract CollectionFactory is Ownable {
     uint16 _mysteryBoxCap,
     uint16 _nftCap,
     uint _mysteryBoxUsdPrice,
-    uint _nftUsdPrice
+    uint _nftUsdPrice,
+    string memory _tokenDescription
   ) external {
 
     require(_mysteryBoxCap <= _nftCap, "CollectionFactory: Presale Supply is higher than total NFT Supply");
@@ -153,7 +155,8 @@ contract CollectionFactory is Ownable {
       _nftUsdPrice,
       false,
       _coverImageUri,
-      _tokenName
+      _tokenName,
+      _tokenDescription
     );
     collections.push(address(_collection));
     userToCollections[msg.sender].push(address(_collection));
