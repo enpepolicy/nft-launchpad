@@ -1,24 +1,27 @@
 <template>
   <header class="absolute w-full z-30">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="flex items-center justify-between h-20">
+      <div class="flex items-end justify-between h-20">
 
         <!-- Site branding -->
         <div class="shrink-0 mr-5">
           <!-- Logo -->
-          <router-link to="/" class="block" aria-label="Cruip">
-            
+          <router-link to="/" class="flex items-end" aria-label="Cruip">
             <img class="" src="../images/favicon.png" width="70" height="60" style="max-width: 84.33%;" alt="Features illustration" />
+            <div class="flex items-baseline">
+              <span class="text-white text-3xl font-red-hat-display font-black">NFT</span>
+              <span class="text-indigo-500 text-sm font-red-hat-display font-bold">Launchpad</span>
+            </div>
           </router-link>
         </div>
 
         <!-- Desktop navigation -->
-        <nav class="hidden md:flex md:grow">
+        <nav class="hidden md:flex md:grow justify-end">
 
           <!-- Desktop menu links -->
-          <ul class="flex grow flex-wrap items-center font-medium">
+          <ul class="flex flex-wrap font-medium items-end pr-4 justify-end text-sm xl:text-lg">
             <li>
-              <router-link to="/create-collection" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 px-5 py-2 flex items-center transition duration-150 ease-in-out">Create Collection</router-link>
+              <router-link to="/launch-collection" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 px-5 py-2 flex items-center transition duration-150 ease-in-out">Launch Collection</router-link>
             </li>
             <li>
               <router-link to="/nft-store" class="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100 px-5 py-2 flex items-center transition duration-150 ease-in-out">NFT Store</router-link>

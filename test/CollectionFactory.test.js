@@ -87,7 +87,7 @@ describe("Collection Factory", function () {
 
 
 
-    it("NFT Attributes are correct", async() => {
+    it("All NFT Collection Attributes are correct", async() => {
       await factory.createNFTCollection(
         colName2,
         colSymbol2,
@@ -99,9 +99,33 @@ describe("Collection Factory", function () {
         colPresalePrice2,
         colRegularPrice2
               )
-      
-      collectionArrays = await factory.getCollectionArray()
-      const fullCollection = await factory.getAllCollectionData(collectionArrays)
+      const fullCollection = await factory.getAllCollectionData()
+      // attributes = await factory.getCollection(firstCollectionAddress)
+      assert.equal(fullCollection[0].presaleDate.toString(), colPresaleDate)
+      assert.equal(fullCollection[0].mysteryBoxCap.toString(), colPresaleCap)
+      assert.equal(fullCollection[0].nftCap.toString(), colFullCap)
+      assert.equal(fullCollection[0].availableNfts.toString(), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19")
+      assert.equal(fullCollection[0].owner, owner.address)
+      assert.equal(fullCollection[0].mysteryBoxUsdPrice.toString(), colPresalePrice)
+      assert.equal(fullCollection[0].nftUsdPrice.toString(), colRegularPrice)
+      assert.equal(fullCollection[0].frozen.toString(), "false")
+      assert.equal(fullCollection[0].coverImageUri.toString(), colCoverImageUri)
+      assert.equal(fullCollection[0].tokenName.toString(), colName)
+
+      assert.equal(fullCollection[1].presaleDate.toString(), colPresaleDate2)
+      assert.equal(fullCollection[1].mysteryBoxCap.toString(), colPresaleCap2)
+      assert.equal(fullCollection[1].nftCap.toString(), colFullCap2)
+      assert.equal(fullCollection[1].availableNfts.toString(), "0,1,2,3,4")
+      assert.equal(fullCollection[1].owner, owner.address)
+      assert.equal(fullCollection[1].mysteryBoxUsdPrice.toString(), colPresalePrice2)
+      assert.equal(fullCollection[1].nftUsdPrice.toString(), colRegularPrice2)
+      assert.equal(fullCollection[1].frozen.toString(), "false")
+      assert.equal(fullCollection[1].coverImageUri.toString(), colCoverImageUri2)
+      assert.equal(fullCollection[1].tokenName.toString(), colName2)
+    })
+
+    it("My NFT Collection Attributes are correct", async() => {    
+      const fullCollection = await factory.getMyCollectionData()
       // attributes = await factory.getCollection(firstCollectionAddress)
       assert.equal(fullCollection[0].presaleDate.toString(), colPresaleDate)
       assert.equal(fullCollection[0].mysteryBoxCap.toString(), colPresaleCap)

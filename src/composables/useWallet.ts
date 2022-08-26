@@ -20,7 +20,7 @@ const provider = computed(() => {
 
 const isValidNetwork = computed(() => {
   return (
-    currentNetworkId.value === NetworkEnum.ETHEREUM_TEST_NET
+    currentNetworkId.value === NetworkEnum.POLYGON_TEST_NET
   )
 })
 

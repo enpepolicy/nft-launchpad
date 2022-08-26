@@ -10,7 +10,7 @@
     <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
       <div class="pt-32 pb-12 md:pt-40 md:pb-20">
         <div class="max-w-3xl mx-auto text-center justify-center flex">
-          <h1 class="h1 lg:text-6xl font-red-hat-display" data-aos="fade-down">Create your own <span class="text-indigo-500">Collection</span></h1>
+          <h1 class="h1 lg:text-6xl font-red-hat-display" data-aos="fade-down">Launch your own <span class="text-indigo-500">Collection</span></h1>
           <div class="mx-auto absolute bottom-0 -mb-5 w-0.5 h-16 bg-gray-300 dark:bg-gray-700" data-aos="fade-down" aria-hidden="true"></div>
         </div>
       </div>
