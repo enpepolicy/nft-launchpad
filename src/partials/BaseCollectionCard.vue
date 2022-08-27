@@ -91,7 +91,7 @@ function getRandomBackgroundColor () {
 }
 
 function presaleIsActive (date: string) {
-  console.log(new Date(Number(date) * 1000).getTime() < new Date().getTime())
+  // console.log(new Date(Number(date) * 1000).getTime() < new Date().getTime())
   if (new Date(Number(date) * 1000).getTime() < new Date().getTime()) {
     return false;
   }

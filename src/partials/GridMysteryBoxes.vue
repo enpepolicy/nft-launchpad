@@ -35,29 +35,9 @@
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="pb-20 md:pb-16">
         <div class="grid gap-4 sm:gap-10 sm:grid-cols-2 lg:grid-cols-4 relative" data-aos-id-featposts>
-          <img
-            class="transition duration-700 ease-out rounded-t-[0.25rem]"
-            data-aos="fade-up"
-            data-aos-anchor="[data-aos-id-featposts]"
-            data-aos-delay="400"
-            src="../images/mystery-box-3.png"
-            height="182"
-          />
-          <img
-            class="transition duration-700 ease-out rounded-t-[0.25rem]"
-            data-aos="fade-up"
-            data-aos-anchor="[data-aos-id-featposts]"
-            data-aos-delay="400"
-            src="../images/mystery-box-3.png"
-            height="182"
-          />
-          <img
-            class="transition duration-700 ease-out rounded-t-[0.25rem]"
-            data-aos="fade-up"
-            data-aos-anchor="[data-aos-id-featposts]"
-            data-aos-delay="400"
-            src="../images/mystery-box-3.png"
-            height="182"
+          <BaseMysteryBoxCard
+            v-for="(n, index) in 5"
+            :key="index"
           />
         </div>
       </div>
@@ -67,7 +47,7 @@
 <script setup lang="ts">
 import { PropType } from 'vue';
 import { Collection } from '../types/index'
-import BaseCollectionCard from './BaseCollectionCard.vue';
+import BaseMysteryBoxCard from './BaseMysteryBoxCard.vue';
 
 const props = defineProps({
   sectionTitle: {
