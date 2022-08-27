@@ -235,7 +235,8 @@ contract CollectionFactory is Ownable {
     uint16[] storage _availableNfts = collection[_nftCollection].availableNfts;
     _availableNfts[_indexToDelete] = _availableNfts[_availableNfts.length - 1];
     userToCollectionNfts[_user][_nftCollection].push(_availableNfts[_indexToDelete]);
-    NftCollection.mint(_availableNfts[_indexToDelete], _user);
+    NftCollection nftCollection = NftCollection(_nftCollection);
+    nftCollection.mint(_availableNfts[_indexToDelete], _user);
     _availableNfts.pop();
     emit AvailableNFtsUpdated(_nftCollection, _indexToDelete); 
   }
