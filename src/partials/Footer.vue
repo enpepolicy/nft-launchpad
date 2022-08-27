@@ -38,10 +38,13 @@
             </div>
 
             <div class="text-sm">
-              <h6 class="font-medium uppercase mb-2">Contract</h6>
+              <h6 class="font-medium uppercase mb-2">Contracts (Mumbai)</h6>
               <ul>
                 <li class="mb-1">
-                  <a class="text-gray-600 dark:text-gray-400 hover:underline transition duration-150 ease-in-out" target="_blank" :href="`https://mumbai.polygonscan.com/address/${contractAddressList[NetworkEnum.POLYGON_TEST_NET]}`">Mumbai</a>
+                  <a class="text-gray-600 dark:text-gray-400 hover:underline transition duration-150 ease-in-out" target="_blank" :href="`https://mumbai.polygonscan.com/address/${contractAddressList[NetworkEnum.POLYGON_TEST_NET]['collection-factory']}`">Collection Factory</a>
+                </li>
+                <li class="mb-1">
+                  <a class="text-gray-600 dark:text-gray-400 hover:underline transition duration-150 ease-in-out" target="_blank" :href="`https://mumbai.polygonscan.com/address/${contractAddressList[NetworkEnum.POLYGON_TEST_NET]['nft-store']}`">NFT Store</a>
                 </li>
               </ul>
             </div>

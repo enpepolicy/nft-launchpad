@@ -7,7 +7,7 @@ import { abi } from '../../artifacts/src/contracts/CollectionFactory.sol/Collect
 import addressList from '../../contract-addresses.json'
 
 const dynamicAddress = computed(() => {
-  return addressList[currentNetworkId.value]
+  return addressList[currentNetworkId.value]['collection-factory']
 })
 
 const Contract = computed(() => {

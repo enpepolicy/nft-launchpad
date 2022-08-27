@@ -9,12 +9,13 @@ const fs = require('fs');
 const path = require('path');
 const { ethers } = require("hardhat");
 
-function setAddress (networkId, contractAddress) {
+function setAddress (networkId, contractName, contractAddress) {
   const addressPath = path.resolve(__dirname, '../contract-addresses.json')
   const addresses = fs.readFileSync(addressPath, "utf8")
   const addressesJsonData = JSON.parse(addresses)
 
-  addressesJsonData[networkId] = contractAddress
+  console.log(networkId, contractName, contractAddress)
+  addressesJsonData[networkId][contractName] = contractAddress
   
   // Updates file
   fs.writeFileSync(
@@ -40,8 +41,9 @@ async function main() {
     "400",
     "NFT Collection supporting Energy System NGO"
   );
+
   console.log("CollectionFactory: ", factory.address);
-  setAddress("CollectionFactory", factory.address)
+  setAddress(process.env.NETWORK_ID, 'collection-factory', factory.address)
 
   const NftStore = await ethers.getContractFactory("NftStore")  
   let nftStore = await NftStore.deploy(
@@ -56,7 +58,7 @@ async function main() {
     "0x2bE1B381396c44b905C1f3Cf586DCF9d7519Df1d"
   )
   console.log("NftStore", nftStore.address)
-  setAddress("NftStore", nftStore.address)
+  setAddress(process.env.NETWORK_ID, 'nft-store', nftStore.address)
 }
 // string memory _tokenName,
 // string memory _tokenSymbol,

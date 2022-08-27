@@ -5,7 +5,7 @@
 
         <!-- Section header -->
         <div class="max-w-3xl mx-auto text-center pb-12 ">
-          <p class="text-[1.8rem] text-gray-600 dark:text-gray-400 font-red-hat-display ">Fill the form with your collection's information and be amazed with NFT Launchpad reliabilty. *You will need the IPFS Folder hash and image hash. </p>
+          <p class="text-[1.8rem] text-gray-600 dark:text-gray-400 font-red-hat-display ">Fill the form with your collection's information and be amazed with NFT Launchpad reliabilty.<br> *You will need the IPFS Folder hash and Cover Image hash. </p>
         </div>    
         
         <form action="" class="pb-10 w-full gap-x-20 gap-y-5 grid grid-cols-1 md:grid-cols-2 ">
@@ -265,7 +265,7 @@ const payload = ref({
 
 async function create () {
   isLoading.value = true
-  console.log(payload.value._presaleDate)
+  // console.log(payload.value._presaleDate)
 
   await createNFTCollection(payload.value)
     .then(() => {
