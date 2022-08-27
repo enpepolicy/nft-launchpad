@@ -44,9 +44,16 @@ contract NftStore is VRFConsumerBaseV2 {
     uint counter;
   }
 
+  struct UserNfts {
+    address collectionAddres;
+    uint[] nftIds;
+  }
+
   mapping(address => mapping(address => uint)) public mysteryBoxUserCounter;
   mapping(address => mapping(address => bool)) userHasCollectionMB;
+  mapping(address => mapping(address => bool)) userHasCollectionNft;
   mapping(address => address[]) userToCollectionsMB;
+  mapping(address => address[]) userToCollectionsNft;
   mapping(address => uint) public mysteryBoxCounter;
   mapping(address => uint) public nftCounter;
   mapping(uint => address) requestToSender;
@@ -136,6 +143,11 @@ contract NftStore is VRFConsumerBaseV2 {
     }
     nftCounter[_collectionAddress] ++;
     _requestRandomWords(1, _collectionAddress);
+    if(userHasCollectionNft[msg.sender][_collectionAddress] == false) {
+      userHasCollectionNft[msg.sender][_collectionAddress] = true;
+      userToCollectionsNft[msg.sender].push(_collectionAddress);
+    }
+
   }
 
   function _requestRandomWords(uint32 _numWords, address _collectionAddress) internal {
@@ -162,8 +174,6 @@ contract NftStore is VRFConsumerBaseV2 {
     uint remaining = collectionFactory.getCollection(collectionAddress).availableNfts.length;
     uint16 index = uint16(randomWords[0] % remaining);
     collectionFactory.updateAvailableNFts(collectionAddress,user, index); // REVIEW: updateColllection is named udateAvailableNFTs now
-    INFTCollection nftCollection = INFTCollection(collectionAddress);
-    nftCollection.mint(index, user);
   }
 
   function getLatestPrice() public view returns (uint) {
@@ -177,7 +187,7 @@ contract NftStore is VRFConsumerBaseV2 {
     return uint(price);
   }
 
-  function getUserMysteryBoxes(address _user) internal view returns (UserMysteryBoxes[] memory) {
+  function getUserMysteryBoxes(address _user) public view returns (UserMysteryBoxes[] memory) {
     address[] memory collections = userToCollectionsMB[_user];
     UserMysteryBoxes[] memory userMysteryBoxes = new UserMysteryBoxes[](collections.length);
     for(uint i = 0; i < collections.length; i++) {
@@ -190,8 +200,22 @@ contract NftStore is VRFConsumerBaseV2 {
     return userMysteryBoxes;
   }
 
+  function getUserNfts(address _user) public view returns(UserNfts[] memory) {
+    address[] memory collections = userToCollectionsNft[_user];
+    UserNfts[] memory userNfts = new UserNfts[](collections.length);
+    for(uint i = 0; i < collections.length; i++) {
+      uint[] memory nftIds = collectionFactory.getTokenIdsByUser(_user, collections[i]);
+      userNfts[i] = UserNfts(
+        collections[i],
+        nftIds
+      );    
+    }
+    return userNfts;
+  }
+
   function getTokenAmount(uint _usdAmount) public view returns(uint) {
-    return _usdAmount * (10 ** 18) * (10 ** 6) / getLatestPrice();
+    uint amount = _usdAmount * (10 ** 18) * (10 ** 6) / getLatestPrice();
+    return (amount + (amount * 5 / 100));
   }
 
 }
