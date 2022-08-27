@@ -14,7 +14,12 @@ const ALCHEMY_API_KEY = "KEY";
 const privateKeys = process.env.PRIVATE_KEYS || "";
 
 module.exports = {
-  solidity: "0.8.9",
+  solidity: {
+    version: "0.8.9",
+    optimizer: {
+      enabled: true,
+      runs: 50
+    }},
   paths: {
     sources: "./src/contracts",
     artifacts:  "./src/artifacts"

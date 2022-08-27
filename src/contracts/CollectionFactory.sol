@@ -1,16 +1,16 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-
 /// @title NFT Collection to be used by artists
 /// @author Juan D. Polanco & Miquel Trallero
 /// @notice This is a standard ERC721 with few, but valuable modifications
 /// @dev All function calls are currently implemented without side effects
 /// @custom:experimental This is an experimental contract used in chainlink hackathon.
-contract NftCollection is ERC721 {
+contract NftCollection is ERC721, Ownable {
   string baseURI;
   address nftStoreAddress;
   using Strings for uint;
@@ -100,6 +100,7 @@ contract CollectionFactory is Ownable {
     string tokenDescription;
   }
 
+  mapping(address => mapping(address => uint[])) userToCollectionNfts;
   mapping(address => Collections) collection;
   mapping(address => address[]) userToCollections;
   
@@ -225,10 +226,11 @@ contract CollectionFactory is Ownable {
   /// @dev used by NFTStore contract after minting an NFT, so that this NFT cannot be minted again
   /// @param _nftCollection Address of NFT Contract
   /// @param _indexToDelete index of NFT that cannot be minted anymore
-  function updateAvailableNFts(address _nftCollection, uint16 _indexToDelete) external {
+  function updateAvailableNFts(address _nftCollection,address _user, uint16 _indexToDelete) external {
     require(msg.sender == nftStoreAddress, "Only nftStore can update this");
     uint16[] storage _availableNfts = collection[_nftCollection].availableNfts;
     _availableNfts[_indexToDelete] = _availableNfts[_availableNfts.length - 1];
+    userToCollectionNfts[_user][_nftCollection].push(_availableNfts[_indexToDelete]);
     _availableNfts.pop();
     emit AvailableNFtsUpdated(_nftCollection, _indexToDelete);
   }
