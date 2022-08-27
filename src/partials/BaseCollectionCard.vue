@@ -40,7 +40,7 @@
         <BaseButton
             :class="presaleIsActive(collection.presaleEndDate) ? 'bg-indigo-800' : 'bg-indigo-500'"
             class="mt-4"
-            :inner-text="presaleIsActive(collection.presaleEndDate) ? `Buy Presale Box ($${collection.mysteryBoxInUSD / 100})` : `Buy NFT ($${collection.NFTPriceInUSD / 100} USD)`"
+            :inner-text="presaleIsActive(collection.presaleEndDate) ? `Buy Box ($${collection.mysteryBoxInUSD / 100} USD)` : `Buy NFT ($${collection.NFTPriceInUSD / 100} USD)`"
         />
 
         <div

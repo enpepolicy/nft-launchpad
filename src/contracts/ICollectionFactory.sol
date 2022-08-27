@@ -20,4 +20,5 @@ interface ICollectionFactory {
 
 	function updateAvailableNFts(address _nftCollection,address _user, uint16 _indexToDelete) external;
   function getCollection(address _collectionAddress) external view returns(Collections memory);
+  function getUserCollections(address _userAddress) external view returns(address[] memory);
 }

@@ -39,7 +39,14 @@ contract NftStore is VRFConsumerBaseV2 {
   address public factoryAddress;
   ICollectionFactory collectionFactory;
 
+  struct UserMysteryBoxes {
+    address collectionAddres;
+    uint counter;
+  }
+
   mapping(address => mapping(address => uint)) public mysteryBoxUserCounter;
+  mapping(address => mapping(address => bool)) userHasCollectionMB;
+  mapping(address => address[]) userToCollectionsMB;
   mapping(address => uint) public mysteryBoxCounter;
   mapping(address => uint) public nftCounter;
   mapping(uint => address) requestToSender;
@@ -95,6 +102,10 @@ contract NftStore is VRFConsumerBaseV2 {
     payable(msg.sender).transfer(msg.value - price - chainlinkFeeMatic);
     mysteryBoxUserCounter[msg.sender][_collectionAddress] ++;
     mysteryBoxCounter[_collectionAddress] ++;
+    if(userHasCollectionMB[msg.sender][_collectionAddress] == false) {
+      userHasCollectionMB[msg.sender][_collectionAddress] = true;
+      userToCollectionsMB[msg.sender].push(_collectionAddress);
+    }
   }
 
   function mint(address _collectionAddress) public payable {
@@ -164,6 +175,23 @@ contract NftStore is VRFConsumerBaseV2 {
       /*uint80 answeredInRound*/
     ) = priceFeed.latestRoundData();
     return uint(price);
+  }
+
+  function getUserMysteryBoxes(address _user) internal view returns (UserMysteryBoxes[] memory) {
+    address[] memory collections = userToCollectionsMB[_user];
+    UserMysteryBoxes[] memory userMysteryBoxes = new UserMysteryBoxes[](collections.length);
+    for(uint i = 0; i < collections.length; i++) {
+      uint counter = mysteryBoxUserCounter[_user][collections[i]];
+      userMysteryBoxes[i] = UserMysteryBoxes(
+        collections[i],
+        counter
+      );    
+    }
+    return userMysteryBoxes;
+  }
+
+  function getTokenAmount(uint _usdAmount) public view returns(uint) {
+    return _usdAmount * (10 ** 18) * (10 ** 6) / getLatestPrice();
   }
 
 }
