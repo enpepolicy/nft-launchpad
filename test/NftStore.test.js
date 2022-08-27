@@ -17,13 +17,13 @@
 // Mint when cap is reached should fail
 
 const { assert } = require("chai")
-const { ethers, waffle } = require("hardhat")
+const { ethers } = require("hardhat")
 
 describe("NftStore", () => {
   
   let CollectionFactory, collectionFactory, NftStore, nftStore, MockPriceFeed, mockPriceFeed, MockPriceVRF, mockPriceVRF, Link, link
   let admin, owner, user
-  let provider = waffle.provider
+  let provider
   const subscriptionId = "1";
   const _vrfCoordinator = "0x7a1BaC17Ccc5b313516C5E16fb24f7659aA5ebed"
   const keyHash = "0x4b09e658ed251bcafeebbc69400383d49f344ace09b9576fe248bb02c003fe9f"
@@ -31,10 +31,10 @@ describe("NftStore", () => {
   const _requestConfirmations = "3"
   const price = '30000000000'
 
-
-  before(async() => {    
+  before(async() => {  
     [admin, owner, user] = await ethers.getSigners()
-    
+    provider = ethers.getDefaultProvider();
+      
     MockPriceFeed = await ethers.getContractFactory("MockV3Aggregator")
     MockPriceVRF = await ethers.getContractFactory("VRFCoordinatorV2Mock")
     Link = await ethers.getContractFactory("BasicToken");
@@ -93,12 +93,12 @@ describe("NftStore", () => {
     })
 
     it('Admin received funds', async() => {
-      const adminBalance = provider.getBalance(admin.address)
+      const adminBalance = await provider.getBalance(admin.address)
       assert.equal(adminBalance, amount.toString())
     })
 
     it('User receives funds back', async() => {
-      const userBalance = provider.getBalance(owner.address)
+      const userBalance = await provider.getBalance(owner.address)
       assert.equal(userBalance, "1")
     })
 
