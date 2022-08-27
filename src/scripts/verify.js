@@ -11,15 +11,15 @@ function getAddress (networkId, contractName) {
 }
 
 async function main () {
-    // await hre.run("verify:verify", {
-    //     address: getAddress(process.env.NETWORK_ID, "collection-factory")
-    // })
+    await hre.run("verify:verify", {
+        address: getAddress(process.env.NETWORK_ID, "collection-factory")
+    })
     await hre.run("verify:verify", {
         address: getAddress(process.env.NETWORK_ID, "nft-store"),
         constructorArguments: [
             "0xd0D5e3DB44DE05E9F294BB0a3bEEaF030DE24Ada",
             getAddress(process.env.NETWORK_ID, "collection-factory"),
-            1612,
+            1616,
             "0x7a1BaC17Ccc5b313516C5E16fb24f7659aA5ebed",
             "0x326C977E6efc84E512bB9C30f76E30c160eD06FB",
             "0x4b09e658ed251bcafeebbc69400383d49f344ace09b9576fe248bb02c003fe9f",
