@@ -1,16 +1,14 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "hardhat/console.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 /// @title NFT Collection to be used by artists
 /// @author Juan D. Polanco & Miquel Trallero
 /// @notice This is a standard ERC721 with few, but valuable modifications
 /// @dev All function calls are currently implemented without side effects
 /// @custom:experimental This is an experimental contract used in chainlink hackathon.
-contract NftCollection is ERC721, Ownable {
+contract NftCollection is ERC721 {
   string baseURI;
   address nftStoreAddress;
   using Strings for uint;
@@ -84,7 +82,7 @@ contract NftCollection is ERC721, Ownable {
 contract CollectionFactory is Ownable {
 
   address[] collections;
-  address public nftStoreAddress;
+  address nftStoreAddress;
   struct Collections {
     address collectionAddress;
     uint presaleDate;
@@ -238,17 +236,10 @@ contract CollectionFactory is Ownable {
   /// @notice updates unit price of mystery box of a NFT Collection
   /// @dev can only be called by owner of callection
   /// @param _collectionAddress Address of NFT Contract
-  /// @param _USDPrice new price in dollars with 2 decimals. E.g 2,00 $ -> 200
-  function updadateMysteryBoxPrice(address _collectionAddress, uint _USDPrice) external collectionOwner(_collectionAddress) {
-    collection[_collectionAddress].mysteryBoxUsdPrice = _USDPrice;
-  }
-
-  /// @notice updates NFT unit price of a NFT Collection
-  /// @dev can only be called by owner of callection
-  /// @param _collectionAddress Address of NFT Contract
-  /// @param _USDPrice new price in dollars with 2 decimals. E.g 2,00 $ -> 200
-  function updateNftPrice(address _collectionAddress, uint _USDPrice) external collectionOwner(_collectionAddress) {
-    collection[_collectionAddress].nftUsdPrice = _USDPrice;
+  /// @param _mysteryUSDPrice new price in dollars with 2 decimals. E.g 2,00 $ -> 200
+  function updadatePrice(address _collectionAddress, uint _mysteryUSDPrice, uint _nftUSDPrice) external collectionOwner(_collectionAddress) {
+    collection[_collectionAddress].mysteryBoxUsdPrice = _mysteryUSDPrice;
+    collection[_collectionAddress].nftUsdPrice = _nftUSDPrice;
   }
 
   /// @notice switch the frozenFlag boolean value

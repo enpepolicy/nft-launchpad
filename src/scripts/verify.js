@@ -2,17 +2,20 @@ const hre = require("hardhat");
 const fs = require('fs');
 const path = require('path');
 
-function getAddress (networkId) {
+function getAddress (contractName) {
   const addressPath = path.resolve(__dirname, '../contract-addresses.json')
   const addresses = fs.readFileSync(addressPath, "utf8")
   const addressesJsonData = JSON.parse(addresses)
 
-  return addressesJsonData[networkId]
+  return addressesJsonData[contractName]
 }
 
 async function main () {
     await hre.run("verify:verify", {
-        address: getAddress(process.env.NETWORK_ID)
+        address: getAddress("CollectionFactory")
+    })
+    await hre.run("verify:verify", {
+        address: getAddress("NftStore")
     })
 }
 

@@ -18,7 +18,7 @@ module.exports = {
     version: "0.8.9",
     optimizer: {
       enabled: true,
-      runs: 50
+      runs: 200
     }},
   paths: {
     sources: "./src/contracts",

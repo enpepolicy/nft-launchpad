@@ -1,11 +1,8 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-// Import this file to use console.log
-import "hardhat/console.sol";
-
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "./CollectionFactory.sol";
+import "./INFTCollection.sol";
+import "./ICollectionFactory.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
@@ -40,7 +37,7 @@ contract NftStore is VRFConsumerBaseV2 {
   address payable admin;
 
   address public factoryAddress;
-  CollectionFactory collectionFactory;
+  ICollectionFactory collectionFactory;
 
   mapping(address => mapping(address => uint)) public mysteryBoxUserCounter;
   mapping(address => uint) public mysteryBoxCounter;
@@ -62,7 +59,7 @@ contract NftStore is VRFConsumerBaseV2 {
     VRFConsumerBaseV2(_vrfCoordinator)
   {
     priceFeed = AggregatorV3Interface(_priceFeedAddress);
-    collectionFactory = CollectionFactory(_factoryAddress);
+    collectionFactory = ICollectionFactory(_factoryAddress);
     vrfCoordinator = _vrfCoordinator;
     COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
     link = _link; 
@@ -77,7 +74,7 @@ contract NftStore is VRFConsumerBaseV2 {
   }  
 
   function buyMysteryBox(address _collectionAddress) public payable {    
-    CollectionFactory.Collections memory collections = collectionFactory.getCollection(_collectionAddress);
+    ICollectionFactory.Collections memory collections = collectionFactory.getCollection(_collectionAddress);
     require(
       mysteryBoxCounter[_collectionAddress] < collections.mysteryBoxCap,
       "NftStore: all Mystery Boxes were already sold"
@@ -101,7 +98,7 @@ contract NftStore is VRFConsumerBaseV2 {
   }
 
   function mint(address _collectionAddress) public payable {
-    CollectionFactory.Collections memory collections = collectionFactory.getCollection(_collectionAddress);
+    ICollectionFactory.Collections memory collections = collectionFactory.getCollection(_collectionAddress);
     require(
       block.timestamp > collections.presaleDate,
       "NftStore: NFT cannot be minted during presale"
@@ -154,7 +151,7 @@ contract NftStore is VRFConsumerBaseV2 {
     uint remaining = collectionFactory.getCollection(collectionAddress).availableNfts.length;
     uint16 index = uint16(randomWords[0] % remaining);
     collectionFactory.updateAvailableNFts(collectionAddress,user, index); // REVIEW: updateColllection is named udateAvailableNFTs now
-    NftCollection nftCollection = NftCollection(collectionAddress);
+    INFTCollection nftCollection = INFTCollection(collectionAddress);
     nftCollection.mint(index, user);
   }
 
