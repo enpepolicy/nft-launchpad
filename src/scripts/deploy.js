@@ -41,7 +41,7 @@ async function main() {
     "NFT Collection supporting Energy System NGO"
   );
   console.log("CollectionFactory: ", factory.address);
-  setAddress("Collection Factory", factory.address)
+  setAddress("CollectionFactory", factory.address)
 
   const NftStore = await ethers.getContractFactory("NftStore")  
   let nftStore = await NftStore.deploy(
