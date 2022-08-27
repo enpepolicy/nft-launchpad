@@ -265,7 +265,7 @@ const payload = ref({
 
 async function create () {
   isLoading.value = true
-  console.log(payload.value._presaleDate)
+  // console.log(payload.value._presaleDate)
 
   await createNFTCollection(payload.value)
     .then(() => {
