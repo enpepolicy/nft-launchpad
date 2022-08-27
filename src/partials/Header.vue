@@ -7,7 +7,7 @@
         <div class="shrink-0 mr-5">
           <!-- Logo -->
           <router-link to="/" class="flex items-end" aria-label="Cruip">
-            <img class="" src="../images/favicon.png" width="70" height="60" style="max-width: 84.33%;" alt="Features illustration" />
+            <img class="mr-3" src="../images/shuttle.png" width="45" height="60" style="max-width: 84.33%;" alt="Features illustration" />
             <div class="flex items-baseline">
               <span class="text-white text-3xl font-red-hat-display font-black">NFT</span>
               <span class="text-indigo-500 text-sm font-red-hat-display font-bold">Launchpad</span>

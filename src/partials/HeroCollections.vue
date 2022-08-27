@@ -27,12 +27,13 @@
     </div>
 
   </section>
+
   <section
     v-if="props.collections[0]"
   >
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="pb-20 md:pb-16">
-        <div class="grid gap-4 sm:gap-10 sm:grid-cols-2 lg:grid-cols-4 relative" data-aos-id-featposts>
+        <div class="grid gap-x-4 gap-y-24 sm:gap-10 sm:grid-cols-2 lg:grid-cols-4 relative" data-aos-id-featposts>
           <BaseCollectionCard
             v-for="(collection, index) in props.collections"
             :key="index"
@@ -45,6 +46,7 @@
 </template>
 <script setup lang="ts">
 import { PropType } from 'vue';
+import { Collection } from '../types/index'
 import BaseCollectionCard from './BaseCollectionCard.vue';
 
 const props = defineProps({
@@ -54,42 +56,42 @@ const props = defineProps({
   },
   sectionDescription: {
     type: String,
-    default: 'Here are some collections deployed using our protocol:',
+    default: 'Here are some collections deployed using NFT Launchpad protocol:',
   },
   address: {
     type: String,
     default: '',
   },
   collections: {
-    type: Array as PropType<Array<{addresss: string; name: string; description: string; coverIPFSHash: string; mysteryBoxInUSD: number; NFTPriceInUSD: number; presaleEndDate: string}>>,
+    type: Array as PropType<Array<Collection>>,
     default: () => [
-      {
-        address: '0x9b17C9E2AA27F93b1d0e71b872069e096cB41233',
-        name: 'Collection 1',
-        description: "Supp",
-        coverIPFSHash: 'https://images.assetsdelivery.com/compings_v2/sabelskaya/sabelskaya1908/sabelskaya190800807.jpg',
-        mysteryBoxInUSD: 5,
-        NFTPriceInUSD: 10,
-        presaleEndDate: '2022.8.10'
-      },
-      {
-        address: '0x9b17C9E2AA27F93b1d0e71b872069e096cB41233',
-        name: 'Collection 2',
-        description: "Support people's health harm reduction by minting a unique NFT that helps alert adulterated MDMA (Ecstasy) in festivals and events",
-        coverIPFSHash: 'https://images.assetsdelivery.com/compings_v2/sabelskaya/sabelskaya1908/sabelskaya190800807.jpg',
-        mysteryBoxInUSD: 5,
-        NFTPriceInUSD: 10,
-        presaleEndDate: '2022.10.10'
-      },
-      {
-        address: '0x9b17C9E2AA27F93b1d0e71b872069e096cB41233',
-        name: 'Collection 3',
-        description: "Support peops",
-        coverIPFSHash: 'https://images.assetsdelivery.com/compings_v2/sabelskaya/sabelskaya1908/sabelskaya190800807.jpg',
-        mysteryBoxInUSD: 8,
-        NFTPriceInUSD: 100,
-        presaleEndDate: '2022.9.10'
-      },
+      // {
+      //   address: '0x9b17C9E2AA27F93b1d0e71b872069e096cB41233',
+      //   name: 'Collection 1',
+      //   description: "Supp",
+      //   coverIPFSHash: 'https://images.assetsdelivery.com/compings_v2/sabelskaya/sabelskaya1908/sabelskaya190800807.jpg',
+      //   mysteryBoxInUSD: 5,
+      //   NFTPriceInUSD: 10,
+      //   presaleEndDate: '2022.8.10'
+      // },
+      // {
+      //   address: '0x9b17C9E2AA27F93b1d0e71b872069e096cB41233',
+      //   name: 'Collection 2',
+      //   description: "Support people's health harm reduction by minting a unique NFT that helps alert adulterated MDMA (Ecstasy) in festivals and events",
+      //   coverIPFSHash: 'https://images.assetsdelivery.com/compings_v2/sabelskaya/sabelskaya1908/sabelskaya190800807.jpg',
+      //   mysteryBoxInUSD: 5,
+      //   NFTPriceInUSD: 10,
+      //   presaleEndDate: '2022.10.10'
+      // },
+      // {
+      //   address: '0x9b17C9E2AA27F93b1d0e71b872069e096cB41233',
+      //   name: 'Collection 3',
+      //   description: "Support peops",
+      //   coverIPFSHash: 'https://images.assetsdelivery.com/compings_v2/sabelskaya/sabelskaya1908/sabelskaya190800807.jpg',
+      //   mysteryBoxInUSD: 8,
+      //   NFTPriceInUSD: 100,
+      //   presaleEndDate: '2022.9.10'
+      // },
     ]
   },
 })

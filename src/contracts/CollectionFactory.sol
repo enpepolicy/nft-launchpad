@@ -83,9 +83,10 @@ contract NftCollection is ERC721 {
 /// @custom:experimental This is an experimental contract used in chainlink hackathon.
 contract CollectionFactory is Ownable {
 
-  address[] public collections;
+  address[] collections;
   address public nftStoreAddress;
   struct Collections {
+    address collectionAddress;
     uint presaleDate;
     uint16 mysteryBoxCap;
     uint16 nftCap;
@@ -96,6 +97,7 @@ contract CollectionFactory is Ownable {
     bool frozen;
     string coverImageUri;
     string tokenName;
+    string tokenDescription;
   }
 
   mapping(address => Collections) collection;
@@ -126,7 +128,8 @@ contract CollectionFactory is Ownable {
     uint16 _mysteryBoxCap,
     uint16 _nftCap,
     uint _mysteryBoxUsdPrice,
-    uint _nftUsdPrice
+    uint _nftUsdPrice,
+    string memory _tokenDescription
   ) external {
 
     require(_mysteryBoxCap <= _nftCap, "CollectionFactory: Presale Supply is higher than total NFT Supply");
@@ -144,6 +147,7 @@ contract CollectionFactory is Ownable {
     );
     // Stores onchain data used to mint NFTs
     collection[address(_collection)] = Collections(
+      address(_collection),
       _presaleDate,
       _mysteryBoxCap,
       _nftCap,
@@ -153,7 +157,8 @@ contract CollectionFactory is Ownable {
       _nftUsdPrice,
       false,
       _coverImageUri,
-      _tokenName
+      _tokenName,
+      _tokenDescription
     );
     collections.push(address(_collection));
     userToCollections[msg.sender].push(address(_collection));

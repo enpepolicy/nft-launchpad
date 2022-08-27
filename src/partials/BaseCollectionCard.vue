@@ -7,7 +7,7 @@
         >
         <img
             class="transition duration-700 ease-out rounded-t-[0.25rem]"
-            :src="collection.coverIPFSHash"
+            :src="imageUrl"
             height="182"
             :alt="collection.name"
         />
@@ -28,41 +28,44 @@
 
         <div class="pt-4 text-center">
             <a
-            :href="`https://mumbai.polygonscan.com/address/${collection.addresss}`"
+            :href="`https://mumbai.polygonscan.com/address/${collection.address}`"
             target="_blank"
             class="text-sm opacity-100 hover:font-semibold"
             >
             📝 Check Contract 📝
             </a>
-            <div class="text-xs opacity-100 text-white/60">Presale Box {{ collection.mysteryBoxInUSD }} USD / NFT {{ collection.NFTPriceInUSD }} USD</div>
+            <div class="text-xs opacity-100 text-white/60">Presale Box {{ collection.mysteryBoxInUSD / 100 }} USD / NFT {{ collection.NFTPriceInUSD / 100 }} USD</div>
         </div>
 
         <BaseButton
             :class="presaleIsActive(collection.presaleEndDate) ? 'bg-indigo-800' : 'bg-indigo-500'"
             class="mt-4"
-            :inner-text="presaleIsActive(collection.presaleEndDate) ? `Buy Presale Box ($${collection.mysteryBoxInUSD})` : `Buy NFT ($${collection.NFTPriceInUSD} USD)`"
+            :inner-text="presaleIsActive(collection.presaleEndDate) ? `Buy Presale Box ($${collection.mysteryBoxInUSD / 100})` : `Buy NFT ($${collection.NFTPriceInUSD / 100} USD)`"
         />
+
+
         
         <div
-            v-if="presaleIsActive(collection.presaleEndDate)"
+            v-if="presaleIsActive(String(Number(collection.presaleEndDate) * 1000))"
             class="pt-4 px-4"
         >
             <div class="text-xs opacity-100 font-semibold text-center">Presale Ends In:</div>
             <BaseCountdown
-            :endDate="new Date(collection.presaleEndDate)"
+              :endDate="new Date(Number(collection.presaleEndDate) * 1000)"
             />
         </div>
     </article>
 </template>
 <script setup lang="ts">
-import { PropType, readonly } from 'vue';
+import { PropType, readonly, computed } from 'vue';
+import { Collection } from '../types/index'
+
 import BaseCountdown from './BaseCountdown.vue';
 import BaseButton from './BaseButton.vue';
 
-
-defineProps({
+const props = defineProps({
   collection: {
-    type: Object as PropType<{addresss: string; name: string; description: string; coverIPFSHash: string; mysteryBoxInUSD: number; NFTPriceInUSD: number; presaleEndDate: string}>,
+    type: Object as PropType<Collection>,
     default: () => [
     //   {
     //     address: '0x9b17C9E2AA27F93b1d0e71b872069e096cB41233',
@@ -79,6 +82,10 @@ defineProps({
 
 const backgroundColors = readonly(['bg-pink-800', 'bg-indigo-800', 'bg-purple-800', 'bg-green-800', 'bg-orange-800', 'bg-red-800' ])
 
+const imageUrl = computed(() => {
+  return 'https://gateway.pinata.cloud/ipfs/' + props.collection.coverIPFSHash
+})
+
 function getRandomBackgroundColor () {
   const backgroundColorsCopy = Object.assign([], backgroundColors)
   const randomColor = backgroundColorsCopy.sort(() => Math.random() - Math.random()).slice(0, 1)
@@ -86,7 +93,7 @@ function getRandomBackgroundColor () {
 }
 
 function presaleIsActive (date: string) {
-  if (new Date(date).getTime() < new Date().getTime()) {
+  if (new Date(Number(date) * 1000).getTime() < new Date().getTime()) {
     return false;
   }
   return true;

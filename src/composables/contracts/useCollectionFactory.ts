@@ -21,23 +21,57 @@ const Contract = computed(() => {
 })
 
 async function getDetailedCollectionsByAddress (address: string) {
-    return await Contract.value
-        .getDetailedCollectionsByAddress(address)
+  return await Contract.value
+      .getDetailedCollectionsByAddress(address)
 }
 
-// async function createEnvelope(
-//   participantsLimit: number,
-//   message: string,
-//   creatorNickname: string,
-//   tokenAmount: string,
-// ) {
-//   const transaction =  await Contract.value
-//     .createEnvelope(
-//       participantsLimit,
-//       message,
-//       creatorNickname,
-//       { value: ethers.utils.parseEther(tokenAmount) }
-//     )
+async function getAllCollectionData () {
+    return await Contract.value
+        .getAllCollectionData()
+}
+
+async function createNFTCollection (payload: {
+  _tokenName: string;
+  _tokenDescription: string;
+  _tokenSymbol: string;
+  _baseUri: string;
+  _coverImageUri: string;
+  _presaleDate: number;
+  _mysteryBoxCap: number | undefined;
+  _nftCap: number | undefined;
+  _mysteryBoxUsdPrice: number | undefined;
+  _nftUsdPrice: number | undefined
+}) {
+
+  const {
+    _tokenName,
+    _tokenDescription,
+    _tokenSymbol,
+    _baseUri,
+    _coverImageUri,
+    _presaleDate,
+    _mysteryBoxCap,
+    _nftCap,
+    _mysteryBoxUsdPrice,
+    _nftUsdPrice
+  } = payload;
+
+  const transaction =  await Contract.value
+    .createNFTCollection(
+      _tokenName,
+      _tokenSymbol,
+      _baseUri,
+      _coverImageUri,
+      Math.trunc(_presaleDate / 1000),
+      _mysteryBoxCap || 0,
+      _nftCap || 0,
+      _mysteryBoxUsdPrice ?_mysteryBoxUsdPrice * 100 : 0,
+      _nftUsdPrice ? _nftUsdPrice * 100 : 0,
+      _tokenDescription,
+    )      
+
+  return await transaction.wait().then(res => console.log(res));
+}
       
 //   return await transaction.wait().then(res => console.log(res));
 // }
@@ -66,7 +100,10 @@ async function getDetailedCollectionsByAddress (address: string) {
 // }
 
 export {
-    getDetailedCollectionsByAddress
+  dynamicAddress,
+  getAllCollectionData,
+  getDetailedCollectionsByAddress,
+  createNFTCollection
 //   createEnvelope,
 //   getEnvelopeById,
 //   participate,
