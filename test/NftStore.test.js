@@ -1,9 +1,8 @@
-// Deploy check
 // Buy MB during presale
 // Buy MB out presale
 // Buy MB paying less
 // Buy MB when cap is reach
-// Check owner receives funcs
+// Check owner receives funds
 // Check sender receives remaining funds
 // Check counter
 
@@ -17,51 +16,60 @@
 // Regular Mint with not enough payment should fail
 // Mint when cap is reached should fail
 
-const { assert } = require("chai");
-const { ethers } = require("hardhat");
+const { assert } = require("chai")
+const { ethers } = require("hardhat")
 
 describe("NftStore", () => {
   
-  let CollectionFactory, collectionFactory, NftStore, nftStore, MockPriceFeed, mockPriceFeed, MockPriceVRF, mockPriceVRF, Link, link;
-  let admin, owner, user;
+  let CollectionFactory, collectionFactory, NftStore, nftStore, MockPriceFeed, mockPriceFeed, MockPriceVRF, mockPriceVRF, Link, link
+  let admin, owner, user
   const subscriptionId = "1";
-  const _vrfCoordinator = "0x7a1BaC17Ccc5b313516C5E16fb24f7659aA5ebed";
-  const keyHash = "0x4b09e658ed251bcafeebbc69400383d49f344ace09b9576fe248bb02c003fe9f";
-  const _callbackGasLimit = "2000000";
-  const _requestConfirmations = "3";
-  const price = '30000000000';
+  const _vrfCoordinator = "0x7a1BaC17Ccc5b313516C5E16fb24f7659aA5ebed"
+  const keyHash = "0x4b09e658ed251bcafeebbc69400383d49f344ace09b9576fe248bb02c003fe9f"
+  const _callbackGasLimit = "2000000"
+  const _requestConfirmations = "3"
+  const price = '30000000000'
 
 
   before(async() => {    
-    [admin, owner, user] = await ethers.getSigners();
+    [admin, owner, user] = await ethers.getSigners()
     
-    MockPriceFeed = await ethers.getContractFactory("MockAggregator");
-    MockPriceVRF = await ethers.getContractFactory("VRFCoordinatorV2Mock");
+    MockPriceFeed = await ethers.getContractFactory("MockAggregator")
+    MockPriceVRF = await ethers.getContractFactory("VRFCoordinatorV2Mock")
     Link = await ethers.getContractFactory("BasicToken");
     CollectionFactory = await ethers.getContractFactory("CollectionFactory")
-    NftStore = await ethers.getContractFactory("NftStore");
+    NftStore = await ethers.getContractFactory("NftStore")
 
-    mockPriceFeed = await MockPriceFeed.deploy();
-    mockPriceVRF = await MockPriceVRF.deploy(10, 10);
-    await mockPriceVRF.createSubscription();
-		await mockPriceVRF.fundSubscription(subscriptionId, "10000000000000000000000000");
-    link = await Link.deploy();
-    collectionFactory = await CollectionFactory.deploy();
+    mockPriceFeed = await MockPriceFeed.deploy()
+    mockPriceVRF = await MockPriceVRF.deploy(10, 10)
+    await mockPriceVRF.createSubscription()
+		await mockPriceVRF.fundSubscription(subscriptionId, "10000000000000000000000000")
+    link = await Link.deploy()
+    collectionFactory = await CollectionFactory.deploy()
     nftStore = await NftStore.deploy(
       mockPriceFeed.address,
       collectionFactory.address,
+      subscriptionId,
       _vrfCoordinator,
       link.address,
       keyHash,
       _callbackGasLimit,
       _requestConfirmations,
-      admin
-    );    
+      admin.address
+    )
+    await collectionFactory.createNFTCollection(
+      "name",
+      "symbol",
+      "baseURI",
+      1670000000, // future date
+      2,
+      4,
+      200, // 2 USD
+      300 // 3 USD
+    )
   })
 
-
-
-  describe("Deployment", function () {
+  describe("Deployment", () => {
     it('deploys successfully', async () => {
 			const address = nftStore.address;
 			assert.notEqual(address, 0x0);
@@ -69,31 +77,15 @@ describe("NftStore", () => {
 			assert.notEqual(address, null);
 			assert.notEqual(address, undefined);
       assert.equal(1, 1)
-		});
+		})
+   })
 
-  //   it("Should set the right owner", async function () {
-  //     const { lock, owner } = await loadFixture(deployOneYearLockFixture);
-
-  //     expect(await lock.owner()).to.equal(owner.address);
-  //   });
-
-  //   it("Should receive and store the funds to lock", async function () {
-  //     const { lock, lockedAmount } = await loadFixture(
-  //       deployOneYearLockFixture
-  //     );
-
-  //     expect(await ethers.provider.getBalance(lock.address)).to.equal(
-  //       lockedAmount
-  //     );
-  //   });
-
-  //   it("Should fail if the unlockTime is not in the future", async function () {
-  //     // We don't use the fixture here because we want a different deployment
-  //     const latestTime = await time.latest();
-  //     const Lock = await ethers.getContractFactory("Lock");
-  //     await expect(Lock.deploy(latestTime, { value: 1 })).to.be.revertedWith(
-  //       "Unlock time should be in the future"
-  //     );
-  //   });
-   });
-});
+   describe("Mystery Box", () => {
+    it('Buy Mystery Box', async () => {
+      const collectionAddress = await collectionFactory.collections(0)
+      await nftStore.buyMysteryBox(collectionAddress, { from: owner.address })
+      const counter = await nftStore.mysteryBoxUserCounter(owner.address, collectionAddress)
+      assert.equal(counter, "1")
+		})
+   })
+})
