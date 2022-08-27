@@ -214,7 +214,8 @@ contract NftStore is VRFConsumerBaseV2 {
   }
 
   function getTokenAmount(uint _usdAmount) public view returns(uint) {
-    return _usdAmount * (10 ** 18) * (10 ** 6) / getLatestPrice();
+    uint amount = _usdAmount * (10 ** 18) * (10 ** 6) / getLatestPrice();
+    return (amount + (amount * 5 / 100));
   }
 
 }
