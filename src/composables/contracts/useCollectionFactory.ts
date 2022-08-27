@@ -25,6 +25,64 @@ async function getDetailedCollectionsByAddress (address: string) {
         .getDetailedCollectionsByAddress(address)
 }
 
+async function getAllCollectionData () {
+    return await Contract.value
+        .getAllCollectionData()
+}
+
+async function createNFTCollection (payload: {
+  _tokenName: string;
+  _tokenDescription: string;
+  _tokenSymbol: string;
+  _baseUri: string;
+  _coverImageUri: string;
+  _presaleDate: number;
+  _mysteryBoxCap: number;
+  _nftCap: number;
+  _mysteryBoxUsdPrice: number;
+  _nftUsdPrice: number
+}) {
+
+  const {
+    _tokenName,
+    _tokenDescription,
+    _tokenSymbol,
+    _baseUri,
+    _coverImageUri,
+    _presaleDate,
+    _mysteryBoxCap,
+    _nftCap,
+    _mysteryBoxUsdPrice,
+    _nftUsdPrice
+  } = payload;
+
+  // string memory _tokenName,
+  // string memory _tokenSymbol,
+  // string memory _baseUri,
+  // string memory _coverImageUri,
+  // uint _presaleDate,
+  // uint16 _mysteryBoxCap,
+  // uint16 _nftCap,
+  // uint _mysteryBoxUsdPrice,
+  // uint _nftUsdPrice
+
+  const transaction =  await Contract.value
+    .createNFTCollection(
+      _tokenName,
+      _tokenSymbol,
+      _baseUri,
+      _coverImageUri,
+      _presaleDate,
+      _mysteryBoxCap,
+      _nftCap,
+      _mysteryBoxUsdPrice * 100,
+      _nftUsdPrice * 100,
+      _tokenDescription,
+    )      
+
+  return await transaction.wait().then(res => console.log(res));
+}
+
 // async function createEnvelope(
 //   participantsLimit: number,
 //   message: string,
@@ -66,7 +124,9 @@ async function getDetailedCollectionsByAddress (address: string) {
 // }
 
 export {
-    getDetailedCollectionsByAddress
+  getAllCollectionData,
+  getDetailedCollectionsByAddress,
+  createNFTCollection
 //   createEnvelope,
 //   getEnvelopeById,
 //   participate,

@@ -28,7 +28,7 @@
 
         <div class="pt-4 text-center">
             <a
-            :href="`https://mumbai.polygonscan.com/address/${collection.addresss}`"
+            :href="`https://mumbai.polygonscan.com/address/${collection.address}`"
             target="_blank"
             class="text-sm opacity-100 hover:font-semibold"
             >
@@ -56,13 +56,14 @@
 </template>
 <script setup lang="ts">
 import { PropType, readonly } from 'vue';
+import { Collection } from '../types/index'
+
 import BaseCountdown from './BaseCountdown.vue';
 import BaseButton from './BaseButton.vue';
 
-
 defineProps({
   collection: {
-    type: Object as PropType<{addresss: string; name: string; description: string; coverIPFSHash: string; mysteryBoxInUSD: number; NFTPriceInUSD: number; presaleEndDate: string}>,
+    type: Object as PropType<Collection>,
     default: () => [
     //   {
     //     address: '0x9b17C9E2AA27F93b1d0e71b872069e096cB41233',

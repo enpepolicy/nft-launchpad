@@ -30,17 +30,18 @@
 
             <div class="w-full flex flex-col gap-2 text-left">
               <label
-                htmlFor="userMessage"
+                htmlFor="name"
                 class="font-red-hat-display uppercase tracking-wider font-light"
               >
                 Name
               </label>
               <input
-                v-model="message"
-                class="rounded-lg text-darkViolet font-semibold text-lg"
-                type="number"
-                id="maxParticipants"
-                placeholder="Type your answer here"
+                v-model="payload._tokenName"
+                class="rounded-lg form-input"
+                type="string"
+                id="name"
+                required
+                placeholder="Collection's name"
               />
             </div>
             
@@ -52,11 +53,12 @@
                 Symbol
               </label>
               <input
-                v-model="totalPocketAmount"
-                class="rounded-lg text-darkViolet font-semibold text-lg"
-                type="number"
+                v-model="payload._tokenSymbol"
+                class="rounded-lg form-input"
+                type="string"
                 id="envelopeAmount"
-                :placeholder="`Amount in ETH`"
+                required
+                :placeholder="`Eg. BAY (we suggest to use the initials.)`"
               />
             </div>
             
@@ -68,11 +70,11 @@
                 Collection Description
               </label>
               <textarea
-                v-model="message"
-                name="userMessage"
-                class="rounded-lg text-darkViolet font-semibold text-lg"
-                placeholder="Type your message here"
-                id="userMessage"
+                v-model="payload._tokenDescription"
+                name="description"
+                class="rounded-lg form-input"
+                placeholder="Describe your collection."
+                id="description"
                 cols="30"
                 required
                 rows="3"
@@ -82,17 +84,18 @@
             
             <div class="w-full flex flex-col gap-2 text-left">
               <label
-                htmlFor="maxParticipants"
+                htmlFor="NFTCap"
                 class="font-red-hat-display uppercase tracking-wider font-light"
               >
                 NFT Cap (Automatic from Hash)
               </label>
               <input
-                v-model="maxParticipants"
-                class="rounded-lg text-darkViolet font-semibold text-lg"
+                v-model="payload._nftCap"
+                class="rounded-lg form-input"
                 type="number"
-                id="maxParticipants"
-                placeholder="Type your answer here"
+                id="NFTCap"
+                required
+                placeholder="Maximum NFT's that can be minted."
               />
             </div>
             
@@ -101,99 +104,103 @@
           <aside class="flex flex-col  justify-between gap-6">
             <div class="w-full flex flex-col gap-2 text-left">
               <label
-                htmlFor="envelopeAmount"
-                class="font-red-hat-display uppercase tracking-wider font-light"
-              >
-                Presale End Date
-              </label>
-              <input
-                v-model="totalPocketAmount"
-                class="rounded-lg text-darkViolet font-semibold text-lg"
-                type="number"
-                id="envelopeAmount"
-                :placeholder="`Amount in ETH`"
-              />
-            </div>
-
-            <div class="w-full flex flex-col gap-2 text-left">
-              <label
-                htmlFor="maxParticipants"
+                htmlFor="mysteryBoxCap"
                 class="font-red-hat-display uppercase tracking-wider font-light"
               >
                 Mystery Box Cap
               </label>
               <input
-                v-model="maxParticipants"
-                class="rounded-lg text-darkViolet font-semibold text-lg"
+                v-model="payload._mysteryBoxCap"
+                class="rounded-lg form-input"
                 type="number"
-                id="maxParticipants"
-                placeholder="Type your answer here"
+                required
+                id="mysteryBoxCap"
+                placeholder="Maximum Mystery Boxes"
               />
             </div>
 
             <div class="w-full flex flex-col gap-2 text-left">
               <label
-                htmlFor="envelopeAmount"
+                htmlFor="endDate"
+                class="font-red-hat-display uppercase tracking-wider font-light"
+              >
+                Presale End Date
+              </label>
+              <input
+                v-model="payload._presaleDate"
+                class="rounded-lg form-input"
+                type="number"
+                required
+                id="endDate"
+                :placeholder="`End Date`"
+              />
+            </div>
+
+            <div class="w-full flex flex-col gap-2 text-left">
+              <label
+                htmlFor="folderHash"
                 class="font-red-hat-display uppercase tracking-wider font-light"
               >
                 Collection Folder IPFS Hash
               </label>
               <input
-                v-model="totalPocketAmount"
-                class="rounded-lg text-darkViolet font-semibold text-lg"
-                type="number"
-                id="envelopeAmount"
-                :placeholder="`Amount in ETH`"
-              />
-            </div>
-
-            <div class="w-full flex flex-col gap-2 text-left">
-              <label
-                htmlFor="username"
-                class="font-red-hat-display uppercase tracking-wider font-light"
-              >
-                Mystery Box USD Price (Powered by Chainlink)
-              </label>
-              <input
-                v-model="name"
-                type="text"
-                class="rounded-lg text-darkViolet font-semibold text-lg"
-                placeholder="Type your name/alias"
-                id="username"
+                v-model="payload._baseUri"
+                class="rounded-lg form-input"
+                type="string"
                 required
+                id="folderHash"
+                :placeholder="`Eg. QmTf1GaD7j9FYZzo9RUSUkHB9oLkNAZrFQB1aPrsGzWn1d`"
               />
             </div>
 
             <div class="w-full flex flex-col gap-2 text-left">
               <label
-                htmlFor="username"
-                class="font-red-hat-display uppercase tracking-wider font-light"
-              >
-                NFT USD Price (Powered by Chainlink)
-              </label>
-              <input
-                v-model="name"
-                type="text"
-                class="rounded-lg text-darkViolet font-semibold text-lg"
-                placeholder="Type your name/alias"
-                id="username"
-                required
-              />
-            </div>
-
-            <div class="w-full flex flex-col gap-2 text-left">
-              <label
-                htmlFor="envelopeAmount"
+                htmlFor="coverHash"
                 class="font-red-hat-display uppercase tracking-wider font-light"
               >
                 Collection Cover IPFS Hash
               </label>
               <input
-                v-model="totalPocketAmount"
-                class="rounded-lg text-darkViolet font-semibold text-lg"
+                v-model="payload._coverImageUri"
+                class="rounded-lg form-input"
+                type="string"
+                required
+                id="coverHash"
+                :placeholder="`Eg. QmTf1GaD7j9FYZzo9RUSUkHB9oLkNAZrFQB1aPrsGzWn1d`"
+              />
+            </div>
+
+            <div class="w-full flex flex-col gap-2 text-left">
+              <label
+                htmlFor="boxPrice"
+                class="font-red-hat-display uppercase tracking-wider font-light"
+              >
+                Mystery Box USD Price (Powered by Chainlink)
+              </label>
+              <input
+                v-model="payload._mysteryBoxUsdPrice"
                 type="number"
-                id="envelopeAmount"
-                :placeholder="`Amount in ETH`"
+                class="rounded-lg form-input"
+                placeholder="Mystery Box Usd Price"
+                id="boxPrice"
+                required
+              />
+            </div>
+
+            <div class="w-full flex flex-col gap-2 text-left">
+              <label
+                htmlFor="nftPrice"
+                class="font-red-hat-display uppercase tracking-wider font-light"
+              >
+                NFT USD Price (Powered by Chainlink)
+              </label>
+              <input
+                v-model="payload._nftUsdPrice"
+                type="number"
+                class="rounded-lg form-input"
+                placeholder="NFT Usd Price"
+                id="nftPrice"
+                required
               />
             </div>
           </aside>
@@ -228,37 +235,35 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  ref,
-  // onMounted
-} from 'vue'
-// import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 import BaseButton from './BaseButton.vue';
 import ConnectButton from './ConnectButton.vue';
-import {
-  currentAccount,
-  // currentNetworkId
-} from '../composables/useWallet'
-// import { isOpen } from '../composables/useCreateEnvelopeForm'
+
+import { currentAccount } from '../composables/useWallet'
+import { createNFTCollection } from '../composables/contracts/useCollectionFactory'
 import { truncateAddress } from '../utils';
-// import { createEnvelope, getEnvelopesByAddress } from './../composables/contracts/useEnvelopesContract'
-// import { NetworkEnum } from '../composables/network.enum'
-// const router = useRouter()
+
 const isLoading = ref(false)
-const name = ref('')
-const message = ref('')
-const totalPocketAmount = ref(undefined)
-const maxParticipants = ref(1)
+
+const payload = ref({
+  _tokenName: '',
+  _tokenDescription: '',
+  _tokenSymbol: '',
+  _baseUri: '',
+  _coverImageUri: '',
+  _presaleDate: Math.floor(new Date(new Date().setDate(new Date().getDate() + 1)).getTime() / 1000),
+  _mysteryBoxCap: 0,
+  _nftCap: 0,
+  _mysteryBoxUsdPrice: 0,
+  _nftUsdPrice: 0
+})
+
 async function create () {
   isLoading.value = true
-  // await createEnvelope(
-  //   maxParticipants.value,
-  //   message.value,
-  //   name.value,
-  //   String(totalPocketAmount.value)
-  // ).catch(() => {
-  //   isLoading.value = false
-  // })
+
+  await createNFTCollection(payload.value).catch(() => {
+    isLoading.value = false
+  })
   // await getEnvelopesByAddress(currentAccount.value)
   //   .then(res =>{
   //     router.push({ path: `envelope/${res[res.length - 1].envelopeId}/${currentNetworkId.value}` })

@@ -17,7 +17,7 @@
                 <router-link to="/blog-post">
                   <h1 class="h1 font-red-hat-display mb-4">{{ props.sectionTitle}}</h1>
                 </router-link>
-                <p class="text-xl text-gray-600 dark:text-gray-400">{{ props.collections[0] ? props.sectionDescription : 'No collections to diplay' }}</p>
+                <p class="text-xl text-gray-600 dark:text-gray-400">{{ props.boxes[0] ? props.sectionDescription : 'No boxes to diplay' }}</p>
               </div>
             </header>
           </article>
@@ -27,16 +27,28 @@
     </div>
 
   </section>
+
+
   <section
-    v-if="props.collections[0]"
+    v-if="props.boxes[0]"
   >
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="pb-20 md:pb-16">
-        <div class="grid gap-x-4 gap-y-24 sm:gap-10 sm:grid-cols-2 lg:grid-cols-4 relative" data-aos-id-featposts>
-          <BaseCollectionCard
-            v-for="(collection, index) in props.collections"
-            :key="index"
-            :collection="collection"
+        <div class="grid gap-4 sm:gap-10 sm:grid-cols-2 lg:grid-cols-4 relative" data-aos-id-featposts>
+          <img
+            class="transition duration-700 ease-out rounded-t-[0.25rem]"
+            src="../images/mystery-box-3.png"
+            height="182"
+          />
+          <img
+            class="transition duration-700 ease-out rounded-t-[0.25rem]"
+            src="../images/mystery-box-3.png"
+            height="182"
+          />
+          <img
+            class="transition duration-700 ease-out rounded-t-[0.25rem]"
+            src="../images/mystery-box-3.png"
+            height="182"
           />
         </div>
       </div>
@@ -51,17 +63,17 @@ import BaseCollectionCard from './BaseCollectionCard.vue';
 const props = defineProps({
   sectionTitle: {
     type: String,
-    default: 'Your Collections',
+    default: 'Your boxes',
   },
   sectionDescription: {
     type: String,
-    default: 'Here are some collections deployed using NFT Launchpad protocol:',
+    default: 'Here are some boxes deployed using NFT Launchpad protocol:',
   },
   address: {
     type: String,
     default: '',
   },
-  collections: {
+  boxes: {
     type: Array as PropType<Array<Collection>>,
     default: () => [
       {

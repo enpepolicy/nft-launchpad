@@ -8,9 +8,10 @@
     <main class="grow">
 
       <!-- Page sections -->
-      <HeroNFTStore />
-      <HeroCollections
-        section-title="Available Collections"
+      <HeroMyMysteryBoxes />
+      <GridMysteryBoxes
+        section-title="Your Mystery Boxes"
+        section-description="Take a look to your unrevealed Mystery Boxes:"
       />
 
     </main>
@@ -24,8 +25,8 @@
 import { onMounted } from 'vue'
 
 import Header from './../partials/Header.vue'
-import HeroNFTStore from '../partials/HeroNFTStore.vue'
-import HeroCollections from '../partials/HeroCollections.vue'
+import HeroMyMysteryBoxes from '../partials/HeroMyMysteryBoxes.vue'
+import GridMysteryBoxes from '../partials/GridMysteryBoxes.vue'
 import Footer from '../partials/Footer.vue'
 
 import { getAllCollectionData } from '../composables/contracts/useCollectionFactory'
