@@ -17,7 +17,7 @@
                 <router-link to="/blog-post">
                   <h1 class="h1 font-red-hat-display mb-4">{{ props.sectionTitle}}</h1>
                 </router-link>
-                <p class="text-xl text-gray-600 dark:text-gray-400">{{ props.collections[0] ? props.sectionDescription : 'No collections to diplay' }}</p>
+                <p class="text-xl text-gray-600 dark:text-gray-400">{{ props.collections[0] ? props.sectionDescription : 'No collections to display' }}</p>
               </div>
             </header>
           </article>

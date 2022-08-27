@@ -43,11 +43,9 @@
             :inner-text="presaleIsActive(collection.presaleEndDate) ? `Buy Presale Box ($${collection.mysteryBoxInUSD / 100})` : `Buy NFT ($${collection.NFTPriceInUSD / 100} USD)`"
         />
 
-
-        
         <div
-            v-if="presaleIsActive(String(Number(collection.presaleEndDate) * 1000))"
-            class="pt-4 px-4"
+          v-if="presaleIsActive(String(Number(collection.presaleEndDate)))"
+          class="pt-4 px-4"
         >
             <div class="text-xs opacity-100 font-semibold text-center">Presale Ends In:</div>
             <BaseCountdown
@@ -93,6 +91,7 @@ function getRandomBackgroundColor () {
 }
 
 function presaleIsActive (date: string) {
+  console.log(new Date(Number(date) * 1000).getTime() < new Date().getTime())
   if (new Date(Number(date) * 1000).getTime() < new Date().getTime()) {
     return false;
   }
