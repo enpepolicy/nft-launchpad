@@ -59,6 +59,7 @@ async function main() {
   )
   console.log("NftStore", nftStore.address)
   setAddress(process.env.NETWORK_ID, 'nft-store', nftStore.address)
+  await factory.setNftStoreAddress(nftStore.address)
 }
 // string memory _tokenName,
 // string memory _tokenSymbol,
