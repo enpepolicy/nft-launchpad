@@ -31,7 +31,7 @@ async function main() {
     "First Test Collection", 
     "FTC",
     "QmTf1GaD7j9FYZzo9RUSUkHB9oLkNAZrFQB1aPrsGzWn1d",
-    "https://gateway.pinata.cloud/ipfs/QmTuxXq8GWWdFbji3nG3oHfL92nPwkdicvvfps7aSx6BJE/1.png",
+    "QmTuxXq8GWWdFbji3nG3oHfL92nPwkdicvvfps7aSx6BJE/1.png",
     "1661601866",
     "3",
     "9",

@@ -58,7 +58,7 @@
                 type="string"
                 id="envelopeAmount"
                 required
-                :placeholder="`Eg. BAY (we suggest to use the initials.)`"
+                :placeholder="`Eg. BAY (We suggest to use the initials of the collection).`"
               />
             </div>
             
@@ -126,13 +126,13 @@
               >
                 Presale End Date
               </label>
-              <input
+
+              <Datepicker
+                dark
+                @update:modelValue="payload._presaleDate = $event"
                 v-model="payload._presaleDate"
-                class="rounded-lg form-input"
-                type="number"
-                required
-                id="endDate"
-                :placeholder="`End Date`"
+                modelType="timestamp"
+                ref="datepicker"
               />
             </div>
 
@@ -166,7 +166,7 @@
                 type="string"
                 required
                 id="coverHash"
-                :placeholder="`Eg. QmTf1GaD7j9FYZzo9RUSUkHB9oLkNAZrFQB1aPrsGzWn1d`"
+                :placeholder="`Eg. QmTf1GaD......rsGzWn1d/1.png`"
               />
             </div>
 
@@ -235,13 +235,18 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import BaseButton from './BaseButton.vue';
 import ConnectButton from './ConnectButton.vue';
 
 import { currentAccount } from '../composables/useWallet'
 import { createNFTCollection } from '../composables/contracts/useCollectionFactory'
 import { truncateAddress } from '../utils';
+
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
+const emit = defineEmits(['new-collection'])
 
 const isLoading = ref(false)
 
@@ -251,41 +256,68 @@ const payload = ref({
   _tokenSymbol: '',
   _baseUri: '',
   _coverImageUri: '',
-  _presaleDate: Math.floor(new Date(new Date().setDate(new Date().getDate() + 1)).getTime() / 1000),
-  _mysteryBoxCap: 0,
-  _nftCap: 0,
-  _mysteryBoxUsdPrice: 0,
-  _nftUsdPrice: 0
+  _presaleDate: 0,
+  _mysteryBoxCap: undefined,
+  _nftCap: undefined,
+  _mysteryBoxUsdPrice: undefined,
+  _nftUsdPrice: undefined
 })
 
 async function create () {
   isLoading.value = true
+  console.log(payload.value._presaleDate)
 
-  await createNFTCollection(payload.value).catch(() => {
-    isLoading.value = false
-  })
-  // await getEnvelopesByAddress(currentAccount.value)
-  //   .then(res =>{
-  //     router.push({ path: `envelope/${res[res.length - 1].envelopeId}/${currentNetworkId.value}` })
-  //   })
-  //   .finally(() => {
-  //     isLoading.value = false
-  //     isOpen.value = false
-  //     cleanForm()
-  //   })
+  await createNFTCollection(payload.value)
+    .then(() => {
+      emit('new-collection')
+    })
+    .catch((err) => {
+      console.log(err)
+      isLoading.value = false
+    })
+
+  isLoading.value = false
 }
-// async function setSelectedNetwork (event) {
-//   await switchNetwork(event.target.value)
-//     .catch((err) => {
-//       router.push({ path: `/network-not-found/${event.target.value}` })
-//       isOpen.value = false
-//     })
-// }
 
-// function cleanForm() {
-//   name.value = ''
-//   message.value = ''
-//   totalPocketAmount.value = undefined
-//   maxParticipants.value = 1
-// }
+onMounted(() => {
+  payload.value._presaleDate = getNearDate()
+})
+
+// Sets n day after today as initial date in
+// Unix Timestamp in seconds (not miliseconds)
+function getNearDate (n = 1) {
+  return Math.round(
+    Math.floor(
+      new Date(
+        new Date()
+          .setDate(
+            new Date()
+              .getDate() + n
+          )
+      )
+      .getTime()
+    )
+  )
+}
+
+function cleanForm() {
+  payload.value = {
+    _tokenName: '',
+    _tokenDescription: '',
+    _tokenSymbol: '',
+    _baseUri: '',
+    _coverImageUri: '',
+    _presaleDate: getNearDate(),
+    _mysteryBoxCap: undefined,
+    _nftCap: undefined,
+    _mysteryBoxUsdPrice: undefined,
+    _nftUsdPrice: undefined
+  }
+}
 </script>
+<style lang="css">
+.dp__theme_dark {
+  --dp-border-color: rgba(255, 255, 255, 0.3);
+  --dp-background-color: #2E2E33
+}
+</style>

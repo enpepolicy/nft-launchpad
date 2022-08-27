@@ -21,8 +21,8 @@ const Contract = computed(() => {
 })
 
 async function getDetailedCollectionsByAddress (address: string) {
-    return await Contract.value
-        .getDetailedCollectionsByAddress(address)
+  return await Contract.value
+      .getDetailedCollectionsByAddress(address)
 }
 
 async function getAllCollectionData () {
@@ -37,10 +37,10 @@ async function createNFTCollection (payload: {
   _baseUri: string;
   _coverImageUri: string;
   _presaleDate: number;
-  _mysteryBoxCap: number;
-  _nftCap: number;
-  _mysteryBoxUsdPrice: number;
-  _nftUsdPrice: number
+  _mysteryBoxCap: number | undefined;
+  _nftCap: number | undefined;
+  _mysteryBoxUsdPrice: number | undefined;
+  _nftUsdPrice: number | undefined
 }) {
 
   const {
@@ -56,46 +56,22 @@ async function createNFTCollection (payload: {
     _nftUsdPrice
   } = payload;
 
-  // string memory _tokenName,
-  // string memory _tokenSymbol,
-  // string memory _baseUri,
-  // string memory _coverImageUri,
-  // uint _presaleDate,
-  // uint16 _mysteryBoxCap,
-  // uint16 _nftCap,
-  // uint _mysteryBoxUsdPrice,
-  // uint _nftUsdPrice
-
   const transaction =  await Contract.value
     .createNFTCollection(
       _tokenName,
       _tokenSymbol,
       _baseUri,
       _coverImageUri,
-      _presaleDate,
-      _mysteryBoxCap,
-      _nftCap,
-      _mysteryBoxUsdPrice * 100,
-      _nftUsdPrice * 100,
+      Math.trunc(_presaleDate / 1000),
+      _mysteryBoxCap || 0,
+      _nftCap || 0,
+      _mysteryBoxUsdPrice ?_mysteryBoxUsdPrice * 100 : 0,
+      _nftUsdPrice ? _nftUsdPrice * 100 : 0,
       _tokenDescription,
     )      
 
   return await transaction.wait().then(res => console.log(res));
 }
-
-// async function createEnvelope(
-//   participantsLimit: number,
-//   message: string,
-//   creatorNickname: string,
-//   tokenAmount: string,
-// ) {
-//   const transaction =  await Contract.value
-//     .createEnvelope(
-//       participantsLimit,
-//       message,
-//       creatorNickname,
-//       { value: ethers.utils.parseEther(tokenAmount) }
-//     )
       
 //   return await transaction.wait().then(res => console.log(res));
 // }
@@ -124,6 +100,7 @@ async function createNFTCollection (payload: {
 // }
 
 export {
+  dynamicAddress,
   getAllCollectionData,
   getDetailedCollectionsByAddress,
   createNFTCollection

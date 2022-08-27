@@ -32,6 +32,6 @@ import Footer from '../partials/Footer.vue'
 import { getAllCollectionData } from '../composables/contracts/useCollectionFactory'
 
 onMounted(async () => {
-  await getAllCollectionData().then(res => console.log(res))
+  await getAllCollectionData().then(res => console.log('TO-DO fetch Mystery Boxes', res))
 })
 </script>
