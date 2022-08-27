@@ -83,9 +83,10 @@ contract NftCollection is ERC721 {
 /// @custom:experimental This is an experimental contract used in chainlink hackathon.
 contract CollectionFactory is Ownable {
 
-  address[] public collections;
+  address[] collections;
   address public nftStoreAddress;
   struct Collections {
+    address collectionAddress;
     uint presaleDate;
     uint16 mysteryBoxCap;
     uint16 nftCap;
@@ -146,6 +147,7 @@ contract CollectionFactory is Ownable {
     );
     // Stores onchain data used to mint NFTs
     collection[address(_collection)] = Collections(
+      address(_collection),
       _presaleDate,
       _mysteryBoxCap,
       _nftCap,
