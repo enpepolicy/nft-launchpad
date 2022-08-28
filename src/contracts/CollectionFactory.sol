@@ -25,7 +25,7 @@ contract NftCollection is ERC721 {
 
     ERC721(_tokenName, _tokenSymbol)
   {    
-    baseURI = string(abi.encodePacked(_baseUri,"ipfs://"));
+    baseURI = string(abi.encodePacked("ipfs://",_baseUri));
     nftStoreAddress = _nftStoreAddress;
   }
 
