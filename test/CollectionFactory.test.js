@@ -14,7 +14,7 @@ const { expect } = require("chai");
 const assert = require('assert');
 // const { expectRevert, expectEvent } = require('@openzeppelin/test-helpers')
 
-let owner, factory
+let owner, factory, firstCollection
 colName = "First Collection Test",
 colSymbol = "FCT",
 colBaseURI = "testBaseURI",
@@ -131,6 +131,8 @@ describe("Collection Factory", function () {
       await factory.updateAvailableNFts(firstCollectionAddress, owner.address, 1)
       attributes = await factory.getCollection(firstCollectionAddress)
       assert.equal(attributes.availableNfts.toString(), "0,19,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18")
+      const uri = await firstCollection.tokenURI("1");
+      console.log(uri.toString())
     })
 
     // it("My NFT Collection Attributes are correct", async() => {    
