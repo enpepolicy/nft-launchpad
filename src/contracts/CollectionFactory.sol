@@ -65,6 +65,10 @@ contract NftCollection is ERC721 {
     return  string(abi.encodePacked(baseURI, "/", _tokenId, ".json"));
   }
 
+  function tokenURI(uint256 _tokenId) public override view returns (string memory) {
+		return string(abi.encodePacked(baseURI, "/", _tokenId, ".json"));
+	}
+
 	/********************************************************
 	*                                                       *
 	*                     Internal                          *
