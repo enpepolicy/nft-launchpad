@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.0;
 
 import "./INFTCollection.sol";
 import "./ICollectionFactory.sol";
@@ -58,6 +58,8 @@ contract NftStore is VRFConsumerBaseV2 {
   mapping(address => uint) public nftCounter;
   mapping(uint => address) requestToSender;
   mapping(uint => address) requestToCollection;
+  mapping(address => uint) userToRequest;
+  mapping(uint => uint16) requestToIndex;
 
   constructor(
     address _priceFeedAddress,
@@ -142,7 +144,7 @@ contract NftStore is VRFConsumerBaseV2 {
       mysteryBoxCounter[_collectionAddress] --;
     }
     nftCounter[_collectionAddress] ++;
-    _requestRandomWords(1, _collectionAddress);
+    _requestRandomWords(1, _collectionAddress, msg.sender);
     if(userHasCollectionNft[msg.sender][_collectionAddress] == false) {
       userHasCollectionNft[msg.sender][_collectionAddress] = true;
       userToCollectionsNft[msg.sender].push(_collectionAddress);
@@ -150,16 +152,17 @@ contract NftStore is VRFConsumerBaseV2 {
 
   }
 
-  function _requestRandomWords(uint32 _numWords, address _collectionAddress) internal {
+  function _requestRandomWords(uint32 _numWords, address _collectionAddress, address _user) internal {
     s_requestId  = COORDINATOR.requestRandomWords(
       keyHash,
       s_subscriptionId,
       requestConfirmations,
       callbackGasLimit,
       _numWords
-    );  
-    requestToSender[s_requestId] = msg.sender;
+    );
+    requestToSender[s_requestId] = _user;
     requestToCollection[s_requestId] = _collectionAddress;
+    userToRequest[_user] = s_requestId;
   }
 
   function fulfillRandomWords(
@@ -168,12 +171,18 @@ contract NftStore is VRFConsumerBaseV2 {
   ) 
     internal override 
   {
-    address user = requestToSender[requestId];
     address collectionAddress = requestToCollection[requestId];
-
     uint remaining = collectionFactory.getCollection(collectionAddress).availableNfts.length;
     uint16 index = uint16(randomWords[0] % remaining);
-    collectionFactory.updateAvailableNFts(collectionAddress,user, index); // REVIEW: updateColllection is named udateAvailableNFTs now
+    // requestToIndex[requestId] = index;
+    collectionFactory.updateAvailableNFts(collectionAddress, requestToSender[requestId],index );
+  }
+
+  function revealNFT(address _user) external {
+    collectionFactory.updateAvailableNFts(
+      requestToCollection[userToRequest[_user]],
+      _user, 
+      requestToIndex[userToRequest[_user]]); // REVIEW: updateColllection is named udateAvailableNFTs now
   }
 
   function getLatestPrice() public view returns (uint) {
