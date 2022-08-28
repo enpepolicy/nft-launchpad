@@ -87,7 +87,7 @@ contract NftStore is VRFConsumerBaseV2 {
     LINKTOKEN = LinkTokenInterface(link);    
     s_subscriptionId = subscriptionId;
     // Fee to pay chainLink VRF usage in presale
-    chainlinkFeeMatic = 60000000000000000;
+    chainlinkFeeMatic = 10;
     admin = _admin;
   }  
 

@@ -93,14 +93,14 @@ describe("NftStore", () => {
     it('Buy Mystery Box', async () => {
       const collectionData = await collectionFactory.getAllCollectionData()
       collectionAddress = collectionData[0].collectionAddress
-      const amount = BigNumber("10").pow("16").toString()
+      const amount = await nftStore.getTokenAmount(300) // BigNumber("10").pow("16").toString()
       console.log(amount)
       prevOwnerBalance = await owner.getBalance()
       prevAdminBalance = await admin.getBalance()
       prevUserBalance = await user.getBalance()
-      // await nftStore.connect(user).buyMysteryBox(collectionAddress, { value: (amount + 1) })
-      // const counter = await nftStore.mysteryBoxUserCounter(user.address, collectionAddress)
-      // assert.equal(counter, "1")
+      await nftStore.connect(user).buyMysteryBox(collectionAddress, { value: (amount + 1) })
+      const counter = await nftStore.mysteryBoxUserCounter(user.address, collectionAddress)
+      assert.equal(counter, "1")
     })
 
     // it('Reveals mystery box', async() => {
