@@ -212,7 +212,7 @@
             />
             <BaseButton
               v-else-if="!isLoading"
-              @click="create"
+              @click="validateForm(create)"
               class="h-[70px] text-2xl"
               inner-text="Launch Collection"
             />
@@ -271,10 +271,10 @@ async function create () {
     .then(() => {
       emit('new-collection')
       notifySuccess('Collection Created')
+      cleanForm()
     })
     .catch((err) => {
-      console.log(err)
-      notifyError(err)
+      notifyError(err.message || 'An error has occured.')
       isLoading.value = false
     })
     .finally(() => {
@@ -282,10 +282,26 @@ async function create () {
     })
 }
 
-onMounted(() => {
-      notifySuccess('Collection Created')
-      notifyError('Collection Created')
+function validateForm (callback) {
+  if (
+    payload.value._tokenName  &&
+    payload.value._tokenDescription  &&
+    payload.value._tokenSymbol &&
+    payload.value._baseUri &&
+    payload.value._coverImageUri &&
+    payload.value._presaleDate  &&
+    payload.value._mysteryBoxCap &&
+    payload.value._nftCap &&
+    payload.value._mysteryBoxUsdPrice  &&
+    payload.value._nftUsdPrice
+  ) {
+    callback()
+  } else {
+    notifyError('All fields must be filled.')
+  }
+}
 
+onMounted(() => {
   payload.value._presaleDate = getNearDate()
 })
 
