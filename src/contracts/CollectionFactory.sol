@@ -13,7 +13,7 @@ import "hardhat/console.sol";
 /// @dev All function calls are currently implemented without side effects
 /// @custom:experimental This is an experimental contract used in chainlink hackathon.
 contract NftCollection is ERC721 {
-  string baseURI;
+  string public baseURI;
   address nftStoreAddress;
   using Strings for uint;
   constructor(
@@ -25,7 +25,7 @@ contract NftCollection is ERC721 {
 
     ERC721(_tokenName, _tokenSymbol)
   {    
-    baseURI = _baseUri;
+    baseURI = string(abi.encodePacked(_baseUri,"ipfs://"));
     nftStoreAddress = _nftStoreAddress;
   }
 
@@ -62,7 +62,7 @@ contract NftCollection is ERC721 {
   /// @param _tokenId Index of NFT to be minted
   /// @return tokenURI URI of metada which is a json object
   function tokenURI(uint256 _tokenId) public override view returns (string memory) {
-		return string(abi.encodePacked("ipfs://",baseURI, "/", _tokenId.toString(), ".json"));
+		return string(abi.encodePacked(baseURI, "/", _tokenId.toString(), ".json"));
 	}
 
 	/********************************************************
