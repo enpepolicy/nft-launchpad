@@ -12,7 +12,7 @@ import "hardhat/console.sol";
 /// @notice This is a standard ERC721 with few, but valuable modifications
 /// @dev All function calls are currently implemented without side effects
 /// @custom:experimental This is an experimental contract used in chainlink hackathon.
-contract NftCollectionABI is ERC721 {
+contract NftCollection is ERC721 {
   string baseURI;
   address nftStoreAddress;
   using Strings for uint;
