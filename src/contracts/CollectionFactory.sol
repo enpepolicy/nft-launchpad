@@ -61,12 +61,8 @@ contract NftCollection is ERC721 {
   /// @dev Used to retrieve token metadata
   /// @param _tokenId Index of NFT to be minted
   /// @return tokenURI URI of metada which is a json object
-  function getTokenUri(uint _tokenId) external view returns(string memory) {
-    return  string(abi.encodePacked(baseURI, "/", _tokenId.toString(), ".json"));
-  }
-
   function tokenURI(uint256 _tokenId) public override view returns (string memory) {
-		return string(abi.encodePacked(baseURI, "/", _tokenId.toString(), ".json"));
+		return string(abi.encodePacked("ipfs//:",baseURI, "/", _tokenId.toString(), ".json"));
 	}
 
 	/********************************************************
