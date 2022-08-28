@@ -92,7 +92,7 @@ contract CollectionFactory is Ownable {
     uint presaleDate;
     uint16 mysteryBoxCap;
     uint16 nftCap;
-    uint16 availableMysteryBoxes;
+    // uint16 availableMysteryBoxes;
     uint16[] availableNfts;
     address owner;
     uint mysteryBoxUsdPrice;
@@ -155,7 +155,7 @@ contract CollectionFactory is Ownable {
       _presaleDate,
       _mysteryBoxCap,
       _nftCap,
-      _mysteryBoxCap,
+      // _mysteryBoxCap,
       _availableNfts,
       msg.sender,
       _mysteryBoxUsdPrice,
@@ -241,7 +241,7 @@ contract CollectionFactory is Ownable {
     userToCollectionNfts[_user][_nftCollection].push(_availableNfts[_indexToDelete]);
     NftCollection nftCollection = NftCollection(_nftCollection);
     nftCollection.mint(_availableNfts[_indexToDelete], _user);
-    collection[_nftCollection].availableMysteryBoxes--;
+    //collection[_nftCollection].availableMysteryBoxes--;
     _availableNfts.pop();
     emit AvailableNFtsUpdated(_nftCollection, _indexToDelete); 
   }
