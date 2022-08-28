@@ -245,6 +245,7 @@ import { truncateAddress } from '../utils';
 
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import { notifyError, notifySuccess } from '../composables/useNotification';
 
 const emit = defineEmits(['new-collection'])
 
@@ -265,21 +266,26 @@ const payload = ref({
 
 async function create () {
   isLoading.value = true
-  // console.log(payload.value._presaleDate)
 
   await createNFTCollection(payload.value)
     .then(() => {
       emit('new-collection')
+      notifySuccess('Collection Created')
     })
     .catch((err) => {
       console.log(err)
+      notifyError(err)
       isLoading.value = false
     })
-
-  isLoading.value = false
+    .finally(() => {
+      isLoading.value = false
+    })
 }
 
 onMounted(() => {
+      notifySuccess('Collection Created')
+      notifyError('Collection Created')
+
   payload.value._presaleDate = getNearDate()
 })
 
