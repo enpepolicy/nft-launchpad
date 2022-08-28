@@ -98,21 +98,21 @@ describe("NftStore", () => {
       prevOwnerBalance = await owner.getBalance()
       prevAdminBalance = await admin.getBalance()
       prevUserBalance = await user.getBalance()
-      await nftStore.connect(user).buyMysteryBox(collectionAddress, { value: (amount + 1) })
-      const counter = await nftStore.mysteryBoxUserCounter(user.address, collectionAddress)
-      assert.equal(counter, "1")
+      // await nftStore.connect(user).buyMysteryBox(collectionAddress, { value: (amount + 1) })
+      // const counter = await nftStore.mysteryBoxUserCounter(user.address, collectionAddress)
+      // assert.equal(counter, "1")
     })
 
-    it('Reveals mystery box', async() => {
-      await helpers.time.increase(70000000);
-      await nftStore.connect(user).mint(collectionAddress);
-      const counter = await nftStore.mysteryBoxUserCounter(user.address, collectionAddress)
-      let requestId = await nftStore.s_requestId()
-      let fulfillRandomWordsReceipt = await mockVRF.fulfillRandomWords(requestId, nftStore.address)
-      assert.equal(counter, "0")
-      receipt = await nftStore.getUserNfts(user.address)
-      console.log(receipt)
-    })
+    // it('Reveals mystery box', async() => {
+    //   await helpers.time.increase(70000000);
+    //   await nftStore.connect(user).mint(collectionAddress);
+    //   const counter = await nftStore.mysteryBoxUserCounter(user.address, collectionAddress)
+    //   let requestId = await nftStore.s_requestId()
+    //   let fulfillRandomWordsReceipt = await mockVRF.fulfillRandomWords(requestId, nftStore.address)
+    //   assert.equal(counter, "0")
+    //   receipt = await nftStore.getUserNfts(user.address)
+    //   console.log(receipt)
+    // })
 
     // it('Admin received funds', async() => {
     //   currAdminBalance = await admin.getBalance()
