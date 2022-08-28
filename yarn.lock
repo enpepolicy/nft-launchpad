@@ -708,7 +708,7 @@
     deep-eql "^4.0.1"
     ordinal "^1.0.3"
 
-"@nomicfoundation/hardhat-network-helpers@^1.0.0":
+"@nomicfoundation/hardhat-network-helpers@^1.0.4":
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/@nomicfoundation/hardhat-network-helpers/-/hardhat-network-helpers-1.0.4.tgz#265e807818b727c50dc6f115ee951e5c25cfe67f"
   integrity sha512-bgS1HtuPZxOzEsQsF6jxfoOMQXKRlddsoJPT8dBNH1Pgpv9Y8AUQ3ecQk4ujAw9EOdTE1xAL4u7S6Gu4p3DO+Q==
@@ -1548,6 +1548,11 @@ bech32@1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/bech32/-/bech32-1.1.4.tgz#e38c9f37bf179b8eb16ae3a772b40c356d4832e9"
   integrity sha512-s0IrSOzLlbvX7yp4WBfPITzpAU8sqQcpsmwXDiKwrG4r491vwCO/XpejasRNl0piBMe/DvP4Tz0mIS/X1DPJBQ==
+
+big-number@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/big-number/-/big-number-2.0.0.tgz#98548eda9393b445791670a213aed6f6dcd66ee3"
+  integrity sha512-C67Su0g+XsmXADX/UM9L/+xSbqqwq0D/qGJs2ky6Noy2FDuCZnC38ZSXODiaBvqWma2VYRZEXgm4H74PS6tCDg==
 
 bignumber.js@^9.0.0, bignumber.js@^9.0.1:
   version "9.1.0"
@@ -4791,6 +4796,11 @@ normalize-url@^4.1.0:
   version "4.5.1"
   resolved "https://registry.yarnpkg.com/normalize-url/-/normalize-url-4.5.1.tgz#0dd90cf1288ee1d1313b87081c9a5932ee48518a"
   integrity sha512-9UZCFRHQdNrfTpGg8+1INIg93B6zE0aXMVFkw1WFwvO4SlZywU6aLg5Of0Ap/PgcbSw4LNxvMWXMeugwMCX0AA==
+
+notiwind@^1.2.6:
+  version "1.2.6"
+  resolved "https://registry.yarnpkg.com/notiwind/-/notiwind-1.2.6.tgz#9796792b4000d31f7b6591779b8f5320ab107cbd"
+  integrity sha512-muU2I95/D97PDf/4dzB/H+C8CMpz2Dn0hZQ7ak7t1uMbe7/h0Hjy5OAHsLLfOgnE7UMrrocgQfXE6q66QW8L7g==
 
 number-to-bn@1.7.0:
   version "1.7.0"

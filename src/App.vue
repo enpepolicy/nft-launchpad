@@ -1,9 +1,13 @@
 <template>
   <router-view />
+  <NotificationGroup />
 </template>
 
 <script setup lang="ts">
 import AOS from 'aos'
+
+import NotificationGroup from './partials/NotificationGroups.vue';
+
 import { onMounted, onBeforeUnmount } from 'vue';
 import {
   initializeWallet,

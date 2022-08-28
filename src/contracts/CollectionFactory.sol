@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 // import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "hardhat/console.sol";
+
 
 /// @title NFT Collection to be used by artists
 /// @author Juan D. Polanco & Miquel Trallero
@@ -83,13 +85,14 @@ contract NftCollection is ERC721 {
 /// @custom:experimental This is an experimental contract used in chainlink hackathon.
 contract CollectionFactory is Ownable {
 
-  address[] collections;
+  address[] public collections;
   address nftStoreAddress;
   struct Collections {
     address collectionAddress;
     uint presaleDate;
     uint16 mysteryBoxCap;
     uint16 nftCap;
+    uint16 availableMysteryBoxes;
     uint16[] availableNfts;
     address owner;
     uint mysteryBoxUsdPrice;
@@ -144,7 +147,7 @@ contract CollectionFactory is Ownable {
       _tokenName,
       _tokenSymbol,
       _baseUri,
-      nftStoreAddress
+      address(this)
     );
     // Stores onchain data used to mint NFTs
     collection[address(_collection)] = Collections(
@@ -152,6 +155,7 @@ contract CollectionFactory is Ownable {
       _presaleDate,
       _mysteryBoxCap,
       _nftCap,
+      _mysteryBoxCap,
       _availableNfts,
       msg.sender,
       _mysteryBoxUsdPrice,
@@ -230,25 +234,26 @@ contract CollectionFactory is Ownable {
   /// @dev used by NFTStore contract after minting an NFT, so that this NFT cannot be minted again
   /// @param _nftCollection Address of NFT Contract
   /// @param _indexToDelete index of NFT that cannot be minted anymore
-  function updateAvailableNFts(address _nftCollection,address _user, uint16 _indexToDelete) external {
+  function updateAvailableNFts(address _nftCollection, address _user, uint16 _indexToDelete) external {
     require(msg.sender == nftStoreAddress, "Only nftStore can update this");
     uint16[] storage _availableNfts = collection[_nftCollection].availableNfts;
     _availableNfts[_indexToDelete] = _availableNfts[_availableNfts.length - 1];
     userToCollectionNfts[_user][_nftCollection].push(_availableNfts[_indexToDelete]);
     NftCollection nftCollection = NftCollection(_nftCollection);
     nftCollection.mint(_availableNfts[_indexToDelete], _user);
+    collection[_nftCollection].availableMysteryBoxes--;
     _availableNfts.pop();
     emit AvailableNFtsUpdated(_nftCollection, _indexToDelete); 
   }
 
-  /// @notice updates unit price of mystery box of a NFT Collection
-  /// @dev can only be called by owner of callection
-  /// @param _collectionAddress Address of NFT Contract
-  /// @param _mysteryUSDPrice new price in dollars with 2 decimals. E.g 2,00 $ -> 200
-  function updadatePrice(address _collectionAddress, uint _mysteryUSDPrice, uint _nftUSDPrice) external collectionOwner(_collectionAddress) {
-    collection[_collectionAddress].mysteryBoxUsdPrice = _mysteryUSDPrice;
-    collection[_collectionAddress].nftUsdPrice = _nftUSDPrice;
-  }
+  // /// @notice updates unit price of mystery box of a NFT Collection
+  // /// @dev can only be called by owner of callection
+  // /// @param _collectionAddress Address of NFT Contract
+  // /// @param _mysteryUSDPrice new price in dollars with 2 decimals. E.g 2,00 $ -> 200
+  // function updadatePrice(address _collectionAddress, uint _mysteryUSDPrice, uint _nftUSDPrice) external collectionOwner(_collectionAddress) {
+  //   collection[_collectionAddress].mysteryBoxUsdPrice = _mysteryUSDPrice;
+  //   collection[_collectionAddress].nftUsdPrice = _nftUSDPrice;
+  // }
 
   
   // /// @notice switch the frozenFlag boolean value
