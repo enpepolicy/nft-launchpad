@@ -8,8 +8,10 @@ import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
-// TODO: EVENTS!!
-
+/// @title NFT Store
+/// @author Juan D. Polanco & Miquel Trallero
+/// @notice Buy a Mystery Box or an NFT from a specific collection
+/// @dev All function calls are currently implemented without side effects
 contract NftStore is VRFConsumerBaseV2 {
 
   // Chainlink price feed interface
@@ -89,6 +91,9 @@ contract NftStore is VRFConsumerBaseV2 {
     admin = _admin;
   }  
 
+  /// @notice only available during presale period
+  /// @dev buy a Mystery Box
+  /// @param _collectionAddress contract address of the collection
   function buyMysteryBox(address _collectionAddress) public payable {    
     ICollectionFactory.Collections memory collections = collectionFactory.getCollection(_collectionAddress);
     require(
@@ -117,6 +122,9 @@ contract NftStore is VRFConsumerBaseV2 {
     }
   }
 
+  /// @notice user can use it either paying or purchasing first a Mystery Box
+  /// @dev mint an NFT
+  /// @param _collectionAddress contract address of the collection
   function mint(address _collectionAddress) public payable {
     ICollectionFactory.Collections memory collections = collectionFactory.getCollection(_collectionAddress);
     require(
@@ -196,6 +204,9 @@ contract NftStore is VRFConsumerBaseV2 {
     return uint(price);
   }
 
+  /// @dev get an array of mystery boxes purchased by a user
+  /// @param _user user address
+  /// @return UserMysteryBoxes array which contains collection and number of Mystery Boxes
   function getUserMysteryBoxes(address _user) public view returns (UserMysteryBoxes[] memory) {
     address[] memory collections = userToCollectionsMB[_user];
     UserMysteryBoxes[] memory userMysteryBoxes = new UserMysteryBoxes[](collections.length);
@@ -209,6 +220,9 @@ contract NftStore is VRFConsumerBaseV2 {
     return userMysteryBoxes;
   }
 
+  /// @dev get an array of NFTs purchased by a user
+  /// @param _user user address
+  /// @return UserNfts array which contains collection and number of NFTs
   function getUserNfts(address _user) public view returns(UserNfts[] memory) {
     address[] memory collections = userToCollectionsNft[_user];
     UserNfts[] memory userNfts = new UserNfts[](collections.length);
@@ -222,6 +236,8 @@ contract NftStore is VRFConsumerBaseV2 {
     return userNfts;
   }
 
+  /// @dev get the price of the usd amount in native currency
+  /// @param _usdAmount amount of USD to convert to native currency
   function getTokenAmount(uint _usdAmount) public view returns(uint) {
     uint amount = _usdAmount * (10 ** 18) * (10 ** 6) / getLatestPrice();
     return (amount + (amount * 5 / 100));
