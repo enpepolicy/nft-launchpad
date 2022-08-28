@@ -123,7 +123,7 @@ contract NftStore is VRFConsumerBaseV2 {
     );
 
     require(
-      nftCounter[_collectionAddress] < (collections.nftCap + mysteryBoxCounter[_collectionAddress]),
+      nftCounter[_collectionAddress] + mysteryBoxCounter[_collectionAddress] < collections.nftCap,
       "NftStore: all NFT were already sold"
     );
 
