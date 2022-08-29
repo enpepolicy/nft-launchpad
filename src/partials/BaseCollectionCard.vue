@@ -115,7 +115,7 @@ async function buyBox() {
     .then(() => notifySuccess('You bought a Mystery Box.'))
     .catch((err) => {
       // notifyError(err.data?.message || err.message || 'An error has occured.')
-      notifyError(err.message || 'An error has occured.')
+      notifyError(err.error?.data?.message || err.message || 'An error has occured.')
     })
     .finally(() => {
       emit('update-collections')
