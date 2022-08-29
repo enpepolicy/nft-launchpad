@@ -30,10 +30,10 @@
     </div>
     <div 
       v-else
-      class="flex flex-col"
+      class="flex flex-col border-2 rounded-lg"
     >
       <div class="flex justify-center">
-        <div class="text-base text-center px-4">Fetching metadata!<br>Try later.</div>
+        <div class="text-base text-center p-4">Fetching Metadata,<br>Try later</div>
       </div>
     </div>
 </template>
@@ -44,12 +44,15 @@ import { computed, PropType } from 'vue';
 const props = defineProps({
   nft: {
     type: Object as PropType<any>,
-    default: () => []
+    default: () => {}
   },
 })
 
 const metadata = computed(() => {
-  return JSON.parse(props.nft.metadata)
+  if (props?.nft?.metadata) {
+    return JSON.parse(props.nft.metadata)
+  }
+  return false
 })
 
 const imageUrl = computed(() => {
