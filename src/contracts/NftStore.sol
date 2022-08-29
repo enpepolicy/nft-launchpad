@@ -2,7 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "./INFTCollection.sol";
-import "./ICollectionFactory.sol";
+import "./CollectionFactory.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
@@ -39,7 +39,7 @@ contract NftStore is VRFConsumerBaseV2 {
   address payable admin;
 
   address public factoryAddress;
-  ICollectionFactory collectionFactory;
+  CollectionFactory collectionFactory;
 
   struct UserMysteryBoxes {
     address collectionAddres;
@@ -77,7 +77,7 @@ contract NftStore is VRFConsumerBaseV2 {
     VRFConsumerBaseV2(_vrfCoordinator)
   {
     priceFeed = AggregatorV3Interface(_priceFeedAddress);
-    collectionFactory = ICollectionFactory(_factoryAddress);
+    collectionFactory = CollectionFactory(_factoryAddress);
     vrfCoordinator = _vrfCoordinator;
     COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
     link = _link; 
@@ -95,7 +95,7 @@ contract NftStore is VRFConsumerBaseV2 {
   /// @dev buy a Mystery Box
   /// @param _collectionAddress contract address of the collection
   function buyMysteryBox(address _collectionAddress) public payable {    
-    ICollectionFactory.Collections memory collections = collectionFactory.getCollection(_collectionAddress);
+    CollectionFactory.Collections memory collections = collectionFactory.getCollection(_collectionAddress);
     require(
       mysteryBoxCounter[_collectionAddress] < collections.mysteryBoxCap,
       "NftStore: all Mystery Boxes were already sold"
@@ -126,7 +126,7 @@ contract NftStore is VRFConsumerBaseV2 {
   /// @dev mint an NFT
   /// @param _collectionAddress contract address of the collection
   function mint(address _collectionAddress) public payable {
-    ICollectionFactory.Collections memory collections = collectionFactory.getCollection(_collectionAddress);
+    CollectionFactory.Collections memory collections = collectionFactory.getCollection(_collectionAddress);
     require(
       block.timestamp > collections.presaleDate,
       "NftStore: NFT cannot be minted during presale"

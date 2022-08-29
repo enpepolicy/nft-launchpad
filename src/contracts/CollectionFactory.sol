@@ -237,11 +237,10 @@ contract CollectionFactory is Ownable {
   function updateAvailableNFts(address _nftCollection, address _user, uint16 _indexToDelete) external {
     require(msg.sender == nftStoreAddress, "Only nftStore can update this");
     uint16[] storage _availableNfts = collection[_nftCollection].availableNfts;
-    _availableNfts[_indexToDelete] = _availableNfts[_availableNfts.length - 1];
-    userToCollectionNfts[_user][_nftCollection].push(_availableNfts[_indexToDelete]);
     NftCollection nftCollection = NftCollection(_nftCollection);
     nftCollection.mint(_availableNfts[_indexToDelete], _user);
-    //collection[_nftCollection].availableMysteryBoxes--;
+    _availableNfts[_indexToDelete] = _availableNfts[_availableNfts.length - 1];
+    userToCollectionNfts[_user][_nftCollection].push(_availableNfts[_indexToDelete]);
     _availableNfts.pop();
     emit AvailableNFtsUpdated(_nftCollection, _indexToDelete); 
   }
