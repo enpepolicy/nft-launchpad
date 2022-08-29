@@ -1,4 +1,4 @@
-# [ETHCC Paris -  RedEnvelope](https://heartfelt-dieffenbachia-195a58.netlify.app/)
+# [NFT Launchpad](https://gentle-capybara-ad7963.netlify.app/)
 
 <p align="center">
   <img src="https://img.shields.io/badge/version-1.0.0-red.svg" alt="Version">
