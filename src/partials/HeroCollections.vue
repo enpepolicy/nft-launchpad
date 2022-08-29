@@ -65,35 +65,7 @@ const props = defineProps({
   },
   collections: {
     type: Array as PropType<Array<Collection>>,
-    default: () => [
-      // {
-      //   address: '0x9b17C9E2AA27F93b1d0e71b872069e096cB41233',
-      //   name: 'Collection 1',
-      //   description: "Supp",
-      //   coverIPFSHash: 'https://images.assetsdelivery.com/compings_v2/sabelskaya/sabelskaya1908/sabelskaya190800807.jpg',
-      //   mysteryBoxInUSD: 5,
-      //   NFTPriceInUSD: 10,
-      //   presaleEndDate: '2022.8.10'
-      // },
-      // {
-      //   address: '0x9b17C9E2AA27F93b1d0e71b872069e096cB41233',
-      //   name: 'Collection 2',
-      //   description: "Support people's health harm reduction by minting a unique NFT that helps alert adulterated MDMA (Ecstasy) in festivals and events",
-      //   coverIPFSHash: 'https://images.assetsdelivery.com/compings_v2/sabelskaya/sabelskaya1908/sabelskaya190800807.jpg',
-      //   mysteryBoxInUSD: 5,
-      //   NFTPriceInUSD: 10,
-      //   presaleEndDate: '2022.10.10'
-      // },
-      // {
-      //   address: '0x9b17C9E2AA27F93b1d0e71b872069e096cB41233',
-      //   name: 'Collection 3',
-      //   description: "Support peops",
-      //   coverIPFSHash: 'https://images.assetsdelivery.com/compings_v2/sabelskaya/sabelskaya1908/sabelskaya190800807.jpg',
-      //   mysteryBoxInUSD: 8,
-      //   NFTPriceInUSD: 100,
-      //   presaleEndDate: '2022.9.10'
-      // },
-    ]
+    default: () => []
   },
 })
 </script>
