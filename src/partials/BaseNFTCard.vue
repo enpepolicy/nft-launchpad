@@ -56,6 +56,17 @@ const metadata = computed(() => {
 })
 
 const imageUrl = computed(() => {
+  // https://ikzttp.mypinata.cloud/ipfs/QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/0.png
+  // ipfs://QmQg7opMWfVEtv2EM2JFhr9uwbcG5UmaDhp14fbVYJkV2g
+
+  let image = metadata.value.image
+  let ipfsPrefix = image.slice(0, 7)
+  
+  console.log(ipfsPrefix)
+
+  if (ipfsPrefix == "ipfs://") {
+    return 'https://gateway.pinata.cloud/ipfs/' + image.slice(8)
+  }
   return metadata.value?.image
 })
 </script>
