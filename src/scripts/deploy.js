@@ -61,8 +61,10 @@ async function main() {
   await factory.createNFTCollection(
     "First Test Collection", 
     "FTC",
-    "QmTf1GaD7j9FYZzo9RUSUkHB9oLkNAZrFQB1aPrsGzWn1d",
-    "QmTuxXq8GWWdFbji3nG3oHfL92nPwkdicvvfps7aSx6BJE/1.png",
+    "QmQFkLSQysj94s5GvTHPyzTxrawwtjgiiYS2TBLgrvw8CW",
+    "QmYDvPAXtiJg7s8JdRBSLWdgSphQdac8j1YuQNNxcGE1hg/10.png",
+    // "QmTf1GaD7j9FYZzo9RUSUkHB9oLkNAZrFQB1aPrsGzWn1d",
+    // "QmTuxXq8GWWdFbji3nG3oHfL92nPwkdicvvfps7aSx6BJE/1.png",
     "1661601866",
     "3",
     "9",
