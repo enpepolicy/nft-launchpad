@@ -65,7 +65,7 @@ const imageUrl = computed(() => {
   console.log(ipfsPrefix)
 
   if (ipfsPrefix == "ipfs://") {
-    return 'https://gateway.pinata.cloud/ipfs/' + image.slice(8)
+    return 'https://gateway.pinata.cloud/ipfs/' + image.slice(7)
   }
   return metadata.value?.image
 })
