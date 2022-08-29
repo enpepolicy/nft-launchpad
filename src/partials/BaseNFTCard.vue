@@ -1,5 +1,8 @@
 <template>
-    <div class="flex flex-col">
+    <div
+      v-if="metadata"
+      class="flex flex-col"
+    >
         <div class="flex justify-center">
           <img
             :src="imageUrl"
@@ -25,21 +28,31 @@
         <!-- :class="presaleIsActive(collection.presaleEndDate) ? 'bg-indigo-800' : 'bg-indigo-500'"
         :inner-text="presaleIsActive(collection.presaleEndDate) ? `Buy Presale Box ($${collection.mysteryBoxInUSD / 100})` : `Buy NFT ($${collection.NFTPriceInUSD / 100} USD)`" -->
     </div>
+    <div 
+      v-else
+      class="flex flex-col border-2 rounded-lg"
+    >
+      <div class="flex justify-center">
+        <div class="text-base text-center p-4">Fetching Metadata,<br>Try later</div>
+      </div>
+    </div>
 </template>
 
 <script setup lang="ts">
 import { computed, PropType } from 'vue';
-import BaseButton from './BaseButton.vue';
 
 const props = defineProps({
   nft: {
     type: Object as PropType<any>,
-    default: () => []
+    default: () => {}
   },
 })
 
 const metadata = computed(() => {
-  return JSON.parse(props.nft.metadata)
+  if (props?.nft?.metadata) {
+    return JSON.parse(props.nft.metadata)
+  }
+  return false
 })
 
 const imageUrl = computed(() => {
