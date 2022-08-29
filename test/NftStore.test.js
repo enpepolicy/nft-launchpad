@@ -31,7 +31,7 @@ describe("NftStore", () => {
   let prevUserBalance, currUserBalance
   let collectionAddress
   const subscriptionId = "1";
-  const keyHash = "0x4b09e658ed251bcafeebbc69400383d49f344ace09b9576fe248bb02c003fe9f"
+  const keyHash = "0xd4bb89654db74673a187bd804519e65e3f71a52bc55f11da7601a13dcf505314"
   const _callbackGasLimit = "2000000"
   const _requestConfirmations = "3"
   const price = '30000000000'
@@ -47,7 +47,7 @@ describe("NftStore", () => {
     NftStore = await ethers.getContractFactory("NftStore")
 
     mockPriceFeed = await MockPriceFeed.deploy(8, price)
-    mockVRF = await MockVRF.deploy(10, 10)
+    mockVRF = await MockVRF.deploy(1, 1)
     await mockVRF.createSubscription()
 		await mockVRF.fundSubscription(subscriptionId, "1000000000000000000000000000")
     link = await Link.deploy()
@@ -71,11 +71,15 @@ describe("NftStore", () => {
       "imageURI",
       1670000000, // future date
       2,
-      4,
+      10,
       300, // 2 USD
       600, // 3 USD
       "description"
     )
+    collectionData = await collectionFactory.getAllCollectionData()
+    collectionAddress = collectionData[0].collectionAddress
+    amount = await nftStore.getTokenAmount(300) 
+    await collectionFactory.setNftStoreAddress(nftStore.address)
   })
 
   describe("Deployment", () => {
@@ -91,9 +95,8 @@ describe("NftStore", () => {
 
   describe("Mystery Box", () => {
     it('Buy Mystery Box', async () => {
-      const collectionData = await collectionFactory.getAllCollectionData()
-      collectionAddress = collectionData[0].collectionAddress
-      const amount = await nftStore.getTokenAmount(300) // BigNumber("10").pow("16").toString()
+      
+      // BigNumber("10").pow("16").toString()
       console.log(amount)
       prevOwnerBalance = await owner.getBalance()
       prevAdminBalance = await admin.getBalance()
@@ -103,19 +106,35 @@ describe("NftStore", () => {
       assert.equal(counter, "1")
     })
 
-    // it('Reveals mystery box', async() => {
-    //   await helpers.time.increase(70000000);
-    //   await nftStore.connect(user).mint(collectionAddress);
-    //   const counter = await nftStore.mysteryBoxUserCounter(user.address, collectionAddress)
-    //   let requestId = await nftStore.s_requestId()
-    //   let fulfillRandomWordsReceipt = await mockVRF.fulfillRandomWords(requestId, nftStore.address)
-    //   assert.equal(counter, "0")
-    //   receipt = await nftStore.getUserNfts(user.address)
-    //   console.log(receipt)
-    // })
+    it('Reveals mystery box', async() => {
+      await helpers.time.increase(70000000);
+      await nftStore.connect(user).mint(collectionAddress, {value: amount + 1});
+      const counter = await nftStore.mysteryBoxUserCounter(user.address, collectionAddress)
+      let requestId = await nftStore.s_requestId()
+      await mockVRF.connect(admin).fulfillRandomWords(requestId, nftStore.address)
+
+      await nftStore.connect(user).mint(collectionAddress, {value: amount + 1});
+      requestId = await nftStore.s_requestId()
+      await mockVRF.connect(admin).fulfillRandomWords(requestId, nftStore.address)
+
+      await nftStore.connect(user).mint(collectionAddress, {value: amount + 1});
+      requestId = await nftStore.s_requestId()
+      await mockVRF.connect(admin).fulfillRandomWords(requestId, nftStore.address)
+      
+      await nftStore.connect(user).mint(collectionAddress, {value: amount + 1});
+      requestId = await nftStore.s_requestId()
+      await mockVRF.connect(admin).fulfillRandomWords(requestId, nftStore.address)
+
+      attributes = await collectionFactory.getCollection(collectionAddress)
+      console.log(attributes)
+
+      assert.equal(counter, "0")
+      receipt = await nftStore.getUserNfts(user.address)
+      console.log(receipt)
+    })
 
     // it('Admin received funds', async() => {
-    //   currAdminBalance = await admin.getBalance()
+    //   currAdminBalance = await adsmin.getBalance()
     //   const amount = BigNumber("10").pow("16").toString()
     //   assert.equal(currAdminBalance, amount.toString())
     // })
