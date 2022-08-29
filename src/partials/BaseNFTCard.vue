@@ -23,7 +23,7 @@
           </a>
         </div>
         <div class="text-base text-left"> {{ metadata ? metadata.name : 'Fetching...' }}</div>
-        <div v-if="metadata" class="text-sm opacity-80 italic">{{ metadata.description.substring(0, 80) }} {{ metadata.description.length > 80 ? '...' : '' }}</div>
+        <div v-if="metadata" class="text-sm opacity-80 italic">{{ metadata.description?.substring(0, 80) }} {{ metadata.description?.length > 80 ? '...' : '' }}</div>
         <!-- <div class="text-xs opacity-100 text-white/60">NFT's Left: {{ nft }}</div> -->
         <!-- :class="presaleIsActive(collection.presaleEndDate) ? 'bg-indigo-800' : 'bg-indigo-500'"
         :inner-text="presaleIsActive(collection.presaleEndDate) ? `Buy Presale Box ($${collection.mysteryBoxInUSD / 100})` : `Buy NFT ($${collection.NFTPriceInUSD / 100} USD)`" -->
