@@ -3,7 +3,7 @@ import { ethers, utils } from 'ethers'
 import { Web3Provider } from '@ethersproject/providers'
 import { currentAccount, provider, currentNetworkId } from '../useWallet'
 
-import { abi as collectionABI } from '../../artifacts/src/contracts/NftCollectionABI.sol/NftCollection.json'
+import { abi as collectionABI } from '../../artifacts/src/contracts/NFTCollectionABI.sol/NftCollection.json'
 import { abi } from '../../artifacts/src/contracts/NftStore.sol/NftStore.json'
 import addressList from '../../contract-addresses.json'
 
