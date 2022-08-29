@@ -51,7 +51,11 @@ async function getCollections () {
           coverIPFSHash: collection.coverImageUri,
           mysteryBoxInUSD: collection.mysteryBoxUsdPrice.toNumber(),
           NFTPriceInUSD: collection.nftUsdPrice.toNumber(),
-          presaleEndDate: collection.presaleDate.toNumber()
+          presaleEndDate: collection.presaleDate.toNumber(),
+          capMysteryBox: collection.mysteryBoxCap,
+          capNFT: collection.nftCap,
+          // availableMysteryBoxesQuantity: collection.availableMysteryBoxes,
+          availableNftsQuantity: collection.availableNfts.length
         }
       })
       // console.log(res, normalizedCollections)

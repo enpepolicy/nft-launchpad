@@ -34,14 +34,34 @@
             >
             📝 Check Contract 📝
             </a>
-            <div class="text-xs opacity-100 text-white/60">Presale Box {{ collection.mysteryBoxInUSD / 100 }} USD / NFT {{ collection.NFTPriceInUSD / 100 }} USD</div>
+            <div
+              :class="presaleIsActive(collection.presaleEndDate) ? '' : 'line-through'"
+              class="text-xs opacity-100 text-white/60"
+            >
+              Total Mystery Boxes: {{ collection.capMysteryBox }}</div>
+            <div class="text-xs opacity-100 text-white/60">NFT's Left: {{ collection.availableNftsQuantity }} / {{ collection.capNFT }}</div>
+            <div class="text-xs opacity-100 text-white/60">Box Price: {{ collection.mysteryBoxInUSD / 100 }} USD / {{  maticPriceBox ? maticPriceBox : '-' }} MATIC</div>
+            <div class="text-xs opacity-100 text-white/60">NFT Price: {{ collection.mysteryBoxInUSD / 100 }} USD / {{ maticPriceNFT ?  maticPriceNFT : '-' }} MATIC</div>
         </div>
 
         <BaseButton
-            :class="presaleIsActive(collection.presaleEndDate) ? 'bg-indigo-800' : 'bg-indigo-500'"
-            class="mt-4"
-            :inner-text="presaleIsActive(collection.presaleEndDate) ? `Buy Box ($${collection.mysteryBoxInUSD / 100} USD)` : `Buy NFT ($${collection.NFTPriceInUSD / 100} USD)`"
+          v-if="!isLoading"
+          @click="presaleIsActive(collection.presaleEndDate) ? validateConnectedWallet(buyBox) : validateConnectedWallet(buyNFT)"
+          :class="presaleIsActive(collection.presaleEndDate) ? 'bg-indigo-800' : 'bg-indigo-500'"
+          class="mt-4"
+          :inner-text="presaleIsActive(collection.presaleEndDate) ? `Buy Box` : `Buy NFT`"
         />
+
+        <div
+          v-else
+          class="btn-sm text-white bg-indigo-500 hover:bg-indigo-400 mt-4"
+        >
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Loading
+          </div>
 
         <div
           v-if="presaleIsActive(String(Number(collection.presaleEndDate)))"
@@ -55,34 +75,76 @@
     </article>
 </template>
 <script setup lang="ts">
-import { PropType, readonly, computed } from 'vue';
-import { Collection } from '../types/index'
+import { PropType, readonly, computed, onMounted, ref } from 'vue';
+import { utils } from 'ethers';
 
 import BaseCountdown from './BaseCountdown.vue';
 import BaseButton from './BaseButton.vue';
 
+import { Collection } from '../types/index'
+import { getTokenAmount, buyMysteryBoxByCollection, mintByCollection } from '../composables/contracts/useNFTStore';
+import { currentAccount } from '../composables/useWallet';
+import { notifyError, notifySuccess } from '../composables/useNotification';
+
 const props = defineProps({
   collection: {
     type: Object as PropType<Collection>,
-    default: () => [
-    //   {
-    //     address: '0x9b17C9E2AA27F93b1d0e71b872069e096cB41233',
-    //     name: 'Collection 1',
-    //     description: "Supp",
-    //     coverIPFSHash: 'https://images.assetsdelivery.com/compings_v2/sabelskaya/sabelskaya1908/sabelskaya190800807.jpg',
-    //     mysteryBoxInUSD: 5,
-    //     NFTPriceInUSD: 10,
-    //     presaleEndDate: '2022.8.10'
-    //   },
-    ]
+    default: () => []
   },
 })
+
+const isLoading = ref(false)
+const maticPriceNFT = ref('')
+const maticPriceBox = ref('')
 
 const backgroundColors = readonly(['bg-pink-800', 'bg-indigo-800', 'bg-purple-800', 'bg-green-800', 'bg-orange-800', 'bg-red-800' ])
 
 const imageUrl = computed(() => {
   return 'https://gateway.pinata.cloud/ipfs/' + props.collection.coverIPFSHash
 })
+
+async function buyBox() {
+  isLoading.value = true
+  
+  let priceInNative = await getTokenAmount(props.collection.NFTPriceInUSD)
+  priceInNative = priceInNative.toString()
+
+  await buyMysteryBoxByCollection(props.collection.address, priceInNative.toString())
+    .then(() => notifySuccess('You bought a Mystery Box.'))
+    .catch((err) => {
+      // notifyError(err.data?.message || err.message || 'An error has occured.')
+      notifyError(err.message || 'An error has occured.')
+    })
+    .finally(() => isLoading.value = false)
+}
+
+async function buyNFT() {
+  isLoading.value = true
+ 
+  let priceInNative = await getTokenAmount(props.collection.NFTPriceInUSD)
+
+  priceInNative = priceInNative.toString()
+
+  await mintByCollection(props.collection.address, priceInNative)
+    .then(() => notifySuccess('You minted an NFT.'))
+    .catch((err) => {
+      notifyError(err.message || 'An error has occured.')
+    })
+    .finally(() => isLoading.value = false)
+}
+
+async function convertUSDToNativeToken () {
+  maticPriceNFT.value = formatPrice(utils.formatEther(await getTokenAmount(props.collection.NFTPriceInUSD)))
+  maticPriceBox.value = formatPrice(utils.formatEther(await getTokenAmount(props.collection.mysteryBoxInUSD)))
+}
+
+function validateConnectedWallet(callback) {
+  if (currentAccount.value) {
+    callback()
+  } else {
+    notifyError('Connect Wallet')
+  }
+}
 
 function getRandomBackgroundColor () {
   const backgroundColorsCopy = Object.assign([], backgroundColors)
@@ -97,4 +159,15 @@ function presaleIsActive (date: string) {
   }
   return true;
 }
+
+function formatPrice(x: number | string, float = 2) {
+  x = Number(x);
+  const price = Number.parseFloat(String(x)).toFixed(float);
+
+  return `${price}`;
+}
+
+onMounted(async () => {
+  convertUSDToNativeToken()
+})
 </script>
