@@ -14,9 +14,7 @@
             <header>
               <!-- Title and excerpt -->
               <div class="text-center md:text-left">
-                <router-link to="/blog-post">
-                  <h1 class="h1 font-red-hat-display mb-4">{{ props.sectionTitle}}</h1>
-                </router-link>
+                <h1 class="h1 font-red-hat-display mb-4">{{ props.sectionTitle}}</h1>
                 <p class="text-xl text-gray-600 dark:text-gray-400">{{ props.collections[0] ? props.sectionDescription : 'No collections to display' }}</p>
               </div>
             </header>
@@ -37,6 +35,7 @@
           <BaseCollectionCard
             v-for="(collection, index) in props.collections"
             :key="index"
+            @update-collections="emit('update-collections')"
             :collection="collection"
           />
         </div>
@@ -48,6 +47,8 @@
 import { PropType } from 'vue';
 import { Collection } from '../types/index'
 import BaseCollectionCard from './BaseCollectionCard.vue';
+
+const emit = defineEmits(['update-collections'])
 
 const props = defineProps({
   sectionTitle: {

@@ -15,6 +15,7 @@
       <HeroCollections
         section-title="Your Collections"
         section-description="Check your deployed collections using NFT Launchpad protocol:"
+        @update-collections="getCollections()"
         :collections="collections"
       />
     </main>
@@ -45,13 +46,17 @@ async function getCollections () {
     .then((res) => {
       const normalizedCollections = res.map(collection => {
         return {
-          address: '0x75668d0C7fb32eca23d0D413469855aB9193c65c',
+          address: collection.collectionAddress,
           name: collection.tokenName,
           description: collection.tokenDescription,
           coverIPFSHash: collection.coverImageUri,
           mysteryBoxInUSD: collection.mysteryBoxUsdPrice.toNumber(),
           NFTPriceInUSD: collection.nftUsdPrice.toNumber(),
-          presaleEndDate: collection.presaleDate.toNumber()
+          presaleEndDate: collection.presaleDate.toNumber(),
+          capMysteryBox: collection.mysteryBoxCap,
+          capNFT: collection.nftCap,
+          // availableMysteryBoxesQuantity: collection.availableMysteryBoxes,
+          availableNftsQuantity: collection.availableNfts.length
         }
       })
       // console.log(res, normalizedCollections)

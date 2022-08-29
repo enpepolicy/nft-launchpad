@@ -5,7 +5,7 @@
 
         <!-- Section header -->
         <div class="max-w-3xl mx-auto text-center pb-12 ">
-          <p class="text-[1.8rem] text-gray-600 dark:text-gray-400 font-red-hat-display ">Fill the form with your collection's information and be amazed with NFT Launchpad reliabilty. *You will need the IPFS Folder hash and image hash. </p>
+          <p class="text-[1.8rem] text-gray-600 dark:text-gray-400 font-red-hat-display ">Fill the form with your collection's information and be amazed with NFT Launchpad reliabilty.<br> *You will need the IPFS Folder hash and Cover Image hash. </p>
         </div>    
         
         <form action="" class="pb-10 w-full gap-x-20 gap-y-5 grid grid-cols-1 md:grid-cols-2 ">
@@ -212,7 +212,7 @@
             />
             <BaseButton
               v-else-if="!isLoading"
-              @click="create"
+              @click="validateForm(create)"
               class="h-[70px] text-2xl"
               inner-text="Launch Collection"
             />
@@ -245,6 +245,7 @@ import { truncateAddress } from '../utils';
 
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import { notifyError, notifySuccess } from '../composables/useNotification';
 
 const emit = defineEmits(['new-collection'])
 
@@ -265,18 +266,39 @@ const payload = ref({
 
 async function create () {
   isLoading.value = true
-  console.log(payload.value._presaleDate)
 
   await createNFTCollection(payload.value)
     .then(() => {
       emit('new-collection')
+      notifySuccess('Collection Created')
+      cleanForm()
     })
     .catch((err) => {
-      console.log(err)
+      notifyError(err.message || 'An error has occured.')
       isLoading.value = false
     })
+    .finally(() => {
+      isLoading.value = false
+    })
+}
 
-  isLoading.value = false
+function validateForm (callback) {
+  if (
+    payload.value._tokenName  &&
+    payload.value._tokenDescription  &&
+    payload.value._tokenSymbol &&
+    payload.value._baseUri &&
+    payload.value._coverImageUri &&
+    payload.value._presaleDate  &&
+    payload.value._mysteryBoxCap &&
+    payload.value._nftCap &&
+    payload.value._mysteryBoxUsdPrice  &&
+    payload.value._nftUsdPrice
+  ) {
+    callback()
+  } else {
+    notifyError('All fields must be filled.')
+  }
 }
 
 onMounted(() => {

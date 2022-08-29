@@ -19,6 +19,7 @@
     "aos": "^3.0.0-beta.6",
     "cross-env": "^7.0.3",
     "ethers": "^5.6.9",
+    "notiwind": "^1.2.6",
     "swiper": "^6.8.4",
     "vue": "^3.2.20",
     "vue-router": "^4.0.12"
@@ -26,7 +27,7 @@
   "devDependencies": {
     "@chainlink/contracts": "^0.4.2",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.0",
-    "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.4",
     "@nomicfoundation/hardhat-toolbox": "^1.0.2",
     "@nomiclabs/hardhat-ethers": "^2.0.0",
     "@nomiclabs/hardhat-etherscan": "^3.1.0",
@@ -38,6 +39,7 @@
     "@vitejs/plugin-vue": "^2.1.0",
     "@vue/compiler-sfc": "^3.2.20",
     "autoprefixer": "10.4.5",
+    "big-number": "^2.0.0",
     "dotenv": "^16.0.1",
     "hardhat": "^2.10.1",
     "hardhat-gas-reporter": "^1.0.8",

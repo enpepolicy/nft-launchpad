@@ -14,7 +14,7 @@ const { expect } = require("chai");
 const assert = require('assert');
 // const { expectRevert, expectEvent } = require('@openzeppelin/test-helpers')
 
-let owner, factory
+let owner, factory, firstCollection
 colName = "First Collection Test",
 colSymbol = "FCT",
 colBaseURI = "testBaseURI",
@@ -42,6 +42,7 @@ describe("Collection Factory", function () {
 		[owner, secAccount] = await ethers.getSigners()
 		const Factory = await ethers.getContractFactory("CollectionFactory");
 		factory = await Factory.deploy()
+    await factory.setNftStoreAddress(owner.address)
 	})
 
   describe("CollectionFactory Deployment", () => {
@@ -65,8 +66,9 @@ describe("Collection Factory", function () {
         colPresaleCap,
         colFullCap,
         colPresalePrice,
-        colRegularPrice
-              )
+        colRegularPrice,
+        "fadsfads"
+              );
       firstCollectionAddress = await factory.collections(0)
       assert.notEqual(firstCollectionAddress, 0x0)
 			assert.notEqual(firstCollectionAddress, '')
@@ -97,7 +99,8 @@ describe("Collection Factory", function () {
         colPresaleCap2,
         colFullCap2,
         colPresalePrice2,
-        colRegularPrice2
+        colRegularPrice2,
+        "refads"
               )
       const fullCollection = await factory.getAllCollectionData()
       // attributes = await factory.getCollection(firstCollectionAddress)
@@ -124,102 +127,110 @@ describe("Collection Factory", function () {
       assert.equal(fullCollection[1].tokenName.toString(), colName2)
     })
 
-    it("My NFT Collection Attributes are correct", async() => {    
-      const fullCollection = await factory.getMyCollectionData()
-      // attributes = await factory.getCollection(firstCollectionAddress)
-      assert.equal(fullCollection[0].presaleDate.toString(), colPresaleDate)
-      assert.equal(fullCollection[0].mysteryBoxCap.toString(), colPresaleCap)
-      assert.equal(fullCollection[0].nftCap.toString(), colFullCap)
-      assert.equal(fullCollection[0].availableNfts.toString(), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19")
-      assert.equal(fullCollection[0].owner, owner.address)
-      assert.equal(fullCollection[0].mysteryBoxUsdPrice.toString(), colPresalePrice)
-      assert.equal(fullCollection[0].nftUsdPrice.toString(), colRegularPrice)
-      assert.equal(fullCollection[0].frozen.toString(), "false")
-      assert.equal(fullCollection[0].coverImageUri.toString(), colCoverImageUri)
-      assert.equal(fullCollection[0].tokenName.toString(), colName)
-
-      assert.equal(fullCollection[1].presaleDate.toString(), colPresaleDate2)
-      assert.equal(fullCollection[1].mysteryBoxCap.toString(), colPresaleCap2)
-      assert.equal(fullCollection[1].nftCap.toString(), colFullCap2)
-      assert.equal(fullCollection[1].availableNfts.toString(), "0,1,2,3,4")
-      assert.equal(fullCollection[1].owner, owner.address)
-      assert.equal(fullCollection[1].mysteryBoxUsdPrice.toString(), colPresalePrice2)
-      assert.equal(fullCollection[1].nftUsdPrice.toString(), colRegularPrice2)
-      assert.equal(fullCollection[1].frozen.toString(), "false")
-      assert.equal(fullCollection[1].coverImageUri.toString(), colCoverImageUri2)
-      assert.equal(fullCollection[1].tokenName.toString(), colName2)
-    })
-
-  describe("Update Collection Parameters", () => {
-    // Set NFTStore address to be able to updateCollection
-    it("Set nftStoreAddress", async() => {
-      await factory.setNftStoreAddress(owner.address)
-      const nftStoreAddress = await factory.nftStoreAddress()
-      assert.equal(nftStoreAddress, owner.address)
-    })
-
-    it("Update presaleDate with insufficient rights", async() => {
-      await expect(
-        factory.connect(secAccount).updatePresaleDate(firstCollectionAddress, 4132431242)
-      ).to.be.revertedWith(colOwnerRevert)
-    })
-
-    it("Update presaleDate", async() => {
-      await factory.updatePresaleDate(firstCollectionAddress, 4132431242)
-      attributes = await factory.getCollection(firstCollectionAddress)
-      assert.equal(attributes.presaleDate.toString(), "4132431242")
-
-    })
-
-    it("Update available NFTs with wrong arguments", async() => {
-      await expect(
-        factory.connect(secAccount).updateAvailableNFts(firstCollectionAddress, 1)
-      ).to.be.revertedWith("Only nftStore can update this")
-    })
-
     it("Update available NFTs", async() => {
-      await factory.updateAvailableNFts(firstCollectionAddress, 1)
+      await factory.updateAvailableNFts(firstCollectionAddress, owner.address, 1)
       attributes = await factory.getCollection(firstCollectionAddress)
       assert.equal(attributes.availableNfts.toString(), "0,19,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18")
+      const uri = await firstCollection.tokenURI("1");
+      console.log(uri.toString())
     })
 
-    it("updadateMysteryBoxPrice with insufficient rights", async() => {
-      await expect(
-        factory.connect(secAccount).updadateMysteryBoxPrice(firstCollectionAddress, 3414)
-      ).to.be.revertedWith(colOwnerRevert)
-    })
+    // it("My NFT Collection Attributes are correct", async() => {    
+    //   const fullCollection = await factory.getMyCollectionData()
+    //   // attributes = await factory.getCollection(firstCollectionAddress)
+    //   assert.equal(fullCollection[0].presaleDate.toString(), colPresaleDate)
+    //   assert.equal(fullCollection[0].mysteryBoxCap.toString(), colPresaleCap)
+    //   assert.equal(fullCollection[0].nftCap.toString(), colFullCap)
+    //   assert.equal(fullCollection[0].availableNfts.toString(), "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19")
+    //   assert.equal(fullCollection[0].owner, owner.address)
+    //   assert.equal(fullCollection[0].mysteryBoxUsdPrice.toString(), colPresalePrice)
+    //   assert.equal(fullCollection[0].nftUsdPrice.toString(), colRegularPrice)
+    //   assert.equal(fullCollection[0].frozen.toString(), "false")
+    //   assert.equal(fullCollection[0].coverImageUri.toString(), colCoverImageUri)
+    //   assert.equal(fullCollection[0].tokenName.toString(), colName)
 
-    it("updadateMysteryBoxPrice", async() => {
-      await factory.updadateMysteryBoxPrice(firstCollectionAddress, 3414)
-      attributes = await factory.getCollection(firstCollectionAddress)
-      assert.equal(attributes.mysteryBoxUsdPrice.toString(), "3414")      
-    })
+    //   assert.equal(fullCollection[1].presaleDate.toString(), colPresaleDate2)
+    //   assert.equal(fullCollection[1].mysteryBoxCap.toString(), colPresaleCap2)
+    //   assert.equal(fullCollection[1].nftCap.toString(), colFullCap2)
+    //   assert.equal(fullCollection[1].availableNfts.toString(), "0,1,2,3,4")
+    //   assert.equal(fullCollection[1].owner, owner.address)
+    //   assert.equal(fullCollection[1].mysteryBoxUsdPrice.toString(), colPresalePrice2)
+    //   assert.equal(fullCollection[1].nftUsdPrice.toString(), colRegularPrice2)
+    //   assert.equal(fullCollection[1].frozen.toString(), "false")
+    //   assert.equal(fullCollection[1].coverImageUri.toString(), colCoverImageUri2)
+    //   assert.equal(fullCollection[1].tokenName.toString(), colName2)
+    // })
 
-    it("updateNftPrice with insufficient rights", async() => {
-      await expect(
-        factory.connect(secAccount).updateNftPrice(firstCollectionAddress, 100)
-      ).to.be.revertedWith(colOwnerRevert)
-    })
+  // describe("Update Collection Parameters", () => {
+  //   // Set NFTStore address to be able to updateCollection
+  //   it("Set nftStoreAddress", async() => {
+  //     await factory.setNftStoreAddress(owner.address)
+  //     const nftStoreAddress = await factory.nftStoreAddress()
+  //     assert.equal(nftStoreAddress, owner.address)
+  //   })
 
-    it("updateNftPrice", async() => {
-      await factory.updateNftPrice(firstCollectionAddress, 100)
-      attributes = await factory.getCollection(firstCollectionAddress)
-      assert.equal(attributes.nftUsdPrice.toString(), "100")
-    })
+  //   it("Update presaleDate with insufficient rights", async() => {
+  //     await expect(
+  //       factory.connect(secAccount).updatePresaleDate(firstCollectionAddress, 4132431242)
+  //     ).to.be.revertedWith(colOwnerRevert)
+  //   })
 
-    it("updateFrozenFlag with insufficient rights", async() => {
-      await expect(
-        factory.connect(secAccount).updateFrozenFlag(firstCollectionAddress)
-      ).to.be.revertedWith(colOwnerRevert)
-    })
+  //   it("Update presaleDate", async() => {
+  //     await factory.updatePresaleDate(firstCollectionAddress, 4132431242)
+  //     attributes = await factory.getCollection(firstCollectionAddress)
+  //     assert.equal(attributes.presaleDate.toString(), "4132431242")
 
-    it("updateFrozenFlag", async() => {
-      await factory.updateFrozenFlag(firstCollectionAddress)
-      attributes = await factory.getCollection(firstCollectionAddress)
-      assert.equal(attributes.frozen.toString(), "true")
-    })    
+  //   })
 
-  })
+  //   it("Update available NFTs with wrong arguments", async() => {
+  //     await expect(
+  //       factory.connect(secAccount).updateAvailableNFts(firstCollectionAddress, 1)
+  //     ).to.be.revertedWith("Only nftStore can update this")
+  //   })
+
+  //   it("Update available NFTs", async() => {
+  //     await factory.updateAvailableNFts(firstCollectionAddress, 1)
+  //     attributes = await factory.getCollection(firstCollectionAddress)
+  //     assert.equal(attributes.availableNfts.toString(), "0,19,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18")
+  //   })
+
+  //   it("updadateMysteryBoxPrice with insufficient rights", async() => {
+  //     await expect(
+  //       factory.connect(secAccount).updadateMysteryBoxPrice(firstCollectionAddress, 3414)
+  //     ).to.be.revertedWith(colOwnerRevert)
+  //   })
+
+  //   it("updadateMysteryBoxPrice", async() => {
+  //     await factory.updadateMysteryBoxPrice(firstCollectionAddress, 3414)
+  //     attributes = await factory.getCollection(firstCollectionAddress)
+  //     assert.equal(attributes.mysteryBoxUsdPrice.toString(), "3414")      
+  //   })
+
+  //   it("updateNftPrice with insufficient rights", async() => {
+  //     await expect(
+  //       factory.connect(secAccount).updateNftPrice(firstCollectionAddress, 100)
+  //     ).to.be.revertedWith(colOwnerRevert)
+  //   })
+
+  //   it("updateNftPrice", async() => {
+  //     await factory.updateNftPrice(firstCollectionAddress, 100)
+  //     attributes = await factory.getCollection(firstCollectionAddress)
+  //     assert.equal(attributes.nftUsdPrice.toString(), "100")
+  //   })
+
+  //   it("updateFrozenFlag with insufficient rights", async() => {
+  //     await expect(
+  //       factory.connect(secAccount).updateFrozenFlag(firstCollectionAddress)
+  //     ).to.be.revertedWith(colOwnerRevert)
+  //   })
+
+  //   it("updateFrozenFlag", async() => {
+  //     await factory.updateFrozenFlag(firstCollectionAddress)
+  //     attributes = await factory.getCollection(firstCollectionAddress)
+  //     assert.equal(attributes.frozen.toString(), "true")
+  //   })    
+
+  // })
 })
 
 // Deploy check

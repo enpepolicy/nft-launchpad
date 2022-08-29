@@ -5,7 +5,11 @@ interface Collection {
     coverIPFSHash: string;
     mysteryBoxInUSD: number;
     NFTPriceInUSD: number;
-    presaleEndDate: string
+    presaleEndDate: string;
+    capMysteryBox: number;
+    capNFT: number;
+    // availableMysteryBoxesQuantity: number;
+    availableNftsQuantity: number;
 }
 
 export {

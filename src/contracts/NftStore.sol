@@ -1,18 +1,17 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.0;
 
-// Import this file to use console.log
-import "hardhat/console.sol";
-
-import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import "./CollectionFactory.sol";
+import "./INFTCollection.sol";
+import "./ICollectionFactory.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
 
-// TODO: EVENTS!!
-
+/// @title NFT Store
+/// @author Juan D. Polanco & Miquel Trallero
+/// @notice Buy a Mystery Box or an NFT from a specific collection
+/// @dev All function calls are currently implemented without side effects
 contract NftStore is VRFConsumerBaseV2 {
 
   // Chainlink price feed interface
@@ -40,13 +39,29 @@ contract NftStore is VRFConsumerBaseV2 {
   address payable admin;
 
   address public factoryAddress;
-  CollectionFactory collectionFactory;
+  ICollectionFactory collectionFactory;
+
+  struct UserMysteryBoxes {
+    address collectionAddres;
+    uint counter;
+  }
+
+  struct UserNfts {
+    address collectionAddres;
+    uint[] nftIds;
+  }
 
   mapping(address => mapping(address => uint)) public mysteryBoxUserCounter;
+  mapping(address => mapping(address => bool)) userHasCollectionMB;
+  mapping(address => mapping(address => bool)) userHasCollectionNft;
+  mapping(address => address[]) userToCollectionsMB;
+  mapping(address => address[]) userToCollectionsNft;
   mapping(address => uint) public mysteryBoxCounter;
   mapping(address => uint) public nftCounter;
   mapping(uint => address) requestToSender;
   mapping(uint => address) requestToCollection;
+  mapping(address => uint) userToRequest;
+  mapping(uint => uint16) requestToIndex;
 
   constructor(
     address _priceFeedAddress,
@@ -62,7 +77,7 @@ contract NftStore is VRFConsumerBaseV2 {
     VRFConsumerBaseV2(_vrfCoordinator)
   {
     priceFeed = AggregatorV3Interface(_priceFeedAddress);
-    collectionFactory = CollectionFactory(_factoryAddress);
+    collectionFactory = ICollectionFactory(_factoryAddress);
     vrfCoordinator = _vrfCoordinator;
     COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
     link = _link; 
@@ -72,12 +87,15 @@ contract NftStore is VRFConsumerBaseV2 {
     LINKTOKEN = LinkTokenInterface(link);    
     s_subscriptionId = subscriptionId;
     // Fee to pay chainLink VRF usage in presale
-    chainlinkFeeMatic = 60000000000000000;
+    chainlinkFeeMatic = 10;
     admin = _admin;
   }  
 
+  /// @notice only available during presale period
+  /// @dev buy a Mystery Box
+  /// @param _collectionAddress contract address of the collection
   function buyMysteryBox(address _collectionAddress) public payable {    
-    CollectionFactory.Collections memory collections = collectionFactory.getCollection(_collectionAddress);
+    ICollectionFactory.Collections memory collections = collectionFactory.getCollection(_collectionAddress);
     require(
       mysteryBoxCounter[_collectionAddress] < collections.mysteryBoxCap,
       "NftStore: all Mystery Boxes were already sold"
@@ -98,17 +116,24 @@ contract NftStore is VRFConsumerBaseV2 {
     payable(msg.sender).transfer(msg.value - price - chainlinkFeeMatic);
     mysteryBoxUserCounter[msg.sender][_collectionAddress] ++;
     mysteryBoxCounter[_collectionAddress] ++;
+    if(userHasCollectionMB[msg.sender][_collectionAddress] == false) {
+      userHasCollectionMB[msg.sender][_collectionAddress] = true;
+      userToCollectionsMB[msg.sender].push(_collectionAddress);
+    }
   }
 
+  /// @notice user can use it either paying or purchasing first a Mystery Box
+  /// @dev mint an NFT
+  /// @param _collectionAddress contract address of the collection
   function mint(address _collectionAddress) public payable {
-    CollectionFactory.Collections memory collections = collectionFactory.getCollection(_collectionAddress);
+    ICollectionFactory.Collections memory collections = collectionFactory.getCollection(_collectionAddress);
     require(
       block.timestamp > collections.presaleDate,
       "NftStore: NFT cannot be minted during presale"
     );
 
     require(
-      nftCounter[_collectionAddress] < (collections.nftCap + mysteryBoxCounter[_collectionAddress]),
+      (nftCounter[_collectionAddress] + mysteryBoxCounter[_collectionAddress]) < collections.nftCap,
       "NftStore: all NFT were already sold"
     );
 
@@ -127,19 +152,25 @@ contract NftStore is VRFConsumerBaseV2 {
       mysteryBoxCounter[_collectionAddress] --;
     }
     nftCounter[_collectionAddress] ++;
-    _requestRandomWords(1, _collectionAddress);
+    _requestRandomWords(1, _collectionAddress, msg.sender);
+    if(userHasCollectionNft[msg.sender][_collectionAddress] == false) {
+      userHasCollectionNft[msg.sender][_collectionAddress] = true;
+      userToCollectionsNft[msg.sender].push(_collectionAddress);
+    }
+
   }
 
-  function _requestRandomWords(uint32 _numWords, address _collectionAddress) internal {
+  function _requestRandomWords(uint32 _numWords, address _collectionAddress, address _user) internal {
     s_requestId  = COORDINATOR.requestRandomWords(
       keyHash,
       s_subscriptionId,
       requestConfirmations,
       callbackGasLimit,
       _numWords
-    );  
-    requestToSender[s_requestId] = msg.sender;
+    );
+    requestToSender[s_requestId] = _user;
     requestToCollection[s_requestId] = _collectionAddress;
+    userToRequest[_user] = s_requestId;
   }
 
   function fulfillRandomWords(
@@ -148,14 +179,18 @@ contract NftStore is VRFConsumerBaseV2 {
   ) 
     internal override 
   {
-    address user = requestToSender[requestId];
     address collectionAddress = requestToCollection[requestId];
-
     uint remaining = collectionFactory.getCollection(collectionAddress).availableNfts.length;
     uint16 index = uint16(randomWords[0] % remaining);
-    collectionFactory.updateAvailableNFts(collectionAddress, index); // REVIEW: updateColllection is named udateAvailableNFTs now
-    NftCollection nftCollection = NftCollection(collectionAddress);
-    nftCollection.mint(index, user);
+    // requestToIndex[requestId] = index;
+    collectionFactory.updateAvailableNFts(collectionAddress, requestToSender[requestId],index );
+  }
+
+  function revealNFT(address _user) external {
+    collectionFactory.updateAvailableNFts(
+      requestToCollection[userToRequest[_user]],
+      _user, 
+      requestToIndex[userToRequest[_user]]); // REVIEW: updateColllection is named udateAvailableNFTs now
   }
 
   function getLatestPrice() public view returns (uint) {
@@ -167,6 +202,45 @@ contract NftStore is VRFConsumerBaseV2 {
       /*uint80 answeredInRound*/
     ) = priceFeed.latestRoundData();
     return uint(price);
+  }
+
+  /// @dev get an array of mystery boxes purchased by a user
+  /// @param _user user address
+  /// @return UserMysteryBoxes array which contains collection and number of Mystery Boxes
+  function getUserMysteryBoxes(address _user) public view returns (UserMysteryBoxes[] memory) {
+    address[] memory collections = userToCollectionsMB[_user];
+    UserMysteryBoxes[] memory userMysteryBoxes = new UserMysteryBoxes[](collections.length);
+    for(uint i = 0; i < collections.length; i++) {
+      uint counter = mysteryBoxUserCounter[_user][collections[i]];
+      userMysteryBoxes[i] = UserMysteryBoxes(
+        collections[i],
+        counter
+      );    
+    }
+    return userMysteryBoxes;
+  }
+
+  /// @dev get an array of NFTs purchased by a user
+  /// @param _user user address
+  /// @return UserNfts array which contains collection and number of NFTs
+  function getUserNfts(address _user) public view returns(UserNfts[] memory) {
+    address[] memory collections = userToCollectionsNft[_user];
+    UserNfts[] memory userNfts = new UserNfts[](collections.length);
+    for(uint i = 0; i < collections.length; i++) {
+      uint[] memory nftIds = collectionFactory.getTokenIdsByUser(_user, collections[i]);
+      userNfts[i] = UserNfts(
+        collections[i],
+        nftIds
+      );    
+    }
+    return userNfts;
+  }
+
+  /// @dev get the price of the usd amount in native currency
+  /// @param _usdAmount amount of USD to convert to native currency
+  function getTokenAmount(uint _usdAmount) public view returns(uint) {
+    uint amount = _usdAmount * (10 ** 18) * (10 ** 6) / getLatestPrice();
+    return (amount + (amount * 5 / 100));
   }
 
 }

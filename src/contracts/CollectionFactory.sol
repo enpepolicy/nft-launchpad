@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+// import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
-import "hardhat/console.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "hardhat/console.sol";
+
 
 /// @title NFT Collection to be used by artists
 /// @author Juan D. Polanco & Miquel Trallero
@@ -11,7 +13,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 /// @dev All function calls are currently implemented without side effects
 /// @custom:experimental This is an experimental contract used in chainlink hackathon.
 contract NftCollection is ERC721 {
-  string baseURI;
+  string public baseURI;
   address nftStoreAddress;
   using Strings for uint;
   constructor(
@@ -23,7 +25,7 @@ contract NftCollection is ERC721 {
 
     ERC721(_tokenName, _tokenSymbol)
   {    
-    baseURI = _baseUri;
+    baseURI = string(abi.encodePacked("ipfs://",_baseUri));
     nftStoreAddress = _nftStoreAddress;
   }
 
@@ -59,9 +61,9 @@ contract NftCollection is ERC721 {
   /// @dev Used to retrieve token metadata
   /// @param _tokenId Index of NFT to be minted
   /// @return tokenURI URI of metada which is a json object
-  function getTokenUri(uint _tokenId) external view returns(string memory) {
-    return  string(abi.encodePacked(baseURI, "/", _tokenId, ".json"));
-  }
+  function tokenURI(uint256 _tokenId) public override view returns (string memory) {
+		return string(abi.encodePacked(baseURI, "/", _tokenId.toString(), ".json"));
+	}
 
 	/********************************************************
 	*                                                       *
@@ -83,13 +85,14 @@ contract NftCollection is ERC721 {
 /// @custom:experimental This is an experimental contract used in chainlink hackathon.
 contract CollectionFactory is Ownable {
 
-  address[] collections;
-  address public nftStoreAddress;
+  address[] public collections;
+  address nftStoreAddress;
   struct Collections {
     address collectionAddress;
     uint presaleDate;
     uint16 mysteryBoxCap;
     uint16 nftCap;
+    // uint16 availableMysteryBoxes;
     uint16[] availableNfts;
     address owner;
     uint mysteryBoxUsdPrice;
@@ -100,6 +103,7 @@ contract CollectionFactory is Ownable {
     string tokenDescription;
   }
 
+  mapping(address => mapping(address => uint[])) userToCollectionNfts;
   mapping(address => Collections) collection;
   mapping(address => address[]) userToCollections;
   
@@ -143,7 +147,7 @@ contract CollectionFactory is Ownable {
       _tokenName,
       _tokenSymbol,
       _baseUri,
-      nftStoreAddress
+      address(this)
     );
     // Stores onchain data used to mint NFTs
     collection[address(_collection)] = Collections(
@@ -151,6 +155,7 @@ contract CollectionFactory is Ownable {
       _presaleDate,
       _mysteryBoxCap,
       _nftCap,
+      // _mysteryBoxCap,
       _availableNfts,
       msg.sender,
       _mysteryBoxUsdPrice,
@@ -202,6 +207,10 @@ contract CollectionFactory is Ownable {
     return _collectionData;
   }
 
+  function getTokenIdsByUser(address _user, address _collection) external view returns (uint [] memory){
+    return userToCollectionNfts[_user][_collection];
+  }
+
 	/********************************************************
 	*                                                       *
 	*                      SETTERS                          *
@@ -215,46 +224,44 @@ contract CollectionFactory is Ownable {
     nftStoreAddress = _nftStoreAddress;
   }
 
-  /// @notice updates presale date of a contract
-  /// @param _collectionAddress Address of NFT Contract
-  /// @param _presaleDate new presale date
-  function updatePresaleDate(address _collectionAddress, uint _presaleDate) external collectionOwner(_collectionAddress) {
-    collection[_collectionAddress].presaleDate = _presaleDate;
-  }
+  // /// @notice updates presale date of a contract
+  // /// @param _collectionAddress Address of NFT Contract
+  // /// @param _presaleDate new presale date
+  // function updatePresaleDate(address _collectionAddress, uint _presaleDate) external collectionOwner(_collectionAddress) {
+  //   collection[_collectionAddress].presaleDate = _presaleDate;
+  // }
 
   /// @dev used by NFTStore contract after minting an NFT, so that this NFT cannot be minted again
   /// @param _nftCollection Address of NFT Contract
   /// @param _indexToDelete index of NFT that cannot be minted anymore
-  function updateAvailableNFts(address _nftCollection, uint16 _indexToDelete) external {
+  function updateAvailableNFts(address _nftCollection, address _user, uint16 _indexToDelete) external {
     require(msg.sender == nftStoreAddress, "Only nftStore can update this");
     uint16[] storage _availableNfts = collection[_nftCollection].availableNfts;
     _availableNfts[_indexToDelete] = _availableNfts[_availableNfts.length - 1];
+    userToCollectionNfts[_user][_nftCollection].push(_availableNfts[_indexToDelete]);
+    NftCollection nftCollection = NftCollection(_nftCollection);
+    nftCollection.mint(_availableNfts[_indexToDelete], _user);
+    //collection[_nftCollection].availableMysteryBoxes--;
     _availableNfts.pop();
-    emit AvailableNFtsUpdated(_nftCollection, _indexToDelete);
+    emit AvailableNFtsUpdated(_nftCollection, _indexToDelete); 
   }
 
-  /// @notice updates unit price of mystery box of a NFT Collection
-  /// @dev can only be called by owner of callection
-  /// @param _collectionAddress Address of NFT Contract
-  /// @param _USDPrice new price in dollars with 2 decimals. E.g 2,00 $ -> 200
-  function updadateMysteryBoxPrice(address _collectionAddress, uint _USDPrice) external collectionOwner(_collectionAddress) {
-    collection[_collectionAddress].mysteryBoxUsdPrice = _USDPrice;
-  }
+  // /// @notice updates unit price of mystery box of a NFT Collection
+  // /// @dev can only be called by owner of callection
+  // /// @param _collectionAddress Address of NFT Contract
+  // /// @param _mysteryUSDPrice new price in dollars with 2 decimals. E.g 2,00 $ -> 200
+  // function updadatePrice(address _collectionAddress, uint _mysteryUSDPrice, uint _nftUSDPrice) external collectionOwner(_collectionAddress) {
+  //   collection[_collectionAddress].mysteryBoxUsdPrice = _mysteryUSDPrice;
+  //   collection[_collectionAddress].nftUsdPrice = _nftUSDPrice;
+  // }
 
-  /// @notice updates NFT unit price of a NFT Collection
-  /// @dev can only be called by owner of callection
-  /// @param _collectionAddress Address of NFT Contract
-  /// @param _USDPrice new price in dollars with 2 decimals. E.g 2,00 $ -> 200
-  function updateNftPrice(address _collectionAddress, uint _USDPrice) external collectionOwner(_collectionAddress) {
-    collection[_collectionAddress].nftUsdPrice = _USDPrice;
-  }
-
-  /// @notice switch the frozenFlag boolean value
-  /// @dev Only owner of collection can call this function. if users switches this no NFTs from the collection can be bought. 
-  /// @param _collectionAddress Address of NFT Contract
-  function updateFrozenFlag(address _collectionAddress) external collectionOwner(_collectionAddress) {
-    collection[_collectionAddress].frozen = !collection[_collectionAddress].frozen;
-  }
+  
+  // /// @notice switch the frozenFlag boolean value
+  // /// @dev Only owner of collection can call this function. if users switches this no NFTs from the collection can be bought. 
+  // /// @param _collectionAddress Address of NFT Contract
+  // function updateFrozenFlag(address _collectionAddress) external collectionOwner(_collectionAddress) {
+  //   collection[_collectionAddress].frozen = !collection[_collectionAddress].frozen;
+  // }
 
 	/********************************************************
 	*                                                       *

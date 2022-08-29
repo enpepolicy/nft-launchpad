@@ -2,10 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from './pages/Home.vue'
 import MyMysteryBoxes from './pages/MyMysteryBoxes.vue'
 import NFTStore from './pages/NFTStore.vue'
-import BlogPost from './pages/BlogPost.vue'
 import CreateCollection from './pages/CreateCollection.vue'
-import Contact from './pages/Contact.vue'
-import Help from './pages/Help.vue'
+import MyNFT from './pages/MyNFT.vue'
 import PageNotFound from './pages/PageNotFound.vue'
 
 const routerHistory = createWebHistory()
@@ -40,18 +38,13 @@ const router = createRouter({
     },
     {
       path: '/my-nft',
-      component: Contact
+      component: MyNFT
     },
 
-    // TO-DO Remove
-    {
-      path: '/blog-post',
-      component: BlogPost
-    },
-    {
-      path: '/help',
-      component: Help
-    },
+    // {
+    //   path: '/help',
+    //   component: Help
+    // },
 
     {
       path: '/:pathMatch(.*)*',

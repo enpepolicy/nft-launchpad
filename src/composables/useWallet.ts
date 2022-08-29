@@ -4,7 +4,7 @@ import { Web3Provider } from '@ethersproject/providers'
 
 import { NetworkEnum } from './network.enum'
 
-const currentNetworkId = ref(0 as NetworkEnum)
+const currentNetworkId = ref(80001 as NetworkEnum)
 const currentAccount = ref('')
 
 const provider = computed(() => {
