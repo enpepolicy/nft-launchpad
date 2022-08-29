@@ -9,7 +9,7 @@
 
       <!-- Page sections -->
       <HeroHome />
-      <Process />
+      <!-- <Process /> -->
 
     </main>
 
@@ -22,6 +22,6 @@
 <script setup lang="ts">
 import Header from './../partials/Header.vue'
 import HeroHome from './../partials/HeroHome.vue'
-import Process from './../partials/Process.vue'
+// import Process from './../partials/Process.vue'
 import Footer from './../partials/Footer.vue'
 </script>

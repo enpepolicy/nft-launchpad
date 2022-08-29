@@ -10,8 +10,10 @@
       <!-- Page sections -->
       <HeroMyMysteryBoxes />
       <GridMysteryBoxes
+        :boxes="cleanMysteryBoxes"
         section-title="Your Mystery Boxes"
         section-description="Take a look to your unrevealed Mystery Boxes:"
+        @update-boxes="getMysteryBoxesByAddress"
       />
 
     </main>
@@ -22,16 +24,36 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { ref, watch } from 'vue'
 
 import Header from './../partials/Header.vue'
 import HeroMyMysteryBoxes from '../partials/HeroMyMysteryBoxes.vue'
 import GridMysteryBoxes from '../partials/GridMysteryBoxes.vue'
 import Footer from '../partials/Footer.vue'
 
-import { getAllCollectionData } from '../composables/contracts/useCollectionFactory'
+import { currentAccount } from '../composables/useWallet'
+import { getUserMysteryBoxes } from '../composables/contracts/useNFTStore'
 
-onMounted(async () => {
-  await getAllCollectionData().then(res => console.log('TO-DO fetch Mystery Boxes', res))
-})
+const cleanMysteryBoxes = ref<Array<{ address: string; amount: number }>>([])
+
+// TO-DO index somehow better this data
+async function getMysteryBoxesByAddress () {
+  cleanMysteryBoxes.value = []
+
+  await getUserMysteryBoxes(currentAccount.value)
+    .then((res) => {
+      res.forEach(element => {
+        cleanMysteryBoxes.value.push({
+          address: element.collectionAddres,
+          amount: element.counter.toNumber()
+        })
+      });
+    })
+}
+
+watch(currentAccount, async () => {
+  if(currentAccount.value){
+    await getMysteryBoxesByAddress()
+  }
+}, { immediate: true })
 </script>
