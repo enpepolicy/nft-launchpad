@@ -86,6 +86,8 @@ import { getTokenAmount, buyMysteryBoxByCollection, mintByCollection } from '../
 import { currentAccount } from '../composables/useWallet';
 import { notifyError, notifySuccess } from '../composables/useNotification';
 
+const emit = defineEmits(['update-collections'])
+
 const props = defineProps({
   collection: {
     type: Object as PropType<Collection>,
@@ -115,7 +117,10 @@ async function buyBox() {
       // notifyError(err.data?.message || err.message || 'An error has occured.')
       notifyError(err.message || 'An error has occured.')
     })
-    .finally(() => isLoading.value = false)
+    .finally(() => {
+      emit('update-collections')
+      isLoading.value = false
+    })
 }
 
 async function buyNFT() {
@@ -130,7 +135,10 @@ async function buyNFT() {
     .catch((err) => {
       notifyError(err.message || 'An error has occured.')
     })
-    .finally(() => isLoading.value = false)
+    .finally(() => {
+      emit('update-collections')
+      isLoading.value = false
+    })
 }
 
 async function convertUSDToNativeToken () {

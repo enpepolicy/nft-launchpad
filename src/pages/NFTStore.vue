@@ -12,6 +12,7 @@
 
       <HeroCollections
         :collections="collections"
+        @update-collections="getCollections()"
         section-title="Available Collections"
       />
 

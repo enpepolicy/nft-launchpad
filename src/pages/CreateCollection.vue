@@ -15,6 +15,7 @@
       <HeroCollections
         section-title="Your Collections"
         section-description="Check your deployed collections using NFT Launchpad protocol:"
+        @update-collections="getCollections()"
         :collections="collections"
       />
     </main>

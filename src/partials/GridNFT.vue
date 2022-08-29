@@ -11,7 +11,7 @@
         <!-- Featured article -->
         <div class="max-w-3xl" data-aos="fade-down">
           <article>
-            <header>
+            <div>
               <!-- Title and excerpt -->
               <div class="text-center md:text-left">
                 <router-link to="/blog-post">
@@ -19,7 +19,7 @@
                 </router-link>
                 <p class="text-xl text-gray-600 dark:text-gray-400">{{ props.nftList[0] ? props.sectionDescription : 'No NFT to display.' }}</p>
               </div>
-            </header>
+            </div>
           </article>
         </div>
       </div>

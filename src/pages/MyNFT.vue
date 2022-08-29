@@ -30,7 +30,7 @@ import HeroMyNFT from '../partials/HeroMyNFT.vue'
 import GridNFT from '../partials/GridNFT.vue'
 import Footer from '../partials/Footer.vue'
 
-import { getUserNfts, getTokenUriByAddressAndId } from '../composables/contracts/useNFTStore'
+import { getUserNfts } from '../composables/contracts/useNFTStore'
 import { currentAccount } from '../composables/useWallet'
 
 const nftList = ref<Array<any>>([])
@@ -54,10 +54,10 @@ async function getNfts () {
   nftList.value = []
   await getUserNfts(currentAccount.value)
     .then((res) => {
-      // console.log(res)
+      console.log(res)
       res.forEach(element => {
         element.nftIds.forEach(async (id) => {
-          // console.log(await fetchMetadata(element.collectionAddres, String(id.toNumber())))
+          console.log(await fetchMetadata(element.collectionAddres, String(id.toNumber())))
           nftList.value.push(await fetchMetadata(element.collectionAddres, String(id.toNumber())))
         })
       });
@@ -67,7 +67,6 @@ async function getNfts () {
 watch(currentAccount, async () => {
   if(currentAccount.value){
     getNfts()
-    await getTokenUriByAddressAndId('0x76DA7dC945032c50304a15E7C56DBc2775C91386', 8)
   }
 }, { immediate: true })
 </script>

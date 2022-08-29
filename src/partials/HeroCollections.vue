@@ -35,6 +35,7 @@
           <BaseCollectionCard
             v-for="(collection, index) in props.collections"
             :key="index"
+            @update-collections="emit('update-collections')"
             :collection="collection"
           />
         </div>
@@ -46,6 +47,8 @@
 import { PropType } from 'vue';
 import { Collection } from '../types/index'
 import BaseCollectionCard from './BaseCollectionCard.vue';
+
+const emit = defineEmits(['update-collections'])
 
 const props = defineProps({
   sectionTitle: {

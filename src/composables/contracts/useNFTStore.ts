@@ -58,7 +58,7 @@ async function getTokenUriByAddressAndId (contractAddress: string, id: number ){
   )
 
   return await contract
-    .tokenURI('4')
+    .tokenURI(id)
     .then(res => console.log(res))
 }
 

@@ -16,7 +16,7 @@
             target="_blank"
             class="text-xl first-letter:opacity-100 font-semibold text-blue-600  hover:text-white duration-300 transition-all"
             >
-              🔗 #{{ nft.token_id }}
+              🔗 <span class="uppercase">{{ nft.name }}</span> - #{{ nft.token_id }}
           </a>
         </div>
         <div class="text-base text-left"> {{ metadata ? metadata.name : 'Fetching...' }}</div>
