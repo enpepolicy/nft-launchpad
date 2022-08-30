@@ -87,7 +87,7 @@
                 htmlFor="NFTCap"
                 class="font-red-hat-display uppercase tracking-wider font-light"
               >
-                NFT Cap (Automatic from Hash)
+                NFT Cap
               </label>
               <input
                 v-model="payload._nftCap"
